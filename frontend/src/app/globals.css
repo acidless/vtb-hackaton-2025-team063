@@ -55,16 +55,16 @@ main {
     color: var(--text-primary);
 }
 
+.text-secondary {
+    color: var(--text-secondary);
+}
+
 .text-active {
     color: var(--primary-color);
 }
 
 .hover\:text-active:hover {
     color: var(--primary-color);
-}
-
-.text-secondary {
-    color: var(--text-secondary);
 }
 
 .bg-accent {
@@ -76,9 +76,10 @@ main {
 }
 
 .navbar {
-    background: rgba(239, 245, 255, 0.59);
+    background: #EEF2F757;
     backdrop-filter: blur(23px);
-    box-shadow: 2px -2px 20.9px 0px rgba(33, 33, 33, 0.09);
+    box-shadow: 2px -2px 57.2px 0px #282B3059;
+    border-radius: 50px;
 }
 
 .right-blurred {
