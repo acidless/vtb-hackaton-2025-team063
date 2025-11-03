@@ -25,6 +25,11 @@ const sfPro = localFont({
             weight: "600",
             style: "semibold",
         },
+        {
+            path: "./fonts/SF-Pro-Display-Bold.otf",
+            weight: "700",
+            style: "bold",
+        },
     ],
     variable: "--font-sf-pro",
     display: "swap",

@@ -7,7 +7,7 @@ export const Navbar = () => {
             className="navbar flex justify-between items-center rounded-xl p-6 py-4 text-center list-none">
             <li>
                 <NavLink
-                    className="text-[0.875rem] font-medium flex flex-col items-center transition-colors duration-300 hover:text-active"
+                    className="text-sm font-medium flex flex-col items-center transition-colors duration-300 hover:text-active"
                     activeClassName="text-active" href="/dashboard">
                     <House className="w-4 h-4"/>
                     Обзор
@@ -15,7 +15,7 @@ export const Navbar = () => {
             </li>
             <li>
                 <NavLink
-                    className="text-[0.875rem] font-medium flex flex-col items-center transition-colors duration-300 hover:text-active"
+                    className="text-sm font-medium flex flex-col items-center transition-colors duration-300 hover:text-active"
                     activeClassName="text-active" href="/expenses">
                     <HandCoins className="w-4 h-4"/>
                     Расходы
@@ -23,7 +23,7 @@ export const Navbar = () => {
             </li>
             <li>
                 <NavLink
-                    className="text-[0.875rem] font-medium flex flex-col items-center transition-colors duration-300 hover:text-active"
+                    className="text-sm font-medium flex flex-col items-center transition-colors duration-300 hover:text-active"
                     activeClassName="text-active" href="/budget">
                     <Wallet className="w-4 h-4"/>
                     Бюджет
@@ -31,7 +31,7 @@ export const Navbar = () => {
             </li>
             <li>
                 <NavLink
-                    className="text-[0.875rem] font-medium flex flex-col items-center transition-colors duration-300 hover:text-active"
+                    className="text-sm font-medium flex flex-col items-center transition-colors duration-300 hover:text-active"
                     activeClassName="text-active" href="/settings">
                     <Settings className="w-4 h-4"/>
                     Настройки
