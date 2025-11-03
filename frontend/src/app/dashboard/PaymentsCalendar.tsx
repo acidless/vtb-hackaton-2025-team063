@@ -27,7 +27,7 @@ const PaymentsCalendar = ({payments}: Props) => {
 
     const now = new Date();
 
-    return <div className="flex-1 bg-tertiary rounded-xl px-1.5 py-2">
+    return <div className="h-full flex-1 bg-tertiary rounded-xl px-1.5 py-2">
         <div className="flex items-center justify-between px-1.5 mb-3">
             <div className="flex items-center gap-1">
                 <button className="cursor-pointer" onClick={prevMonth}>

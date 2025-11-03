@@ -1,5 +1,6 @@
 import Image, {StaticImageData} from "next/image";
 import Heading from "@/shared/ui/typography/Heading";
+import MoneyAmount from "@/shared/ui/MoneyAmount";
 
 type Person = {
     avatar: string | StaticImageData;
@@ -25,7 +26,7 @@ const SharedBalance = ({personFirst, personSecond, balance, monthlyIncome}: Prop
                 </div>
             </div>
             <div className="bg-primary px-3 py-1.5 rounded-2xl shadow-xl z-1">
-                <p className="text-base font-semibold leading-tight">+ {new Intl.NumberFormat('ru-RU').format(monthlyIncome)} ₽</p>
+                <p className="text-base font-semibold leading-tight">+ <MoneyAmount value={monthlyIncome}/></p>
             </div>
         </div>
 
@@ -33,7 +34,7 @@ const SharedBalance = ({personFirst, personSecond, balance, monthlyIncome}: Prop
             <div>
                 <p className="text-xs font-light mb-0.5 leading-tight">Общий баланс</p>
                 <Heading level={1} className="flex items-center gap-1 tracking-[-0.06rem] leading-none mb-0">
-                    {new Intl.NumberFormat('ru-RU').format(balance)} ₽
+                    <MoneyAmount value={balance}/>
                 </Heading>
             </div>
             <div>
