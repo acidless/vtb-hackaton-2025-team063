@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+:root {
+    --color-primary-light: #E6F0FF;
+    --primary-color: #0066FF;
+    --text-primary: #1E1E1E;
+    --text-secondary: #9CA3AF;
+    --bg-tertiary: #EEF2F7;
+    --accent-color: #00C897;
+}
+
+body, .font-sf {
+    font-family: var(--font-sf-pro), sans-serif;
+    line-height: 1.5;
+    color: var(--text-primary);
+    letter-spacing: -0.02em;
+}
+
+main {
+    overflow: hidden;
+}
+
+.bg-shared-balance {
+    position: relative;
+    background: linear-gradient(96.32deg, #0066FF 24.32%, #0046B3 96.61%);
+}
+
+.bg-shared-balance::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("/images/balance-bg.webp") center center no-repeat;
+    background-size: cover;
+    opacity: 10%;
+    border-radius: 0.75rem;
+}
+
+.bg-primary {
+    background: var(--primary-color);
+}
+
+.bg-primary-light {
+    background: var(--color-primary-light);
+}
+
+.bg-tertiary {
+    background: var(--bg-tertiary);
+}
+
+.text-primary {
+    color: var(--text-primary);
+}
+
+.text-active {
+    color: var(--primary-color);
+}
+
+.hover\:text-active:hover {
+    color: var(--primary-color);
+}
+
+.text-secondary {
+    color: var(--text-secondary);
+}
+
+.bg-accent {
+    background: var(--accent-color);
+}
+
+.navbar {
+    background: rgba(239, 245, 255, 0.59);
+    backdrop-filter: blur(23px);
+    box-shadow: 2px -2px 20.9px 0px rgba(33, 33, 33, 0.09);
+}
+
+.right-blurred {
+    position: relative;
+}
+
+.right-blurred::after {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 95%;
+    width: 10%;
+    height: 100%;
+    filter: blur(1rem);
+    background: white;
+}
+
+.z-1 {
+    z-index: 1;
+}
