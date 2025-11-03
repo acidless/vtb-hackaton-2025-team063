@@ -29,7 +29,7 @@ export const Goal = ({goal}: Props) => {
             <p className="text-secondary text-[0.6rem] self-end">
                 из {new Intl.NumberFormat('ru-RU').format(goal.moneyNeed)}
             </p>
-            <div className="w-20">
+            <div className="w-20 self-end">
                 <ProgressBar value={goal.moneyCollected} max={goal.moneyNeed}/>
             </div>
         </div>

@@ -2,6 +2,7 @@ import SharedBalance from "@/app/dashboard/SharedBalance";
 import Accounts from "@/app/dashboard/Accounts";
 import Goals from "@/app/dashboard/Goals";
 import UpcomingPayments from "@/app/dashboard/UpcomingPayments";
+import ChildAccount from "@/app/dashboard/ChildAccount";
 
 export default async function Dashboard() {
     return <div>
@@ -16,9 +17,22 @@ export default async function Dashboard() {
             </div>
             <div>
                 <Goals goals={[
-                    {id: 1, name: "Поездка на море", deadline: new Date(2025, 8, 29), moneyCollected: 200000, moneyNeed: 230000},
-                    {id: 2, name: "Квартира у моря", deadline: new Date(2026, 3, 14), moneyCollected: 230000, moneyNeed: 450000000},
+                    {
+                        id: 1,
+                        name: "Поездка на море",
+                        deadline: new Date(2025, 8, 29),
+                        moneyCollected: 200000,
+                        moneyNeed: 230000
+                    },
+                    {
+                        id: 2,
+                        name: "Квартира у моря",
+                        deadline: new Date(2026, 3, 14),
+                        moneyCollected: 80000000,
+                        moneyNeed: 450000000
+                    },
                 ]}/>
+                <ChildAccount moneyCollected={123450} moneyNeed={230000} avatar="/images/woman.png"/>
             </div>
         </div>
 
