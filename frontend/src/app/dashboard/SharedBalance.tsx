@@ -14,7 +14,7 @@ type Props = {
 }
 
 const SharedBalance = ({personFirst, personSecond, balance, monthlyIncome}: Props) => {
-    return <section className="p-2 rounded-xl bg-shared-balance mb-1 text-white mx-4">
+    return <section className="p-2 rounded-xl bg-shared-balance mb-5 text-white mx-4">
         <div className="mb-12 flex items-center justify-between">
             <div className="flex items-center">
                 <div className="w-[2.375rem] h-[2.375rem] relative">
@@ -31,7 +31,7 @@ const SharedBalance = ({personFirst, personSecond, balance, monthlyIncome}: Prop
 
         <div className="flex items-end justify-between">
             <div>
-                <p className="text-[0.75rem] font-light mb-0.5 leading-tight">Общий баланс</p>
+                <p className="text-xs font-light mb-0.5 leading-tight">Общий баланс</p>
                 <Heading level={1} className="flex items-center gap-1 tracking-[-0.06rem] leading-none mb-0">
                     {new Intl.NumberFormat('ru-RU').format(balance)} ₽
                 </Heading>
