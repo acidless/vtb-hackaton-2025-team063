@@ -28,7 +28,7 @@ const ChildAccount = ({moneyCollected, moneyNeed, avatar}: Props) => {
                     </div>
                 </div>
                 <div>
-                    <button className="bg-accent text-white text-base font-medium px-3 py-1 rounded-2xl">Пополнить</button>
+                    <button className="bg-accent text-white text-base font-medium px-3 py-1 rounded-2xl cursor-pointer">Пополнить</button>
                 </div>
             </div>
         </div>
