@@ -6,7 +6,7 @@ type Props = {
 };
 
 const Goals = ({goals}: Props) => {
-    return <section className="mx-4 md:mx-0 md:mr-4 mb-20">
+    return <section className="mx-4 md:mx-0 md:mr-4 mb-5">
         <Heading level={2}>Наши цели</Heading>
         <div className="flex gap-1 flex-col">
             {goals.map((goal) => (<Goal key={goal.id} goal={goal}/>))}
