@@ -31,7 +31,14 @@ export default async function Dashboard() {
                         name: "Подписка",
                         money: 500,
                         payed: false
-                    }]}/>
+                    },
+                    {
+                        date: new Date(2025, 10, 20),
+                        name: "Кредит",
+                        money: 10000,
+                        payed: false
+                    }
+                ]}/>
             </div>
             <div>
                 <Goals goals={[

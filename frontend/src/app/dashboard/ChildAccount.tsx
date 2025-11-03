@@ -1,6 +1,7 @@
 import Heading from "@/shared/ui/typography/Heading";
 import Image from "next/image";
 import ProgressBar from "@/shared/ui/ProgressBar";
+import MoneyAmount from "@/shared/ui/MoneyAmount";
 
 type Props = {
     moneyCollected: number;
@@ -13,7 +14,7 @@ const ChildAccount = ({moneyCollected, moneyNeed, avatar}: Props) => {
         <Heading level={2}>Детский счет</Heading>
         <div className="bg-tertiary rounded-xl py-2 px-1.5">
             <div className="flex items-start justify-between mb-5">
-                <p className="text-[2.5rem] mb-0.5 leading-none font-bold">{new Intl.NumberFormat('ru-RU').format(moneyCollected)} ₽</p>
+                <p className="text-[2.5rem] mb-0.5 leading-none font-bold"><MoneyAmount value={moneyCollected}/></p>
                 <div className="w-[2.375rem] h-[2.375rem] rounded-full relative">
                     <Image src={avatar} alt="Ребенок" fill/>
                 </div>
@@ -21,7 +22,7 @@ const ChildAccount = ({moneyCollected, moneyNeed, avatar}: Props) => {
             <div className="flex items-center justify-between">
                 <div className="flex-1">
                     <p className="text-secondary font-medium text-xs mb-0.5">
-                        из {new Intl.NumberFormat('ru-RU').format(moneyNeed)}
+                        <MoneyAmount showCurrency={false} value={moneyNeed}/>
                     </p>
                     <div className="w-2/3">
                         <ProgressBar value={moneyCollected} max={moneyNeed}/>

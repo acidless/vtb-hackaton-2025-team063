@@ -88,12 +88,24 @@ main {
     background: var(--success-color);
 }
 
+.text-success {
+    color: var(--success-color);
+}
+
 .bg-error {
     background: var(--error-color);
 }
 
+.text-error {
+    color: var(--error-color);
+}
+
 .bg-info {
     background: var(--info-color);
+}
+
+.text-info {
+    color: var(--info-color);
 }
 
 .navbar {

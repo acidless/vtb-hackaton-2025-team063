@@ -1,6 +1,7 @@
 import {type GoalType} from "@/entities/goal/model/types";
 import Image from "next/image";
 import ProgressBar from "@/shared/ui/ProgressBar";
+import MoneyAmount from "@/shared/ui/MoneyAmount";
 
 type Props = {
     goal: GoalType;
@@ -24,10 +25,10 @@ export const Goal = ({goal}: Props) => {
         </div>
         <div className="ml-auto flex flex-col">
             <p className="leading-none mb-1 font-bold text-xl">
-                {new Intl.NumberFormat('ru-RU').format(goal.moneyCollected)}
+                <MoneyAmount value={goal.moneyCollected}/>
             </p>
             <p className="text-secondary text-[0.6rem] self-end">
-                из {new Intl.NumberFormat('ru-RU').format(goal.moneyNeed)}
+                из <MoneyAmount showCurrency={false} value={goal.moneyNeed}/>
             </p>
             <div className="w-20 self-end">
                 <ProgressBar value={goal.moneyCollected} max={goal.moneyNeed}/>
