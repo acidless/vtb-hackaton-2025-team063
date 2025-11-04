@@ -66,6 +66,5 @@ export default async function Dashboard() {
                 <ChildAccount moneyCollected={123450} moneyNeed={230000} avatar="/images/woman.png"/>
             </div>
         </div>
-
     </div>
 }

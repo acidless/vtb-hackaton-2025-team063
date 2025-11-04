@@ -2,6 +2,8 @@ import Image, {StaticImageData} from "next/image";
 import Heading from "@/shared/ui/typography/Heading";
 import MoneyAmount from "@/shared/ui/MoneyAmount";
 import BalanceCounter from "@/shared/ui/MoneyCounting";
+import Avatar from "@/shared/ui/Avatar";
+import CoupleAvatars from "@/shared/ui/CoupleAvatars";
 
 type Person = {
     avatar: string | StaticImageData;
@@ -18,14 +20,7 @@ type Props = {
 const SharedBalance = ({personFirst, personSecond, balance, monthlyIncome}: Props) => {
     return <section className="p-2 rounded-xl bg-shared-balance mb-5 text-white mx-4">
         <div className="mb-12 flex items-center justify-between">
-            <div className="flex items-center">
-                <div className="w-[2.375rem] h-[2.375rem] relative">
-                    <Image className="rounded-xl" fill src={personFirst.avatar} alt=""/>
-                </div>
-                <div className="w-[2.375rem] h-[2.375rem] relative -ml-2.5">
-                    <Image className="rounded-xl" fill src={personSecond.avatar} alt=""/>
-                </div>
-            </div>
+            <CoupleAvatars firstAvatar={personFirst.avatar} secondAvatar={personSecond.avatar}/>
             <div className="bg-primary px-3 py-1.5 rounded-2xl shadow-xl z-1">
                 <p className="text-base font-semibold leading-tight">+ <MoneyAmount value={monthlyIncome}/></p>
             </div>

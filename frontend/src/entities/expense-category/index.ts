@@ -1,0 +1,2 @@
+export {type ExpenseCategoryType, type ExpenseCategoryName} from "@/entities/expense-category/model/types"
+export {ExpenseCategory} from "@/entities/expense-category/ui/ExpenseCategory"
