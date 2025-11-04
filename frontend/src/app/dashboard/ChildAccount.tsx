@@ -5,6 +5,7 @@ import Image from "next/image";
 import ProgressBar from "@/shared/ui/ProgressBar";
 import MoneyAmount from "@/shared/ui/MoneyAmount";
 import {motion} from "framer-motion";
+import Avatar from "@/shared/ui/Avatar";
 
 type Props = {
     moneyCollected: number;
@@ -22,9 +23,7 @@ const ChildAccount = ({moneyCollected, moneyNeed, avatar}: Props) => {
                         transition={{duration: 0.3}}>
                 <div className="flex items-start justify-between mb-5">
                     <p className="text-[2.5rem] mb-0.5 leading-none font-bold"><MoneyAmount value={moneyCollected}/></p>
-                    <div className="w-[2.375rem] h-[2.375rem] rounded-full relative">
-                        <Image src={avatar} alt="Ребенок" fill/>
-                    </div>
+                    <Avatar avatar={avatar} alt="Ребенок"/>
                 </div>
                 <div className="flex items-center justify-between">
                     <div className="flex-1">

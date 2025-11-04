@@ -5,6 +5,7 @@ import Heading from "@/shared/ui/typography/Heading";
 import Image from "next/image";
 import MoneyAmount from "@/shared/ui/MoneyAmount";
 import {motion} from "framer-motion";
+import Avatar from "@/shared/ui/Avatar";
 
 type Props = {
     className?: string;
@@ -18,9 +19,7 @@ export const Account = ({account, className = "", ...props}: Props) => {
                     animate={{opacity: 1, y: 0}}
                     transition={{duration: 0.3, ease: 'easeOut'}}>
             <div className="flex items-center gap-2 mb-2">
-                <div className="w-[2.375rem] h-[2.375rem] relative">
-                    <Image src={account.avatar} alt={account.name} fill/>
-                </div>
+                <Avatar avatar={account.avatar} alt={account.name}/>
                 <Heading level={3}>{account.name}</Heading>
             </div>
             <div className="text-secondary">
