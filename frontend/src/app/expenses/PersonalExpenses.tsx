@@ -4,8 +4,8 @@ import React from "react";
 import 'dayjs/locale/ru';
 import dayjs from "dayjs";
 import Avatar from "@/shared/ui/Avatar";
-import Histogram from "@/shared/ui/charts/Histogram";
 import BalanceCounter from "@/shared/ui/MoneyCounting";
+import ExpensesHistogram from "@/app/expenses/ExpensesHistogram";
 
 type Props = {
     avatar: string;
@@ -13,10 +13,9 @@ type Props = {
 }
 
 const PersonalExpenses = ({avatar, expenseCategories}: Props) => {
-    const histogramData = expenseCategories.map(cat => ({value: cat.spent, color: cat.color}));
     const totalExpenses = expenseCategories.reduce((acc, c) => acc + c.spent, 0);
 
-    return <section className="mx-4 md:mx-0 md:mr-4 mb-5">
+    return <section className="mx-4 md:mx-0 md:mr-4 mb-[1.875rem]">
         <div className="flex items-center justify-between -mb-1.5">
             <Heading level={2}>Мои траты за {dayjs(Date.now()).locale('ru').format('MMMM')}</Heading>
             <Avatar avatar={avatar}/>
@@ -26,14 +25,7 @@ const PersonalExpenses = ({avatar, expenseCategories}: Props) => {
                 <BalanceCounter value={totalExpenses}/>
             </p>
         </div>
-        <div className="mb-2.5">
-            <Histogram data={histogramData}/>
-        </div>
-        <div className="flex items-center justify-start gap-1 mb-32 flex-wrap">
-            {expenseCategories.map(cat => (
-                <ExpenseCategory key={cat.name} overflowText={false} expenseCategory={cat}/>
-            ))}
-        </div>
+        <ExpensesHistogram expenseCategories={expenseCategories}/>
     </section>;
 }
 

@@ -27,7 +27,7 @@ const ChildAccount = ({moneyCollected, moneyNeed, avatar}: Props) => {
                 </div>
                 <div className="flex items-center justify-between">
                     <div className="flex-1">
-                        <p className="text-secondary font-medium text-xs mb-0.5">
+                        <p className="text-light font-medium text-xs mb-0.5">
                             <MoneyAmount showCurrency={false} value={moneyNeed}/>
                         </p>
                         <div className="w-2/3">

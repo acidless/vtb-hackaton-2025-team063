@@ -5,18 +5,13 @@ import Image from "next/image";
 import ProgressBar from "@/shared/ui/ProgressBar";
 import MoneyAmount from "@/shared/ui/MoneyAmount";
 import {motion} from "framer-motion";
+import Date from "@/shared/ui/typography/Date";
 
 type Props = {
     goal: GoalType;
 }
 
 export const Goal = ({goal}: Props) => {
-    const formattedDeadline = new Intl.DateTimeFormat('ru-RU', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    }).format(goal.deadline);
-
     return <article className="bg-tertiary rounded-xl p-1.5">
         <motion.div className="flex items-center justify-start gap-2"
                     initial={{opacity: 0, y: 10}}
@@ -30,13 +25,13 @@ export const Goal = ({goal}: Props) => {
             </div>
             <div className="flex flex-col min-w-0">
                 <p className="text-primary font-medium text-ellipsis overflow-hidden whitespace-nowrap">{goal.name}</p>
-                <time className="text-secondary text-xs">{formattedDeadline}</time>
+                <Date date={goal.deadline}/>
             </div>
             <div className="shrink-0 ml-auto flex flex-col">
                 <p className="leading-none mb-1 font-bold text-lg xxs:text-xl">
                     <MoneyAmount value={goal.moneyCollected}/>
                 </p>
-                <p className="text-secondary text-[0.6rem] self-end">
+                <p className="text-light text-[0.6rem] self-end">
                     из <MoneyAmount showCurrency={false} value={goal.moneyNeed}/>
                 </p>
                 <div className="w-20 self-end">

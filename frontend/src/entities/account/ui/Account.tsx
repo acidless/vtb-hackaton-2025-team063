@@ -22,7 +22,7 @@ export const Account = ({account, className = "", ...props}: Props) => {
                 <Avatar avatar={account.avatar} alt={account.name}/>
                 <Heading level={3}>{account.name}</Heading>
             </div>
-            <div className="text-secondary">
+            <div className="text-light">
                 <p className="text-[0.6rem]">Баланс</p>
                 <p className="text-2xl xxs:text-3xl leading-none font-semibold">
                     <MoneyAmount value={account.balance}/>

@@ -2,47 +2,48 @@ import Limits from "@/app/expenses/Limits";
 import SharedExpenses from "@/app/expenses/SharedExpenses";
 import {
     ExpenseCategoryType,
-    ExpenseseCategoryColors,
-    ExpenseseCategoryIcons
+    ExpensesCategoryColors,
+    ExpensesCategoryIcons
 } from "@/entities/expense-category/model/types";
 import PersonalExpenses from "@/app/expenses/PersonalExpenses";
+import ExpenseHistory from "@/app/expenses/ExpenseHistory";
 
 const categories: ExpenseCategoryType[] = [
     {
         name: "Развлечения",
         spent: 5000,
-        color: ExpenseseCategoryColors["Развлечения"],
-        icon: ExpenseseCategoryIcons["Развлечения"]
+        color: ExpensesCategoryColors["Развлечения"],
+        icon: ExpensesCategoryIcons["Развлечения"]
     },
     {
         name: "Продукты",
         spent: 45000,
-        color: ExpenseseCategoryColors["Продукты"],
-        icon: ExpenseseCategoryIcons["Продукты"]
+        color: ExpensesCategoryColors["Продукты"],
+        icon: ExpensesCategoryIcons["Продукты"]
     },
     {
         name: "ЖКХ и связь",
         spent: 4000,
-        color: ExpenseseCategoryColors["ЖКХ и связь"],
-        icon: ExpenseseCategoryIcons["ЖКХ и связь"]
+        color: ExpensesCategoryColors["ЖКХ и связь"],
+        icon: ExpensesCategoryIcons["ЖКХ и связь"]
     },
     {
         name: "Транспорт",
         spent: 10000,
-        color: ExpenseseCategoryColors["Транспорт"],
-        icon: ExpenseseCategoryIcons["Транспорт"]
+        color: ExpensesCategoryColors["Транспорт"],
+        icon: ExpensesCategoryIcons["Транспорт"]
     },
     {
         name: "Одежда и обувь",
         spent: 12000,
-        color: ExpenseseCategoryColors["Одежда и обувь"],
-        icon: ExpenseseCategoryIcons["Одежда и обувь"]
+        color: ExpensesCategoryColors["Одежда и обувь"],
+        icon: ExpensesCategoryIcons["Одежда и обувь"]
     },
     {
         name: "Подарки",
         spent: 1000,
-        color: ExpenseseCategoryColors["Подарки"],
-        icon: ExpenseseCategoryIcons["Подарки"]
+        color: ExpensesCategoryColors["Подарки"],
+        icon: ExpensesCategoryIcons["Подарки"]
     }
 ];
 
@@ -60,6 +61,29 @@ export default function Expenses() {
             </div>
             <div>
                 <PersonalExpenses avatar="/images/woman.png" expenseCategories={categories}/>
+                <ExpenseHistory expenses={[
+                    {
+                        category: categories[5],
+                        date: new Date(2025, 8, 29),
+                        name: "Золотое яблоко",
+                        outcome: true,
+                        value: 20000
+                    },
+                    {
+                        category: categories[4],
+                        date: new Date(2025, 8, 28),
+                        name: "ИП МАРИЯ МОРОЗОВА",
+                        outcome: false,
+                        value: 20000
+                    },
+                    {
+                        category: categories[3],
+                        date: new Date(2025, 8, 22),
+                        name: "Стрелка",
+                        outcome: true,
+                        value: 1000
+                    }
+                ]}/>
             </div>
         </div>
     </div>
