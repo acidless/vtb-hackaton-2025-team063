@@ -49,7 +49,7 @@ const PaymentsCalendar = ({payments, currentDate, setCurrentDate}: Props) => {
                         </button>
                     </div>
                     <div>
-                        <p className="text-secondary text-sm font-medium">{yearLabel}</p>
+                        <p className="text-light text-sm font-medium">{yearLabel}</p>
                     </div>
                 </div>
                 <Calendar
@@ -72,7 +72,7 @@ const PaymentsCalendar = ({payments, currentDate, setCurrentDate}: Props) => {
                         weekday: {
                             fontSize: '0.6rem',
                             fontWeight: 500,
-                            color: "var(--text-secondary)",
+                            color: "var(--text-light)",
                             padding: 0
                         },
                         month: {

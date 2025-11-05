@@ -15,7 +15,7 @@ export const Payment = ({payment}: Props) => {
             </p>
         </div>
         <div className="flex items-center gap-1 justify-between">
-            <time className="text-secondary text-[0.6rem] leading-none">{payment.date.toLocaleDateString()}</time>
+            <time className="text-light text-[0.6rem] leading-none">{payment.date.toLocaleDateString()}</time>
             <Status payment={payment}/>
         </div>
     </article>;

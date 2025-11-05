@@ -5,6 +5,7 @@
     --primary-color: #0066FF;
     --text-primary: #1E1E1E;
     --text-secondary: #6B7280;
+    --text-light: #9CA3AF;
     --bg-tertiary: #EEF2F7;
     --accent-color: #00C897;
     --accent-color--transparent: rgba(0, 200, 151, 0.22);
@@ -68,6 +69,10 @@ main {
 
 .text-secondary {
     color: var(--text-secondary);
+}
+
+.text-light {
+    color: var(--text-light);
 }
 
 .text-active {
@@ -142,4 +147,9 @@ main {
 
 .z-1 {
     z-index: 1;
+}
+
+.popup {
+    background: rgba(242, 38, 38, 0.38);
+    box-shadow: 1.1px -1.1px 31.34px 0px rgba(40, 43, 48, 0.35);
 }

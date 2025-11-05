@@ -5,6 +5,7 @@ import Image from "next/image";
 import MoneyAmount from "@/shared/ui/MoneyAmount";
 import ProgressBar from "@/shared/ui/ProgressBar";
 import {LimitType} from "@/entities/limit";
+import {ExpenseCategoryAvatar} from "@/entities/expense-category";
 
 type Props = {
     limit: LimitType;
@@ -20,12 +21,10 @@ export const Limit = ({limit}: Props) => {
                     animate={{opacity: 1, y: 0}}
                     exit={{opacity: 0, y: -10}}
                     transition={{duration: 0.3}}>
-            <div className="shrink-0 w-[3.125rem] h-[3.125rem] rounded-full relative" style={{backgroundColor: limit.category.color}}>
-                <Image className="p-3" src={`/images/categories/${limit.category.icon}`} alt={limit.category.name} fill/>
-            </div>
+            <ExpenseCategoryAvatar expenseCategory={limit.category}/>
             <div className="flex flex-col min-w-0">
                 <p className="text-primary font-medium text-ellipsis overflow-hidden whitespace-nowrap">{limit.category.name}</p>
-                <p className="text-secondary text-xs">
+                <p className="text-light text-xs">
                     <MoneyAmount value={limit.category.spent} showCurrency={false}/>
                     <span> из </span>
                     <MoneyAmount value={limit.limit} showCurrency={false}/>

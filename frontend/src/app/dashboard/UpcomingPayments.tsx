@@ -72,7 +72,7 @@ const UpcomingPayments = ({payments}: Props) => {
                         transition={{duration: 0.2}}
                         className="flex-1 flex items-center justify-center"
                     >
-                        <p className="text-center text-secondary text-sm font-medium">
+                        <p className="text-center text-light text-sm font-medium">
                             В этом месяце нет запланированных платежей
                         </p>
                     </motion.div>

@@ -16,7 +16,7 @@ export type ExpenseCategoryType = {
     icon: string;
 }
 
-export const ExpenseseCategoryIcons: Record<ExpenseCategoryName, string> = {
+export const ExpensesCategoryIcons: Record<ExpenseCategoryName, string> = {
     "ЖКХ и связь": "tv.png",
     "Продукты": "cart.png",
     "Транспорт": "car.png",
@@ -28,7 +28,7 @@ export const ExpenseseCategoryIcons: Record<ExpenseCategoryName, string> = {
     "Прочее": "lightning.png",
 }
 
-export const ExpenseseCategoryColors: Record<ExpenseCategoryName, string> = {
+export const ExpensesCategoryColors: Record<ExpenseCategoryName, string> = {
     "ЖКХ и связь": "#C3CCEF",
     "Продукты": "#BED3CB",
     "Транспорт": "#C3D1DF",
