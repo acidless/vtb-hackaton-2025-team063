@@ -20,7 +20,7 @@ const SharedExpenses = ({firstAvatar, secondAvatar, expenseCategories}: Props) =
         return [...expenseCategories].sort((c1, c2) => c2.spent - c1.spent);
     }, [expenseCategories]);
     const chartData = useMemo(() => {
-        return [...sortedCategories].reverse().map(c => ({name: c.name, value: c.spent, color: c.color}));
+        return [...sortedCategories].reverse().map(c => ({value: c.spent, color: c.color}));
     }, [sortedCategories]);
 
     const isShowingSkeleton = useShowingSkeleton(expenseCategories);
