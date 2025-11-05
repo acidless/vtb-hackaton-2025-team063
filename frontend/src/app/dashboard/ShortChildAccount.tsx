@@ -14,7 +14,7 @@ type Props = {
     avatar: string;
 }
 
-const ChildAccount = ({moneyCollected, moneyNeed, avatar}: Props) => {
+const ShortChildAccount = ({moneyCollected, moneyNeed, avatar}: Props) => {
     return <section className="mx-4 md:ml-0 mb-20">
         <Heading level={2}>Детский счет</Heading>
         <div className="bg-tertiary rounded-xl py-2 px-1.5">
@@ -44,4 +44,4 @@ const ChildAccount = ({moneyCollected, moneyNeed, avatar}: Props) => {
     </section>
 }
 
-export default ChildAccount;
+export default ShortChildAccount;

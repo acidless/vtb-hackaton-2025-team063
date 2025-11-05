@@ -3,6 +3,9 @@ import {ExpenseCategoryType} from "@/entities/expense-category";
 import {ExpensesCategoryColors, ExpensesCategoryIcons} from "@/entities/expense-category/model/types";
 import Wallet from "@/app/budget/Wallet";
 import UpcomingPayments from "@/app/budget/UpcomingPayments";
+import ChildAccount from "@/app/budget/ChildAccount";
+import ExpenseStats from "@/app/budget/ExpenseStats";
+import ExpenseList from "@/app/budget/ExpenseList";
 
 const categories: ExpenseCategoryType[] = [
     {
@@ -68,8 +71,6 @@ export default async function Budget() {
                     {category: categories[1], limit: 40000},
                     {category: categories[2], limit: 5000},
                 ]}/>
-            </div>
-            <div>
                 <UpcomingPayments payments={[
                     {
                         date: new Date(2025, 10, 3),
@@ -100,6 +101,33 @@ export default async function Budget() {
                         money: 5000,
                         name: "На квартиру",
                         payed: false
+                    }
+                ]}/>
+            </div>
+            <div>
+                <ChildAccount moneyCollected={123450} moneyNeed={230000} avatar="/images/woman.png"/>
+                <ExpenseStats expenseCategories={categories}/>
+                <ExpenseList expenses={[
+                    {
+                        category: categories[5],
+                        date: new Date(2025, 8, 29),
+                        name: "Золотое яблоко",
+                        outcome: true,
+                        value: 20000
+                    },
+                    {
+                        category: categories[4],
+                        date: new Date(2025, 8, 28),
+                        name: "ИП МАРИЯ МОРОЗОВА",
+                        outcome: false,
+                        value: 20000
+                    },
+                    {
+                        category: categories[3],
+                        date: new Date(2025, 8, 22),
+                        name: "Стрелка",
+                        outcome: true,
+                        value: 1000
                     }
                 ]}/>
             </div>

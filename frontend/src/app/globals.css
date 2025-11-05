@@ -58,6 +58,10 @@ main {
     background: var(--primary-color);
 }
 
+.bg-primary-dark {
+    background: var(--primary-color--dark);
+}
+
 .bg-primary-light {
     background: var(--color-primary-light);
 }

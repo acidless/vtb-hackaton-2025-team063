@@ -1,7 +1,14 @@
 "use client";
 
 import Heading from "@/shared/ui/typography/Heading";
-import {Payment, PaymentLarge, PaymentType} from "@/entities/payment";
+import {
+    isPaymentActual,
+    isPaymentExpired,
+    isPaymentPayed,
+    Payment,
+    PaymentLarge,
+    PaymentType
+} from "@/entities/payment";
 import React, {useMemo, useState} from "react";
 import {PaymentsCalendar} from "@/widgets/payments-calendar";
 import AccentButton from "@/shared/ui/AccentButton";
@@ -16,14 +23,31 @@ type Props = {
     payments: PaymentType[];
 }
 
-
-
 const UpcomingPayments = ({payments}: Props) => {
     const [currentDate, setCurrentDate] = useState<Date>(new Date());
+    const [search, setSearch] = useState("");
+    const [selectedStatus, setSelectedStatus] = useState("all");
+
+    const filteredPayments = useMemo(() => {
+        return payments.filter(p => {
+            let searchSubstr = search.toLowerCase().trim();
+            if(search && !p.name.toLowerCase().includes(searchSubstr)) {
+                return false;
+            }
+
+            if(selectedStatus === "waiting" && !isPaymentActual(p)
+                || selectedStatus === "expired" && !isPaymentExpired(p)
+                || selectedStatus === "payed" && !isPaymentPayed(p)) {
+                return false;
+            }
+
+            return true;
+        });
+    }, [payments, search, selectedStatus]);
 
     const dateToPayment = useMemo(() => {
-        return Object.fromEntries(payments.map(p => [p.date.toISOString().slice(0, 10), {...p}]));
-    }, [payments]);
+        return Object.fromEntries(filteredPayments.map(p => [p.date.toISOString().slice(0, 10), {...p}]));
+    }, [filteredPayments]);
 
     const nearestPayment = useMemo(() => {
         return payments.find(p => p.date > new Date());
@@ -34,14 +58,14 @@ const UpcomingPayments = ({payments}: Props) => {
             <Heading level={2}>Календарь платежей</Heading>
         </div>
         <div className="mb-1 flex items-stretch gap-1">
-            <SearchInput className="flex-1" placeholder="Поиск платежей"/>
+            <SearchInput value={search} onChange={(e) => setSearch(e.target.value)} className="flex-1" placeholder="Поиск платежей"/>
             <AccentButton>
                 <Plus className="mr-1"/>
                 Создать платеж
             </AccentButton>
         </div>
         <div className="mb-2.5 flex items-stretch gap-1">
-            <Select className="flex-1" options={[
+            <Select onChange={setSelectedStatus} className="flex-1" options={[
                 {label: "Все статусы", value: "all"}, {label: "Ожидается", value: "waiting"},
                 {label: "Просрочен", value: "expired"}, {label: "Внесен", value: "payed"}
             ]}></Select>
@@ -59,7 +83,7 @@ const UpcomingPayments = ({payments}: Props) => {
         </div>
         <div>
             <Heading level={3}>Все платежи</Heading>
-            <PaymentsList currentDate={currentDate} payments={payments}
+            <PaymentsList currentDate={currentDate} payments={filteredPayments}
                           paymentMarkup={(payment) => <PaymentLarge payment={payment}/>}
                           skeletonMarkup={(i) => (
                               <div key={i} className="h-16 rounded-xl bg-tertiary animate-pulse"/>

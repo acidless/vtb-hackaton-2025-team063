@@ -1,6 +1,5 @@
-import {PaymentType} from "@/entities/payment";
+import {isPaymentExpired, isPaymentPayed, PaymentType} from "@/entities/payment";
 import MoneyAmount from "@/shared/ui/MoneyAmount";
-import Heading from "@/shared/ui/typography/Heading";
 
 type Props = {
     payment: PaymentType;
@@ -25,11 +24,11 @@ export const PaymentLarge = ({payment}: Props) => {
 const Status = ({payment}: Props) => {
     const baseClasses = "text-[0.6rem] text-white py-0.5 px-4 rounded-xl font-medium";
 
-    if (payment.payed) {
+    if (isPaymentPayed(payment)) {
         return <p className={`${baseClasses} bg-info`}>Внесено</p>
     }
 
-    if (payment.date < new Date()) {
+    if (isPaymentExpired(payment)) {
         return <p className={`${baseClasses} bg-error`}>Просрочен</p>
     }
 

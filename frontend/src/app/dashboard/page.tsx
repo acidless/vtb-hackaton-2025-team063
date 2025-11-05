@@ -2,7 +2,7 @@ import SharedBalance from "@/app/dashboard/SharedBalance";
 import Accounts from "@/app/dashboard/Accounts";
 import ShortGoals from "@/app/dashboard/ShortGoals";
 import ShortUpcomingPayments from "@/app/dashboard/ShortUpcomingPayments";
-import ChildAccount from "@/app/dashboard/ChildAccount";
+import ShortChildAccount from "@/app/dashboard/ShortChildAccount";
 
 export default async function Dashboard() {
     return <div>
@@ -63,7 +63,7 @@ export default async function Dashboard() {
                         moneyNeed: 450000000
                     },
                 ]}/>
-                <ChildAccount moneyCollected={123450} moneyNeed={230000} avatar="/images/woman.png"/>
+                <ShortChildAccount moneyCollected={123450} moneyNeed={230000} avatar="/images/woman.png"/>
             </div>
         </div>
     </div>

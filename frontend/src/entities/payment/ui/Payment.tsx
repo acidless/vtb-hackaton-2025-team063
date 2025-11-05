@@ -1,4 +1,4 @@
-import {PaymentType} from "@/entities/payment";
+import {isPaymentExpired, isPaymentPayed, PaymentType} from "@/entities/payment";
 import MoneyAmount from "@/shared/ui/MoneyAmount";
 
 type Props = {
@@ -24,11 +24,11 @@ export const Payment = ({payment}: Props) => {
 const Status = ({payment}: Props) => {
     const baseClasses = "text-[0.6rem] font-medium";
 
-    if (payment.payed) {
+    if (isPaymentPayed(payment)) {
         return <p className={`${baseClasses} text-success`}>Внесено</p>
     }
 
-    if (payment.date < new Date()) {
+    if (isPaymentExpired(payment)) {
         return <p className={`${baseClasses} text-error`}>Просрочен</p>
     }
 

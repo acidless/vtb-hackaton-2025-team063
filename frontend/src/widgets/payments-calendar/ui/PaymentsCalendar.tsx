@@ -1,7 +1,7 @@
 "use client";
 
 import {Calendar} from "@mantine/dates";
-import {PaymentType} from "@/entities/payment";
+import {isPaymentExpired, isPaymentPayed, PaymentType} from "@/entities/payment";
 import {Dispatch, SetStateAction, useState} from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
@@ -97,9 +97,9 @@ export const PaymentsCalendar = ({payments, currentDate, setCurrentDate, large}:
                         let colorClass = "bg-info text-white";
                         if (!payment) {
                             colorClass = "";
-                        } else if (payment.payed) {
+                        } else if (isPaymentPayed(payment)) {
                             colorClass = "bg-success text-white";
-                        } else if (new Date(dateStr) < now) {
+                        } else if (isPaymentExpired(payment)) {
                             colorClass = "bg-error text-white";
                         }
 

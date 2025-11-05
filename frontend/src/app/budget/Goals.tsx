@@ -8,7 +8,7 @@ type Props = {
 };
 
 const Goals = ({goals}: Props) => {
-    return <section className="mx-4 md:mx-0 md:mr-4 mb-[1.875rem]">
+    return <section className="mx-4 md:mr-0 mb-[1.875rem]">
         <div className="flex items-center justify-between mb-2.5">
             <Heading level={2}>Наши цели</Heading>
             <AccentButton>
