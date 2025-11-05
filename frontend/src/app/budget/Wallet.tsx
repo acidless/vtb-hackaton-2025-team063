@@ -11,7 +11,7 @@ type Props = {
 };
 
 const Wallet = ({walletItems}: Props) => {
-    return <section className="mx-4 md:mx-0 md:mr-4 mb-5">
+    return <section className="mx-4 md:mx-0 md:mr-4 mb-[1.875rem]">
         <div className="flex items-center justify-between mb-2.5">
             <Heading level={2}>Кошелек</Heading>
             <AccentButton>

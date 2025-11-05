@@ -6,7 +6,7 @@ export const Status = ({percent}: { percent: number }) => {
         return <p className={`${baseClass} text-error`}>Лимит исчерпан</p>;
     }
 
-    return <p className={`${baseClass} text-light`}>
+    return <p className={`${baseClass} text-inactive`}>
         {percent >= 80 ? "Почти близок к лимиту" : "В норме"}
     </p>;
 }

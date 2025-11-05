@@ -1,7 +1,7 @@
 import SharedBalance from "@/app/dashboard/SharedBalance";
 import Accounts from "@/app/dashboard/Accounts";
 import ShortGoals from "@/app/dashboard/ShortGoals";
-import UpcomingPayments from "@/app/dashboard/UpcomingPayments";
+import ShortUpcomingPayments from "@/app/dashboard/ShortUpcomingPayments";
 import ChildAccount from "@/app/dashboard/ChildAccount";
 
 export default async function Dashboard() {
@@ -13,7 +13,7 @@ export default async function Dashboard() {
             <div>
                 <Accounts firstAccount={{name: "Мария", balance: 120000, avatar: "/images/woman.png"}}
                           secondAccount={{name: "Пётр", balance: 120000, avatar: "/images/man.png"}}/>
-                <UpcomingPayments payments={[
+                <ShortUpcomingPayments payments={[
                     {
                         date: new Date(2025, 10, 3),
                         money: 5000,

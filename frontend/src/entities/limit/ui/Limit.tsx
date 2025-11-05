@@ -24,7 +24,7 @@ export const Limit = ({limit}: Props) => {
             <ExpenseCategoryAvatar expenseCategory={limit.category}/>
             <div className="flex flex-col min-w-0">
                 <p className="text-primary font-medium text-ellipsis overflow-hidden whitespace-nowrap">{limit.category.name}</p>
-                <p className="text-light text-xs">
+                <p className="text-light font-light text-xs">
                     <MoneyAmount value={limit.category.spent} showCurrency={false}/>
                     <span> из </span>
                     <MoneyAmount value={limit.limit} showCurrency={false}/>

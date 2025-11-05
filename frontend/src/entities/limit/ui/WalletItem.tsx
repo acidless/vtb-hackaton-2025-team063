@@ -24,11 +24,11 @@ export const WalletItem = ({item}: Props) => {
             <ExpenseCategoryAvatar expenseCategory={item.category}/>
             <div className="flex flex-col min-w-0">
                 <p className="text-primary font-medium text-ellipsis overflow-hidden whitespace-nowrap">{item.category.name}</p>
-                <p className="text-light text-xs">
-                    <span>Осталось </span>
-                    <MoneyAmount value={item.category.spent}/>
-                    <span> из </span>
-                    <MoneyAmount value={item.limit}/>
+                <p className="text-light font-light text-xs flex items-center gap-[0.15rem]">
+                    <span>Осталось</span>
+                    <span><MoneyAmount value={Math.max(0, item.limit - item.category.spent)}/></span>
+                    <span>из</span>
+                    <span><MoneyAmount value={item.limit}/></span>
                 </p>
             </div>
             <div className="shrink-0 ml-auto flex flex-col items-end">

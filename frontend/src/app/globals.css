@@ -3,6 +3,7 @@
 :root {
     --color-primary-light: #E6F0FF;
     --primary-color: #0066FF;
+    --primary-color--dark: #0046B3;
     --text-primary: #1E1E1E;
     --text-secondary: #6B7280;
     --text-light: #9CA3AF;
@@ -75,6 +76,14 @@ main {
 
 .text-light {
     color: var(--text-light);
+}
+
+.text-inactive {
+    color: var(--icons-inactive);
+}
+
+.text-primary-dark {
+    color: var(--primary-color--dark);
 }
 
 .text-active {
@@ -152,6 +161,18 @@ main {
 }
 
 .popup {
-    background: rgba(242, 38, 38, 0.38);
+    background: #0176FA;
     box-shadow: 1.1px -1.1px 31.34px 0px rgba(40, 43, 48, 0.35);
+}
+
+input::placeholder {
+    font-size: 0.75rem;
+}
+
+.mantine-Calendar-day:hover,
+.mantine-Calendar-day:focus {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    filter: none !important;
+    opacity: 1 !important;
 }

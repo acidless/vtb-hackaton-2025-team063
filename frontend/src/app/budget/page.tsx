@@ -2,6 +2,7 @@ import Goals from "@/app/budget/Goals";
 import {ExpenseCategoryType} from "@/entities/expense-category";
 import {ExpensesCategoryColors, ExpensesCategoryIcons} from "@/entities/expense-category/model/types";
 import Wallet from "@/app/budget/Wallet";
+import UpcomingPayments from "@/app/budget/UpcomingPayments";
 
 const categories: ExpenseCategoryType[] = [
     {
@@ -69,7 +70,38 @@ export default async function Budget() {
                 ]}/>
             </div>
             <div>
-
+                <UpcomingPayments payments={[
+                    {
+                        date: new Date(2025, 10, 3),
+                        money: 5000,
+                        name: "На квартиру",
+                        payed: true
+                    },
+                    {
+                        date: new Date(2025, 10, 2),
+                        money: 4500,
+                        name: "Детский счет",
+                        payed: false
+                    },
+                    {
+                        date: new Date(2025, 10, 10),
+                        name: "Подписка",
+                        money: 500,
+                        payed: false
+                    },
+                    {
+                        date: new Date(2025, 10, 20),
+                        name: "Кредит",
+                        money: 10000,
+                        payed: false
+                    },
+                    {
+                        date: new Date(2025, 11, 3),
+                        money: 5000,
+                        name: "На квартиру",
+                        payed: false
+                    }
+                ]}/>
             </div>
         </div>
     </div>

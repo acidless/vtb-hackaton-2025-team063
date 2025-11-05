@@ -1,9 +1,10 @@
-import Image, {StaticImageData} from "next/image";
+import {StaticImageData} from "next/image";
 import Heading from "@/shared/ui/typography/Heading";
 import MoneyAmount from "@/shared/ui/MoneyAmount";
 import BalanceCounter from "@/shared/ui/MoneyCounting";
-import Avatar from "@/shared/ui/Avatar";
 import CoupleAvatars from "@/shared/ui/CoupleAvatars";
+import dayjs from "dayjs";
+import "dayjs/locale/ru";
 
 type Person = {
     avatar: string | StaticImageData;
@@ -22,7 +23,9 @@ const SharedBalance = ({personFirst, personSecond, balance, monthlyIncome}: Prop
         <div className="mb-12 flex items-center justify-between">
             <CoupleAvatars firstAvatar={personFirst.avatar} secondAvatar={personSecond.avatar}/>
             <div className="bg-primary px-3 py-1.5 rounded-2xl shadow-xl z-1">
-                <p className="text-base font-semibold leading-tight">+ <MoneyAmount value={monthlyIncome}/></p>
+                <p className="text-base font-semibold leading-tight">
+                    + <MoneyAmount value={monthlyIncome}/>
+                </p>
             </div>
         </div>
 
