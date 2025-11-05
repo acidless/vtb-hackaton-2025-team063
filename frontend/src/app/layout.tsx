@@ -47,9 +47,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({children}: Readonly<{children: React.ReactNode;}>) {
     return (
-        <html lang="ru">
+        <html lang="ru" data-mantine-color-scheme="light">
         <head>
-            <ColorSchemeScript/>
+            <ColorSchemeScript defaultColorScheme="light"/>
         </head>
         <body
             className={`${sfPro.variable} antialiased bg-[#F8F9FB] text-white`}

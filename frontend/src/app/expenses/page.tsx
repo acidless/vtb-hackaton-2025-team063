@@ -7,6 +7,7 @@ import {
 } from "@/entities/expense-category/model/types";
 import PersonalExpenses from "@/app/expenses/PersonalExpenses";
 import ExpenseHistory from "@/app/expenses/ExpenseHistory";
+import ExpensesDistribution from "@/app/expenses/ExpensesDistribution";
 
 const categories: ExpenseCategoryType[] = [
     {
@@ -84,6 +85,7 @@ export default function Expenses() {
                         value: 1000
                     }
                 ]}/>
+                <ExpensesDistribution firstPerson={{value: 10000, avatar:"/images/woman.png"}} secondPerson={{value: 19000, avatar:"/images/man.png"}}/>
             </div>
         </div>
     </div>

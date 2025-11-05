@@ -12,7 +12,7 @@ type Props = {
 const ExpenseHistory = ({expenses}: Props) => {
     const isShowindSkeletons = useShowingSkeleton(expenses);
 
-    return <section className="mx-4 md:mx-0 md:mr-4 mb-5 mb-32">
+    return <section className="mx-4 md:mx-0 md:mr-4 mb-[1.875rem]">
         <Heading level={2}>История трат</Heading>
         <div className="flex flex-col gap-2.5">
             {isShowindSkeletons
