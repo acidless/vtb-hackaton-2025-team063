@@ -34,7 +34,7 @@ const ExpenseHistory = ({expenses}: Props) => {
             {isShowindSkeletons
                 ? Array.from({length: 5}).map((_, i) => (
                     <div key={i} className="bg-tertiary h-16 rounded-xl animate-pulse"></div>))
-                : currentExpenses.map((expense) => (<Expense key={expense.date.getTime()} expense={expense}/>))
+                : currentExpenses.map((expense) => (<Expense key={expense.id} expense={expense}/>))
             }
         </div>
     </section>;

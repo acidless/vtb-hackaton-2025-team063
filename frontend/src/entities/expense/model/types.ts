@@ -1,6 +1,7 @@
 import {ExpenseCategoryType} from "@/entities/expense-category";
 
 export type ExpenseType = {
+    id: string;
     category: ExpenseCategoryType;
     name: string;
     value: number;

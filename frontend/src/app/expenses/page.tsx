@@ -8,6 +8,7 @@ import {
 import PersonalExpenses from "@/app/expenses/PersonalExpenses";
 import ExpenseHistory from "@/app/expenses/ExpenseHistory";
 import ExpensesDistribution from "@/app/expenses/ExpensesDistribution";
+import InteractiveExpenses from "@/app/expenses/InteractiveExpenses";
 
 const categories: ExpenseCategoryType[] = [
     {
@@ -61,9 +62,9 @@ export default function Expenses() {
                                 expenseCategories={categories}/>
             </div>
             <div>
-                <PersonalExpenses avatar="/images/woman.png" expenseCategories={categories}/>
-                <ExpenseHistory expenses={[
+                <InteractiveExpenses avatar="/images/woman.png" categories={categories} expenses={[
                     {
+                        id: "1",
                         category: categories[5],
                         date: new Date(2025, 8, 29),
                         name: "Золотое яблоко",
@@ -72,6 +73,7 @@ export default function Expenses() {
                         bank:"Альфабанк"
                     },
                     {
+                        id: "2",
                         category: categories[4],
                         date: new Date(2025, 8, 28),
                         name: "ИП МАРИЯ МОРОЗОВА",
@@ -80,6 +82,7 @@ export default function Expenses() {
                         bank:"Сбербанк"
                     },
                     {
+                        id: "3",
                         category: categories[3],
                         date: new Date(2025, 8, 22),
                         name: "Стрелка",
@@ -88,6 +91,7 @@ export default function Expenses() {
                         bank:"Альфабанк"
                     },
                     {
+                        id: "4",
                         category: categories[5],
                         date: new Date(2024, 8, 29),
                         name: "Золотое яблоко",
@@ -96,6 +100,7 @@ export default function Expenses() {
                         bank:"Альфабанк"
                     },
                     {
+                        id: "5",
                         category: categories[4],
                         date: new Date(2024, 8, 28),
                         name: "ИП МАРИЯ МОРОЗОВА",
@@ -104,6 +109,7 @@ export default function Expenses() {
                         bank:"Сбербанк"
                     },
                     {
+                        id: "6",
                         category: categories[3],
                         date: new Date(2024, 8, 22),
                         name: "Стрелка",

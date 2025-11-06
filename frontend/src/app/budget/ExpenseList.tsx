@@ -34,7 +34,7 @@ const ExpenseList = ({expenses}: Props) => {
                     <div key={i} className="bg-tertiary h-14 rounded-xl animate-pulse"></div>))}
             </div>
             : <div className="flex flex-col">
-                {currentExpenses.map((expense) => (<ExpenseLight key={expense.date.getTime()} expense={expense}/>))}
+                {currentExpenses.map((expense) => (<ExpenseLight key={expense.id} expense={expense}/>))}
             </div>
         }
     </section>
