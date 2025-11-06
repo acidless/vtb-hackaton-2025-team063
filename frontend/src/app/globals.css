@@ -15,6 +15,7 @@
 
     --success-color: #00C897;
     --error-color: #FF5A5F;
+    --error-color-hover: #ce4247;
     --warning-color: #FFD66B;
     --error-color--transparent: rgba(255, 90, 95, 0.16);
     --info-color: #0078FF;
@@ -80,6 +81,14 @@ main {
     background: var(--bg-tertiary);
 }
 
+.bg-light {
+    background: var(--text-light);
+}
+
+.bg-light-hover:hover {
+    background: var(--text-secondary);
+}
+
 .bg-health {
     background: var(--health-color);
 }
@@ -90,6 +99,10 @@ main {
 
 .text-secondary {
     color: var(--text-secondary);
+}
+
+.bg-secondary {
+    background: var(--text-secondary);
 }
 
 .text-light {
@@ -138,6 +151,10 @@ main {
 
 .bg-error {
     background: var(--error-color);
+}
+
+.bg-error-hover:hover {
+    background: var(--error-color-hover);
 }
 
 .bg-error-transparent {

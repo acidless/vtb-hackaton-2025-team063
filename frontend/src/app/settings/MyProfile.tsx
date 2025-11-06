@@ -1,0 +1,44 @@
+"use client";
+
+import Heading from "@/shared/ui/typography/Heading";
+import Avatar from "@/shared/ui/Avatar";
+import EditableField from "@/app/settings/EditableField";
+import {useState} from "react";
+import Checkbox from "@/shared/ui/inputs/Checkbox";
+
+type Props = {
+    profileData: {
+        avatar: string;
+        name: string;
+        email: string;
+        phone: string;
+    };
+    pushEnabled: boolean;
+}
+
+const MyProfile = ({profileData, pushEnabled}: Props) => {
+    const [isPushEnabled, setPushEnabled] = useState(false);
+
+    return <section className="mx-4 md:mr-0 mb-[1.875rem]">
+        <div className="mb-2.5 flex items-center justify-between">
+            <Heading level={2}>Мой профиль</Heading>
+            <Avatar avatar={profileData.avatar}/>
+        </div>
+        <div className="flex flex-col items-stretch gap-1 mb-[1.875rem]">
+            <EditableField value={profileData.name} onChange={() => {
+            }}/>
+            <EditableField value={profileData.email} onChange={() => {
+            }}/>
+            <EditableField value={profileData.phone} onChange={() => {
+            }}/>
+        </div>
+        <div>
+            <div className="bg-tertiary rounded-xl px-2.5 h-[2.625rem] flex items-center justify-between">
+                <p className="text-sm font-medium">Push-уведомления</p>
+                <Checkbox value={isPushEnabled} onChange={setPushEnabled}/>
+            </div>
+        </div>
+    </section>
+}
+
+export default MyProfile;
