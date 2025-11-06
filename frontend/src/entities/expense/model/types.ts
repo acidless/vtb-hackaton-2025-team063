@@ -5,5 +5,6 @@ export type ExpenseType = {
     name: string;
     value: number;
     outcome: boolean;
+    bank: string;
     date: Date;
 }

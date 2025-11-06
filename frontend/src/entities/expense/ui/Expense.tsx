@@ -3,6 +3,7 @@ import {ExpenseCategoryAvatar} from "@/entities/expense-category";
 import Date from "@/shared/ui/typography/Date";
 import MoneyAmount from "@/shared/ui/MoneyAmount";
 import {motion} from "framer-motion";
+import {BankTag} from "@/entities/expense/ui/BankTag";
 
 type Props = {
     expense: ExpenseType;
@@ -18,7 +19,10 @@ export const Expense = ({expense}: Props) => {
             <ExpenseCategoryAvatar expenseCategory={expense.category}/>
             <div className="flex flex-col min-w-0">
                 <p className="text-base font-medium min-w-0 text-ellipsis overflow-hidden whitespace-nowrap">{expense.name}</p>
-                <Date date={expense.date}/>
+                <div className="flex gap-1">
+                    <BankTag bank={expense.bank}/>
+                    <Date date={expense.date}/>
+                </div>
             </div>
         </div>
         <div className="shrink-0 flex flex-col items-end">

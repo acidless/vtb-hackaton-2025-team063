@@ -2,22 +2,34 @@
 
 import {type ExpenseType, Expense} from "@/entities/expense";
 import Heading from "@/shared/ui/typography/Heading";
-import React from "react";
+import React, {useMemo} from "react";
 import useShowingSkeleton from "@/shared/hooks/useShowingSkeleton";
+import {ChevronRight} from "@/shared/ui/icons/ChevronRight";
+import {ChevronLeft} from "@/shared/ui/icons/ChevronLeft";
+import usePagination from "@/shared/hooks/usePagination";
+import Pagination from "@/shared/ui/Pagination";
 
 type Props = {
     expenses: ExpenseType[];
 }
 
+const PER_PAGE = 5;
+
 const ExpenseHistory = ({expenses}: Props) => {
+    const [currentExpenses, {setPage, firstPage, lastPage}] = usePagination(expenses, 5);
+
     const isShowindSkeletons = useShowingSkeleton(expenses);
 
     return <section className="mx-4 md:mx-0 md:mr-4 mb-[1.875rem]">
-        <Heading level={2}>История трат</Heading>
+        <div className="flex justify-between items-center">
+            <Heading level={2}>История трат</Heading>
+            <Pagination setPage={setPage} firstPage={firstPage} lastPage={lastPage}/>
+        </div>
         <div className="flex flex-col gap-2.5">
             {isShowindSkeletons
-                ? Array.from({length: 5}).map((_, i) => (<div key={i} className="bg-tertiary h-16 rounded-xl animate-pulse"></div>))
-                : expenses.map((expense) => (<Expense key={expense.date.getTime()} expense={expense}/>))
+                ? Array.from({length: 5}).map((_, i) => (
+                    <div key={i} className="bg-tertiary h-16 rounded-xl animate-pulse"></div>))
+                : currentExpenses.map((expense) => (<Expense key={expense.date.getTime()} expense={expense}/>))
             }
         </div>
     </section>;

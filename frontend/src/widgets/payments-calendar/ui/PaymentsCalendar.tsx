@@ -6,8 +6,9 @@ import {Dispatch, SetStateAction, useState} from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
 import {AnimatePresence, motion} from "framer-motion";
-import {ChevronLeft, ChevronRight} from "lucide-react";
 import MoneyAmount from "@/shared/ui/MoneyAmount";
+import {ChevronLeft} from "@/shared/ui/icons/ChevronLeft";
+import {ChevronRight} from "@/shared/ui/icons/ChevronRight";
 
 type Props = {
     payments: Record<string, PaymentType>;

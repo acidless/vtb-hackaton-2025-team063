@@ -68,21 +68,48 @@ export default function Expenses() {
                         date: new Date(2025, 8, 29),
                         name: "Золотое яблоко",
                         outcome: true,
-                        value: 20000
+                        value: 20000,
+                        bank:"Альфабанк"
                     },
                     {
                         category: categories[4],
                         date: new Date(2025, 8, 28),
                         name: "ИП МАРИЯ МОРОЗОВА",
                         outcome: false,
-                        value: 20000
+                        value: 20000,
+                        bank:"Сбербанк"
                     },
                     {
                         category: categories[3],
                         date: new Date(2025, 8, 22),
                         name: "Стрелка",
                         outcome: true,
-                        value: 1000
+                        value: 1000,
+                        bank:"Альфабанк"
+                    },
+                    {
+                        category: categories[5],
+                        date: new Date(2024, 8, 29),
+                        name: "Золотое яблоко",
+                        outcome: true,
+                        value: 20000,
+                        bank:"Альфабанк"
+                    },
+                    {
+                        category: categories[4],
+                        date: new Date(2024, 8, 28),
+                        name: "ИП МАРИЯ МОРОЗОВА",
+                        outcome: false,
+                        value: 20000,
+                        bank:"Сбербанк"
+                    },
+                    {
+                        category: categories[3],
+                        date: new Date(2024, 8, 22),
+                        name: "Стрелка",
+                        outcome: true,
+                        value: 1000,
+                        bank:"Альфабанк"
                     }
                 ]}/>
                 <ExpensesDistribution firstPerson={{value: 10000, avatar:"/images/woman.png"}} secondPerson={{value: 19000, avatar:"/images/man.png"}}/>

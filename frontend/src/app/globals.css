@@ -20,6 +20,7 @@
     --error-color--transparent: rgba(255, 90, 95, 0.16);
     --info-color: #0078FF;
 
+    --bg-inactive: rgba(174, 179, 185, 0.38);
     --icons-inactive: #AEB3B9;
 
     --health-color: #BEE4F5;
@@ -107,6 +108,10 @@ main {
 
 .text-light {
     color: var(--text-light);
+}
+
+.bg-inactive {
+    background: var(--bg-inactive);
 }
 
 .text-inactive {
