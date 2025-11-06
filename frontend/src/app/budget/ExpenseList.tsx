@@ -1,11 +1,13 @@
 "use client";
 
 import Heading from "@/shared/ui/typography/Heading";
-import {ExpenseLight, ExpenseType} from "@/entities/expense";
+import {ExpenseLight, ExpenseType, toExcelData} from "@/entities/expense";
 import useShowingSkeleton from "@/shared/hooks/useShowingSkeleton";
 import React from "react";
 import usePagination from "@/shared/hooks/usePagination";
 import Pagination from "@/shared/ui/Pagination";
+import {exportToExcel} from "@/shared/lib/exportToExcel";
+import {Export} from "@/shared/ui/icons/Export";
 
 type Props = {
     expenses: ExpenseType[];
@@ -16,8 +18,13 @@ const ExpenseList = ({expenses}: Props) => {
     const isShowindSkeletons = useShowingSkeleton(expenses);
 
     return <section className="mx-4 md:ml-0 mb-20">
-        <div className="mb-2.5 flex justify-between items-center">
-            <Heading level={2}>История операций</Heading>
+        <div className="mb-2.5 flex justify-between items-center flex-wrap gap-x-2">
+            <div className="flex items-center gap-2">
+                <Heading level={2}>История операций</Heading>
+                <button onClick={() => exportToExcel(toExcelData(expenses))} className="text-inactive">
+                    <Export/>
+                </button>
+            </div>
             <Pagination setPage={setPage} firstPage={firstPage} lastPage={lastPage}/>
         </div>
 

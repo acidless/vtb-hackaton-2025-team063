@@ -1,6 +1,6 @@
 "use client";
 
-import {type ExpenseType, Expense} from "@/entities/expense";
+import {type ExpenseType, Expense, toExcelData} from "@/entities/expense";
 import Heading from "@/shared/ui/typography/Heading";
 import React, {useMemo} from "react";
 import useShowingSkeleton from "@/shared/hooks/useShowingSkeleton";
@@ -8,12 +8,12 @@ import {ChevronRight} from "@/shared/ui/icons/ChevronRight";
 import {ChevronLeft} from "@/shared/ui/icons/ChevronLeft";
 import usePagination from "@/shared/hooks/usePagination";
 import Pagination from "@/shared/ui/Pagination";
+import {Export} from "@/shared/ui/icons/Export";
+import {exportToExcel} from "@/shared/lib/exportToExcel";
 
 type Props = {
     expenses: ExpenseType[];
 }
-
-const PER_PAGE = 5;
 
 const ExpenseHistory = ({expenses}: Props) => {
     const [currentExpenses, {setPage, firstPage, lastPage}] = usePagination(expenses, 5);
@@ -22,7 +22,12 @@ const ExpenseHistory = ({expenses}: Props) => {
 
     return <section className="mx-4 md:mx-0 md:mr-4 mb-[1.875rem]">
         <div className="flex justify-between items-center">
-            <Heading level={2}>История трат</Heading>
+            <div className="flex items-center gap-2">
+                <Heading level={2}>История трат</Heading>
+                <button onClick={() => exportToExcel(toExcelData(expenses))} className="text-inactive">
+                    <Export/>
+                </button>
+            </div>
             <Pagination setPage={setPage} firstPage={firstPage} lastPage={lastPage}/>
         </div>
         <div className="flex flex-col gap-2.5">

@@ -8,3 +8,14 @@ export type ExpenseType = {
     bank: string;
     date: Date;
 }
+
+export function toExcelData(expenses: ExpenseType[]) {
+    return expenses.map(item => ({
+        "Название": item.name,
+        "Дата операции": new Date(item.date).toLocaleDateString("ru-RU"),
+        "Категория": item.category.name,
+        "Тип": item.outcome ? "Исходящее" : "Входящее",
+        "Сумма (₽)": item.value,
+        "Банк": item.bank
+    }));
+}
