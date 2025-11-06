@@ -10,6 +10,7 @@ import VariantPick from "@/shared/ui/inputs/VariantPick";
 import {IMaskInput} from "react-imask";
 import InputError from "@/shared/ui/inputs/InputError";
 import {useEffect} from "react";
+import { motion } from "framer-motion";
 
 const schema = yup
     .object({
@@ -71,7 +72,11 @@ const MainStep = ({onSuccess}: Props) => {
         onSuccess();
     }
 
-    return <div className="p-4 rounded-xl bg-white">
+    return <motion.div className="p-4 rounded-xl bg-white"
+                       initial={{opacity: 0, y: 10}}
+                       animate={{opacity: 1, y: 0}}
+                       exit={{opacity: 0, y: -10}}
+                       transition={{duration: 0.3}}>
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-2 flex flex-col">
                 <Input id="name" placeholder="Валерия" error={errors.name?.message}
@@ -121,7 +126,7 @@ const MainStep = ({onSuccess}: Props) => {
                               className="justify-center text-base! py-2.5! font-normal!">Зарегистрироваться</AccentButton>
             </div>
         </form>
-    </div>
+    </motion.div>
 }
 
 export default MainStep;
