@@ -7,39 +7,45 @@ import MoneyAmount from "@/shared/ui/MoneyAmount";
 import {motion} from "framer-motion";
 import Date from "@/shared/ui/typography/Date";
 import {FlashOn} from "@/shared/ui/icons/FlashOn";
+import SwipeForDelete from "@/shared/ui/SwipeForDelete";
 
 type Props = {
     goal: GoalType;
 }
 
 export const Goal = ({goal}: Props) => {
-    return <article className="bg-tertiary rounded-xl p-1.5">
-        <motion.div className="flex items-center justify-start gap-2"
-                    initial={{opacity: 0, y: 10}}
-                    animate={{opacity: 1, y: 0}}
-                    exit={{opacity: 0, y: -10}}
-                    transition={{duration: 0.3}}>
-            <div className="shrink-0 w-[3.125rem] h-[3.125rem] rounded-full relative bg-health text-white flex justify-center items-center">
-                {goal.avatar
-                    ? <Image className="p-1.5" src={goal.avatar} alt={goal.name} fill sizes="50px"/>
-                    : <FlashOn/>
-                }
-            </div>
-            <div className="flex flex-col min-w-0">
-                <p className="text-primary font-medium text-ellipsis overflow-hidden whitespace-nowrap">{goal.name}</p>
-                <Date date={goal.deadline}/>
-            </div>
-            <div className="shrink-0 ml-auto flex flex-col">
-                <p className="leading-none mb-1 font-bold text-lg xxs:text-xl">
-                    <MoneyAmount value={goal.moneyCollected}/>
-                </p>
-                <p className="text-light text-[0.6rem] self-end">
-                    из <MoneyAmount showCurrency={false} value={goal.moneyNeed}/>
-                </p>
-                <div className="w-20 self-end">
-                    <ProgressBar value={goal.moneyCollected} max={goal.moneyNeed}/>
-                </div>
-            </div>
-        </motion.div>
-    </article>
+    return <div className="relative overflow-hidden">
+        <SwipeForDelete onDelete={() => {}}>
+            <article className="bg-tertiary rounded-xl py-1.5 pl-1.5 pr-2.5">
+                <motion.div className="flex items-center justify-start gap-2"
+                            initial={{opacity: 0, y: 10}}
+                            animate={{opacity: 1, y: 0}}
+                            exit={{opacity: 0, y: -10}}
+                            transition={{duration: 0.3}}>
+                    <div
+                        className="shrink-0 w-[3.125rem] h-[3.125rem] rounded-full relative bg-health text-white flex justify-center items-center">
+                        {goal.avatar
+                            ? <Image className="p-1.5" src={goal.avatar} alt={goal.name} fill sizes="50px"/>
+                            : <FlashOn/>
+                        }
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                        <p className="text-primary font-medium text-ellipsis overflow-hidden whitespace-nowrap">{goal.name}</p>
+                        <Date date={goal.deadline}/>
+                    </div>
+                    <div className="shrink-0 ml-auto flex flex-col">
+                        <p className="leading-none mb-1 font-bold text-lg xxs:text-xl">
+                            <MoneyAmount value={goal.moneyCollected}/>
+                        </p>
+                        <p className="text-light text-[0.6rem] self-end">
+                            из <MoneyAmount showCurrency={false} value={goal.moneyNeed}/>
+                        </p>
+                        <div className="w-20 self-end">
+                            <ProgressBar value={goal.moneyCollected} max={goal.moneyNeed}/>
+                        </div>
+                    </div>
+                </motion.div>
+            </article>
+        </SwipeForDelete>
+    </div>
 }
