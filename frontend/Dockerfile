@@ -1,5 +1,3 @@
-# syntax=docker/dockerfile:1
-
 ARG NODE_VERSION=20-alpine
 FROM node:${NODE_VERSION} AS deps
 
@@ -19,26 +17,26 @@ COPY . .
 
 ARG NEXT_PUBLIC_API_BASE_URL
 ENV NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
+
 RUN npm run build
 
 FROM node:${NODE_VERSION} AS runner
+
+RUN addgroup -g 1001 next && adduser -D -u 1001 -G next nextjs
 
 WORKDIR /app
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1
 
-COPY package.json package-lock.json* ./
+COPY --chown=nextjs:next package.json package-lock.json* ./
 RUN npm ci --omit=dev && npm cache clean --force
 
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next ./.next
-
-RUN addgroup -g 1001 next && adduser -D -u 1001 -G next nextjs \
-    && chown -R nextjs:next /app
+COPY --chown=nextjs:next --from=builder /app/public ./public
+COPY --chown=nextjs:next --from=builder /app/.next ./.next
 
 USER nextjs
 
 EXPOSE 3000
 ENV PORT=3000
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start", "--", "-H", "0.0.0.0"]

@@ -30,7 +30,7 @@ const RegisterForm = () => {
 
     }
 
-    return <section className="min-h-screen w-full login-page flex flex-col px-4 relative">
+    return <section className="min-h-screen w-full max-w-md login-page flex flex-col px-4 relative">
         {step === 0 && <MainStep onSuccess={onMainStepEnd}/>}
         {step === 1 && <PhotoStep onSuccess={onPhotoStepEnd}/>}
         {step === 2 && <BankSelectStep onSuccess={onBanksStepEnd}/>}
