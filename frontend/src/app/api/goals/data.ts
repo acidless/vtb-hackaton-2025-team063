@@ -7,6 +7,7 @@ let goals: GoalType[] = [
         moneyNeed: 150000,
         moneyCollected: 20000,
         deadline: new Date("2025-12-01"),
+        avatar: "target",
     },
     {
         id: 2,
@@ -14,11 +15,12 @@ let goals: GoalType[] = [
         moneyNeed: 100000,
         moneyCollected: 40000,
         deadline: new Date("2025-09-01"),
+        avatar: "vacation",
     },
 ];
 
 export function getGoals() {
-    return goals.sort((g1, g2) => g2.deadline.getTime() - g1.deadline.getTime());
+    return goals.sort((g1, g2) => new Date(g1.deadline).getTime() - new Date(g2.deadline).getTime());
 }
 
 export function addGoal(goal: Omit<GoalType, "id">) {

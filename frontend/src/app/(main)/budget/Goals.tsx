@@ -30,10 +30,9 @@ const Goals = () => {
             <AnimatePresence>
                 {goals.length
                     ? goals.map((goal) => (<Goal key={goal.id} goal={goal}/>))
-                    : <CollectionEmpty>Целей пока нет</CollectionEmpty>
+                    : <CollectionEmpty>У вас пока нет созданных целей</CollectionEmpty>
                 }
             </AnimatePresence>
-
         </div>
         <CreateGoal isActive={isModalOpen} setActive={setModalOpen}/>
     </section>
