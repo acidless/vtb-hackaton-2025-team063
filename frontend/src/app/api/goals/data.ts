@@ -18,7 +18,7 @@ let goals: GoalType[] = [
 ];
 
 export function getGoals() {
-    return goals.sort((g1, g2) => g2.deadline.getTime() - g1.deadline.getTime());
+    return goals.sort((g1, g2) => new Date(g1.deadline).getTime() - new Date(g2.deadline).getTime());
 }
 
 export function addGoal(goal: Omit<GoalType, "id">) {

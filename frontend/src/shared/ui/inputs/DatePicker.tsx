@@ -8,15 +8,20 @@ import Input from "@/shared/ui/inputs/Input";
 import {DatePicker} from "@mantine/dates";
 
 type Props = {
+    date: string | null;
     dateChange: (date: string | null) => void;
     large?: boolean;
     error?: string;
 }
 
-export default function DatePickerCompoent({large, error, dateChange}: Props) {
+export default function DatePickerCompoent({date, large, error, dateChange}: Props) {
     const [opened, setOpened] = useState(false);
     const [value, setValue] = useState<string | null>(null);
     const wrapperRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        setValue(date);
+    }, [date]);
 
     const handleChange = (date: string | null) => {
         setValue(date);

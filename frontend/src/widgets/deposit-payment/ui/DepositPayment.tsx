@@ -30,7 +30,7 @@ export const DepositPayment = ({isActive, setActive}: Props) => {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mb-2.5">
                     <AccentButton className="w-full justify-center" large>
-                        Заплатить
+                        Внести
                     </AccentButton>
                 </div>
             </form>
