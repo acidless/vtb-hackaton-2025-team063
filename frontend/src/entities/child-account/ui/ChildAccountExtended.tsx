@@ -9,7 +9,6 @@ import AccentButton from "@/shared/ui/AccentButton";
 import {useState} from "react";
 import {DepositChildAccount} from "@/widgets/deposit-child-account";
 import {ChangeChildAccountLimit} from "@/widgets/change-child-account-limit";
-import {ChildAccountType} from "@/entities/child-account/model/types";
 import {useQuery} from "@tanstack/react-query";
 import {getChildAccount} from "@/entities/child-account";
 

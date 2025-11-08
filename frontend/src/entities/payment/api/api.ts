@@ -1,5 +1,6 @@
 import { fetchMock } from "@/shared/lib/fetchMock";
 import {PaymentType} from "@/entities/payment";
+import {ExpenseType} from "@/entities/expense";
 
 export async function getPayments(): Promise<PaymentType[]> {
     const payments = await fetchMock("/api/payments");
@@ -22,6 +23,12 @@ export async function addPayment(newPayment: Omit<PaymentType, "id" | "payed" | 
 
 export async function deletePayment(paymentId: number): Promise<void> {
     await fetchMock(`/api/payments/?id=${paymentId}`, {
+        method: "DELETE",
+    });
+}
+
+export async function executePayment(paymentId: number): Promise<void> {
+    await fetchMock(`/api/payments/execution/?id=${paymentId}`, {
         method: "DELETE",
     });
 }

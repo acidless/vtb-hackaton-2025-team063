@@ -11,30 +11,13 @@ import {getPersonalAccounts, getSharedAccounts} from "@/entities/account";
 export default async function Dashboard() {
     const queryClient = new QueryClient();
 
-    await queryClient.prefetchQuery({
-        queryKey: ["shared-accounts"],
-        queryFn: getSharedAccounts,
-    });
-
-    await queryClient.prefetchQuery({
-        queryKey: ["personal-accounts"],
-        queryFn: getPersonalAccounts,
-    });
-
-    await queryClient.prefetchQuery({
-        queryKey: ["goals"],
-        queryFn: getGoals,
-    });
-
-    await queryClient.prefetchQuery({
-        queryKey: ["payments"],
-        queryFn: getPayments,
-    });
-
-    await queryClient.prefetchQuery({
-        queryKey: ["child-account"],
-        queryFn: getChildAccount,
-    });
+    await Promise.all([
+        queryClient.prefetchQuery({queryKey: ["shared-accounts"], queryFn: getSharedAccounts}),
+        queryClient.prefetchQuery({queryKey: ["personal-accounts"], queryFn: getPersonalAccounts}),
+        queryClient.prefetchQuery({queryKey: ["goals"], queryFn: getGoals}),
+        queryClient.prefetchQuery({queryKey: ["payments"], queryFn: getPayments}),
+        queryClient.prefetchQuery({queryKey: ["child-account"], queryFn: getChildAccount})
+    ]);
 
     return <div>
         <HydrationBoundary state={dehydrate(queryClient)}>

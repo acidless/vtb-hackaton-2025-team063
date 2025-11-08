@@ -6,9 +6,8 @@ import ProgressBar from "@/shared/ui/ProgressBar";
 import {deleteLimit, LimitType} from "@/entities/limit";
 import {ExpenseCategoryAvatar} from "@/entities/expense-category";
 import SwipeForDelete from "@/shared/ui/SwipeForDelete";
-import {usePopup} from "@/providers/GlobalPopupProvider";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {Delete} from "@/shared/ui/icons/Delete";
+import {useQueryClient} from "@tanstack/react-query";
+import useDelete from "@/shared/hooks/useDelete";
 
 type Props = {
     limit: LimitType;
@@ -18,28 +17,11 @@ export const Limit = ({limit}: Props) => {
     const percent = Math.round((limit.category.spent / limit.limit) * 100);
     const isOverflow = percent >= 100;
 
-    const {showPopup, closePopup} = usePopup();
     const queryClient = useQueryClient();
+    const onDelete = useDelete(limit.id, deleteLimit, onSuccess, "Удаление лимита...");
 
-    const {mutate: removeLimit, isPending} = useMutation({
-        mutationFn: deleteLimit,
-        onSuccess: () => {
-            closePopup();
-            queryClient.invalidateQueries({queryKey: ["limits"]});
-        },
-    });
-
-    function onDelete() {
-        if (isPending) {
-            return;
-        }
-
-        showPopup({
-            text: "Удаление лимита...",
-            background: "var(--error-color)",
-            icon: () => <Delete/>,
-        });
-        removeLimit(limit.id);
+    function onSuccess() {
+        queryClient.invalidateQueries({queryKey: ["limits"]});
     }
 
     return <div className="relative overflow-hidden">

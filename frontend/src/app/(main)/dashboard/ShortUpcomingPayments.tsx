@@ -10,6 +10,7 @@ import {useQuery} from "@tanstack/react-query";
 
 const ShortUpcomingPayments = () => {
     const [isModalActive, setModalActive] = useState(false);
+    const [currentPaymentId, setCurrentPaymentId] = useState<number | null>(null);
     const [currentDate, setCurrentDate] = useState<Date>(new Date());
 
     const {data: payments = []} = useQuery({
@@ -22,6 +23,7 @@ const ShortUpcomingPayments = () => {
     }, [payments]);
 
     function onDepositClick(id: number) {
+        setCurrentPaymentId(id);
         setModalActive(true);
     }
 
@@ -36,7 +38,7 @@ const ShortUpcomingPayments = () => {
                               <div key={i} className="h-11 rounded-xl bg-tertiary animate-pulse"/>
                           )}/>
         </div>
-        <DepositPayment isActive={isModalActive} setActive={setModalActive}/>
+        <DepositPayment currentPaymentId={currentPaymentId} isActive={isModalActive} setActive={setModalActive}/>
     </section>
 }
 

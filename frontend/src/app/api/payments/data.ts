@@ -1,7 +1,8 @@
 import {PaymentType} from "@/entities/payment";
 import {getExpenseCategories} from "@/app/api/expenses/categories/data";
+import {addExpense} from "@/app/api/expenses/data";
 
-let payments: (Omit<PaymentType, "category"> & {category: number})[] = [
+let payments: (Omit<PaymentType, "category"> & { category: number })[] = [
     {
         id: 1,
         category: 3,
@@ -43,7 +44,7 @@ export function getPayments() {
         .map(p => ({...p, category: categories.find((c) => c.id === p.category)}));
 }
 
-export function addPayment(payment: Omit<PaymentType, "id"  | "category"> & {category: number}) {
+export function addPayment(payment: Omit<PaymentType, "id" | "category"> & { category: number }) {
     const newPayment = {
         ...payment,
         id: Math.max(0, ...payments.map((p) => p.id)) + 1,
@@ -56,4 +57,21 @@ export function addPayment(payment: Omit<PaymentType, "id"  | "category"> & {cat
 
 export function deletePayment(paymentId: number) {
     payments = payments.filter((payment) => payment.id !== paymentId);
+}
+
+export function executePayment(paymentId: number) {
+    for (let payment of payments) {
+        if (payment.id === paymentId) {
+            payment.payed = true;
+            addExpense({
+                date: new Date(),
+                name: payment.name,
+                value: payment.money,
+                outcome: true,
+                category: payment.category,
+                bank: "ВТБ"
+            });
+            break;
+        }
+    }
 }

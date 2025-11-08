@@ -13,20 +13,11 @@ export default async function Expenses() {
 
     const queryClient = new QueryClient();
 
-    await queryClient.prefetchQuery({
-        queryKey: ["expenses"],
-        queryFn: getExpenses,
-    });
-
-    await queryClient.prefetchQuery({
-        queryKey: ["expense-categories"],
-        queryFn: getExpenseCategories,
-    });
-
-    await queryClient.prefetchQuery({
-        queryKey: ["limits"],
-        queryFn: getLimits,
-    });
+    await Promise.all([
+        queryClient.prefetchQuery({queryKey: ["expenses"], queryFn: getExpenses}),
+        queryClient.prefetchQuery({queryKey: ["expense-categories"], queryFn: getExpenseCategories}),
+        queryClient.prefetchQuery({queryKey: ["limits"], queryFn: getLimits}),
+    ]);
 
     return <div>
         <div className="grid grid-cols-1 md:grid-cols-2 md:gap-8">

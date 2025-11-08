@@ -8,38 +8,20 @@ import {motion} from "framer-motion";
 import Date from "@/shared/ui/typography/Date";
 import {FlashOn} from "@/shared/ui/icons/FlashOn";
 import SwipeForDelete from "@/shared/ui/SwipeForDelete";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {useQueryClient} from "@tanstack/react-query";
 import {deleteGoal} from "@/entities/goal";
-import {usePopup} from "@/providers/GlobalPopupProvider";
-import {Delete} from "@/shared/ui/icons/Delete";
+import useDelete from "@/shared/hooks/useDelete";
 
 type Props = {
     goal: GoalType;
 }
 
 export const Goal = ({goal}: Props) => {
-    const {showPopup, closePopup} = usePopup();
     const queryClient = useQueryClient();
+    const onDelete = useDelete(goal.id, deleteGoal, onSuccess, "Удаление цели...");
 
-    const {mutate: removeGoal, isPending} = useMutation({
-        mutationFn: deleteGoal,
-        onSuccess: () => {
-            closePopup();
-            queryClient.invalidateQueries({queryKey: ["goals"]});
-        },
-    });
-
-    function onDelete() {
-        if(isPending) {
-            return;
-        }
-
-        showPopup({
-            text: "Удаление цели...",
-            background: "var(--error-color)",
-            icon: () => <Delete />,
-        });
-        removeGoal(goal.id);
+    function onSuccess() {
+        queryClient.invalidateQueries({queryKey: ["goals"]});
     }
 
     return <div className="relative overflow-hidden">

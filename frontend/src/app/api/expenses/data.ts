@@ -1,5 +1,6 @@
 import {getExpenseCategoriesWithoutPopulation} from "@/app/api/expenses/categories/data";
 import {ExpenseType} from "@/entities/expense";
+import {getFamilyAccounts} from "@/app/api/users/family/data";
 
 type UnpopulatedExpense = Omit<ExpenseType, "category"> & { category: number };
 
@@ -71,10 +72,11 @@ let expenses: UnpopulatedExpense[] = [
 
 export function getExpenses(): ExpenseType[] {
     const categories = getExpenseCategoriesWithoutPopulation();
-    return expenses.map((item: UnpopulatedExpense) => ({
-        ...item,
-        category: categories.find((c: any) => c.id === item.category)!
-    }));
+    return expenses
+        .sort((e1, e2) => new Date(e2.date).getTime() - new Date(e1.date)
+            .getTime()).map((item: UnpopulatedExpense) => ({
+            ...item, category: categories.find((c: any) => c.id === item.category)!
+        }));
 }
 
 export function expenseUpdateCategory(expenseId: string, newCategoryId: number): UnpopulatedExpense | undefined {
@@ -84,4 +86,19 @@ export function expenseUpdateCategory(expenseId: string, newCategoryId: number):
             return expense;
         }
     });
+}
+
+export function addExpense(expense: Omit<UnpopulatedExpense, "id">): UnpopulatedExpense | undefined {
+    const newExpense = {
+        ...expense,
+        id: (Math.max(0, ...expenses.map((g) => Number(g.id))) + 1).toString(),
+    };
+
+    if(expense.outcome) {
+        getFamilyAccounts()[1].balance -= expense.value;
+        getFamilyAccounts()[1].expenses += expense.value;
+    }
+
+    expenses.push(newExpense);
+    return newExpense;
 }

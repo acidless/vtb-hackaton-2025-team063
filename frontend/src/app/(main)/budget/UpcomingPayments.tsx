@@ -28,6 +28,7 @@ const UpcomingPayments = () => {
     const [search, setSearch] = useState("");
     const [selectedStatus, setSelectedStatus] = useState("all");
     const [selectedName, setSelectedName] = useState("all");
+    const [currentPaymentId, setCurrentPaymentId] = useState<number | null>(null);
 
     const {data: payments = []} = useQuery({
         queryKey: ["payments"],
@@ -68,6 +69,7 @@ const UpcomingPayments = () => {
     }, [payments]);
 
     function onDepositClick(id: number) {
+        setCurrentPaymentId(id);
         setDepositModalOpen(true);
     }
 
@@ -109,7 +111,7 @@ const UpcomingPayments = () => {
                           )}/>
         </div>
         <CreatePayment isActive={isCreateModalOpen} setActive={setCreateModalOpen}/>
-        <DepositPayment isActive={isDepositModalOpen} setActive={setDepositModalOpen}/>
+        <DepositPayment currentPaymentId={currentPaymentId} isActive={isDepositModalOpen} setActive={setDepositModalOpen}/>
     </section>
 }
 

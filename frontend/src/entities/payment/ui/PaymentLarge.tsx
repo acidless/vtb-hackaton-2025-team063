@@ -1,10 +1,9 @@
 import {deletePayment, isPaymentExpired, isPaymentPayed, PaymentType} from "@/entities/payment";
 import MoneyAmount from "@/shared/ui/MoneyAmount";
 import SwipeForDelete from "@/shared/ui/SwipeForDelete";
-import {usePopup} from "@/providers/GlobalPopupProvider";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {Delete} from "@/shared/ui/icons/Delete";
+import {useQueryClient} from "@tanstack/react-query";
 import {motion} from "framer-motion";
+import useDelete from "@/shared/hooks/useDelete";
 
 type Props = {
     payment: PaymentType;
@@ -12,28 +11,11 @@ type Props = {
 }
 
 export const PaymentLarge = ({payment, onDepositClick}: Props) => {
-    const {showPopup, closePopup} = usePopup();
     const queryClient = useQueryClient();
+    const onDelete = useDelete(payment.id, deletePayment, onSuccess, "Удаление платежа...");
 
-    const {mutate: removePayment, isPending} = useMutation({
-        mutationFn: deletePayment,
-        onSuccess: () => {
-            closePopup();
-            queryClient.invalidateQueries({queryKey: ["payments"]});
-        },
-    });
-
-    function onDelete() {
-        if(isPending) {
-            return;
-        }
-
-        showPopup({
-            text: "Удаление платежа...",
-            background: "var(--error-color)",
-            icon: () => <Delete/>,
-        });
-        removePayment(payment.id);
+    function onSuccess() {
+        queryClient.invalidateQueries({queryKey: ["payments"]});
     }
 
     return <div className="relative overflow-hidden">

@@ -1,6 +1,8 @@
-import {isPaymentExpired, isPaymentPayed, PaymentType} from "@/entities/payment";
+import {deletePayment, isPaymentExpired, isPaymentPayed, PaymentType} from "@/entities/payment";
 import MoneyAmount from "@/shared/ui/MoneyAmount";
 import SwipeForDelete from "@/shared/ui/SwipeForDelete";
+import {useQueryClient} from "@tanstack/react-query";
+import useDelete from "@/shared/hooks/useDelete";
 
 type Props = {
     payment: PaymentType;
@@ -8,8 +10,15 @@ type Props = {
 }
 
 export const Payment = ({payment, onDepositClick}: Props) => {
+    const queryClient = useQueryClient();
+    const onDelete = useDelete(payment.id, deletePayment, onSuccess, "Удаление платежа...");
+
+    function onSuccess() {
+        queryClient.invalidateQueries({queryKey: ["payments"]});
+    }
+
     return <div className="relative overflow-hidden">
-        <SwipeForDelete onDelete={() => {}}>
+        <SwipeForDelete onDelete={onDelete}>
             <article
                 className={`${!payment.payed && payment.date < new Date() ? "bg-error-transparent" : "bg-tertiary"} px-1.5 py-1 rounded-xl`}>
                 <div className="flex items-center gap-1 justify-between mb-0.5">
