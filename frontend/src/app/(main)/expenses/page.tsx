@@ -2,14 +2,14 @@ import Limits from "@/app/(main)/expenses/Limits";
 import SharedExpenses from "@/app/(main)/expenses/SharedExpenses";
 import ExpensesDistribution from "@/app/(main)/expenses/ExpensesDistribution";
 import InteractiveExpenses from "@/app/(main)/expenses/InteractiveExpenses";
-import fetchWrap from "@/shared/lib/fetchWrap";
+import { fetchMock } from "@/shared/lib/fetchMock";
 import {getExpenses} from "@/entities/expense";
 import {dehydrate, HydrationBoundary, QueryClient} from "@tanstack/react-query";
 import {getExpenseCategories} from "@/entities/expense-category";
+import {getLimits} from "@/entities/limit";
 
 export default async function Expenses() {
-    const members = await fetchWrap("/api/users/family");
-    const limits = await fetchWrap("/api/expenses/limits");
+    const members = await fetchMock("/api/users/family");
 
     const queryClient = new QueryClient();
 
@@ -23,11 +23,16 @@ export default async function Expenses() {
         queryFn: getExpenseCategories,
     });
 
+    await queryClient.prefetchQuery({
+        queryKey: ["limits"],
+        queryFn: getLimits,
+    });
+
     return <div>
         <div className="grid grid-cols-1 md:grid-cols-2 md:gap-8">
             <div>
-                <Limits limits={limits}/>
                 <HydrationBoundary state={dehydrate(queryClient)}>
+                    <Limits/>
                     <SharedExpenses firstAvatar={members[1].avatar} secondAvatar={members[2].avatar}/>
                 </HydrationBoundary>
             </div>

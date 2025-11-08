@@ -1,16 +1,20 @@
 import {NextResponse} from "next/server";
-import fetchWrap from "@/shared/lib/fetchWrap";
+import {addLimit, deleteLimit, getLimits} from "@/app/api/expenses/limits/data";
 
 export async function GET() {
-    const mockData = [
-        {id: 1, category: 1, limit: 20000},
-        {id: 2, category: 2, limit: 40000},
-        {id: 3, category: 3, limit: 5000},
-    ];
+    return NextResponse.json(getLimits());
+}
 
-    const categories = await fetchWrap("/api/expenses/categories");
-    return NextResponse.json(mockData.map(item => ({
-        ...item,
-        category: categories.find((c: any) => c.id === item.category)
-    })));
+export async function POST(req: Request) {
+    const data = await req.json();
+    const newLimit = addLimit(data);
+    return NextResponse.json(newLimit);
+}
+
+export async function DELETE(req: Request) {
+    const { searchParams } = new URL(req.url);
+    const id = Number(searchParams.get("id"));
+    deleteLimit(id);
+
+    return new NextResponse(null, { status: 204 });
 }

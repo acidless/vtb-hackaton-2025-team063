@@ -73,7 +73,7 @@ export const DepositChildAccount = ({isActive, setActive}: Props) => {
                     </div>
                 </div>
                 <div className="mb-2.5">
-                    <AccentButton className="w-full justify-center" large>
+                    <AccentButton disabled={isPending} className="w-full justify-center" large>
                         <Plus className="mr-1"/>
                         Пополнить
                     </AccentButton>

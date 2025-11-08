@@ -24,6 +24,10 @@ export const PaymentLarge = ({payment, onDepositClick}: Props) => {
     });
 
     function onDelete() {
+        if(isPending) {
+            return;
+        }
+
         showPopup({
             text: "Удаление платежа...",
             background: "var(--error-color)",

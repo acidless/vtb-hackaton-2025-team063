@@ -1,12 +1,14 @@
 "use client";
 
 import {motion} from "framer-motion";
-import Image from "next/image";
 import MoneyAmount from "@/shared/ui/MoneyAmount";
 import ProgressBar from "@/shared/ui/ProgressBar";
-import {LimitType} from "@/entities/limit";
+import {deleteLimit, LimitType} from "@/entities/limit";
 import {ExpenseCategoryAvatar} from "@/entities/expense-category";
 import SwipeForDelete from "@/shared/ui/SwipeForDelete";
+import {usePopup} from "@/providers/GlobalPopupProvider";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {Delete} from "@/shared/ui/icons/Delete";
 
 type Props = {
     limit: LimitType;
@@ -16,9 +18,36 @@ export const Limit = ({limit}: Props) => {
     const percent = Math.round((limit.category.spent / limit.limit) * 100);
     const isOverflow = percent >= 100;
 
+    const {showPopup, closePopup} = usePopup();
+    const queryClient = useQueryClient();
+
+    const {mutate: removeLimit, isPending} = useMutation({
+        mutationFn: deleteLimit,
+        onSuccess: () => {
+            closePopup();
+            queryClient.invalidateQueries({queryKey: ["limits"]});
+        },
+    });
+
+    function onDelete() {
+        if (isPending) {
+            return;
+        }
+
+        showPopup({
+            text: "Удаление лимита...",
+            background: "var(--error-color)",
+            icon: () => <Delete/>,
+        });
+        removeLimit(limit.id);
+    }
+
     return <div className="relative overflow-hidden">
-        <SwipeForDelete onDelete={() => {}}>
-            <article className="bg-tertiary rounded-xl p-1.5">
+        <SwipeForDelete onDelete={onDelete}>
+            <motion.article className="bg-tertiary rounded-xl p-1.5"
+                            exit={{opacity: 0, height: 0, paddingTop: 0, paddingBottom: 0}}
+                            transition={{duration: 0.3}}
+                            layout>
                 <motion.div className="flex items-center justify-start gap-2"
                             initial={{opacity: 0, y: 10}}
                             animate={{opacity: 1, y: 0}}
@@ -26,7 +55,7 @@ export const Limit = ({limit}: Props) => {
                             transition={{duration: 0.3}}>
                     <ExpenseCategoryAvatar expenseCategory={limit.category}/>
                     <div className="flex flex-col min-w-0">
-                        <p className="text-primary font-medium text-ellipsis overflow-hidden whitespace-nowrap">{limit.category.name}</p>
+                        <p className="text-primary font-medium text-ellipsis overflow-hidden whitespace-nowrap">{limit.name}</p>
                         <p className="text-light font-light text-xs">
                             <MoneyAmount value={limit.category.spent} showCurrency={false}/>
                             <span> из </span>
@@ -42,7 +71,7 @@ export const Limit = ({limit}: Props) => {
                         </div>
                     </div>
                 </motion.div>
-            </article>
+            </motion.article>
         </SwipeForDelete>
     </div>
 }

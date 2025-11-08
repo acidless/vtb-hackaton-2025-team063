@@ -1,18 +1,23 @@
 "use client";
 
-import {Limit, LimitType} from "@/entities/limit";
+import {getLimits, Limit} from "@/entities/limit";
 import Heading from "@/shared/ui/typography/Heading";
 import {Plus} from "@/shared/ui/icons/Plus";
 import AccentButton from "@/shared/ui/AccentButton";
 import {useState} from "react";
 import {CreateLimit} from "@/widgets/create-limit";
+import {useQuery} from "@tanstack/react-query";
+import {Goal} from "@/entities/goal";
+import CollectionEmpty from "@/shared/ui/CollectionEmpty";
+import {AnimatePresence} from "framer-motion";
 
-type Props = {
-    limits: LimitType[];
-}
-
-const Limits = ({limits}: Props) => {
+const Limits = () => {
     const [isModalOpen, setModalOpen] = useState(false);
+
+    const {data: limits = []} = useQuery({
+        queryKey: ["limits"],
+        queryFn: getLimits,
+    });
 
     return <section className="mx-4 md:mr-0 mb-[1.875rem]">
         <div className="flex items-center justify-between mb-1">
@@ -23,9 +28,14 @@ const Limits = ({limits}: Props) => {
             </AccentButton>
         </div>
         <div className="flex gap-1 flex-col">
-            {limits.map((limit) => (
-                <Limit key={limit.id} limit={limit}/>
-            ))}
+            <AnimatePresence>
+                {limits.length
+                    ? limits.map((limit) => (
+                        <Limit key={limit.id} limit={limit}/>
+                    ))
+                    : <CollectionEmpty>У вас пока нет созданных лимитов</CollectionEmpty>
+                }
+            </AnimatePresence>
         </div>
         <CreateLimit isActive={isModalOpen} setActive={setModalOpen}/>
     </section>;

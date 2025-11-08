@@ -1,6 +1,6 @@
-import fetchWrap from "@/shared/lib/fetchWrap";
+import { fetchMock } from "@/shared/lib/fetchMock";
 import {ExpenseCategoryType} from "@/entities/expense-category";
 
 export async function getExpenseCategories(): Promise<ExpenseCategoryType[]> {
-    return fetchWrap("/api/expenses/categories");
+    return fetchMock("/api/expenses/categories");
 }

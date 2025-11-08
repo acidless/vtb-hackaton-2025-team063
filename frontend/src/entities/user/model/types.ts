@@ -1,3 +1,9 @@
+export type UserInput = {
+    name: string;
+    phone: string;
+    image_url: string;
+}
+
 export type UserType = {
     name: string;
     gender: string;

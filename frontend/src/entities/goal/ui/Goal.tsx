@@ -30,6 +30,10 @@ export const Goal = ({goal}: Props) => {
     });
 
     function onDelete() {
+        if(isPending) {
+            return;
+        }
+
         showPopup({
             text: "Удаление цели...",
             background: "var(--error-color)",

@@ -3,10 +3,12 @@
 import {useState} from "react";
 import MainStep from "@/app/register/MainStep";
 import PhotoStep from "@/app/register/PhotoStep";
-import {UserType} from "@/entities/user";
+import {registerUser, UserType} from "@/entities/user";
 import BankSelectStep from "@/app/register/BankSelectStep";
 import FinalStep from "@/app/register/FinalStep";
 import { useRouter } from "next/navigation";
+import {useMutation} from "@tanstack/react-query";
+import {deleteWallet} from "@/entities/wallet";
 
 const RegisterForm = () => {
     const [step, setStep] = useState(0);
@@ -28,8 +30,15 @@ const RegisterForm = () => {
         setStep(3);
     }
 
+    const {mutate: register, isPending} = useMutation({
+        mutationFn: registerUser,
+        onSuccess: () => {
+            router.push("/dashboard");
+        },
+    });
+
     function onRegisterFinished() {
-        router.push("/dashboard");
+        register({name: userData.name!, phone: userData.phone!, image_url: userData.photo!});
     }
 
     return <section className="min-h-screen w-full max-w-md login-page flex flex-col px-4 relative">

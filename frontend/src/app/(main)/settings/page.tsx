@@ -1,11 +1,11 @@
 import MyProfile from "./MyProfile";
 import ManageFamily from "./ManageFamily";
 import AppData from "@/app/(main)/settings/AppData";
-import fetchWrap from "@/shared/lib/fetchWrap";
+import { fetchMock } from "@/shared/lib/fetchMock";
 import {PartnerType} from "@/entities/partner";
 
 export default async function Settings() {
-    const profile = await fetchWrap("/api/users");
+    const profile = await fetchMock("/api/users");
     profile.partners = profile.partners.map((p: PartnerType) => ({...p, date: new Date(p.date)}));
 
     return <div>

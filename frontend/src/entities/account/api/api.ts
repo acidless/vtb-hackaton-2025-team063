@@ -1,10 +1,10 @@
-import fetchWrap from "@/shared/lib/fetchWrap";
+import { fetchMock } from "@/shared/lib/fetchMock";
 import {PersonalAccountType, SharedAccountType} from "@/entities/account/model/types";
 
 export async function getSharedAccounts(): Promise<SharedAccountType> {
-    return fetchWrap("/api/accounts");
+    return fetchMock("/api/accounts");
 }
 
 export async function getPersonalAccounts(): Promise<Record<number, PersonalAccountType>> {
-    return fetchWrap("/api/users/family");
+    return fetchMock("/api/users/family");
 }

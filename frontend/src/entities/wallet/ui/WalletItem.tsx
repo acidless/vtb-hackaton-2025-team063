@@ -31,6 +31,10 @@ export const WalletItem = ({item}: Props) => {
     });
 
     function onDelete() {
+        if(isPending) {
+            return;
+        }
+
         showPopup({
             text: "Удаление кошелька...",
             background: "var(--error-color)",

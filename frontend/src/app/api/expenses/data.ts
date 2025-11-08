@@ -59,7 +59,7 @@ let expenses: UnpopulatedExpense[] = [
         bank: "Альфабанк"
     },
     {
-        id: "6",
+        id: "7",
         category: 3,
         date: new Date(2024, 8, 18),
         name: "Интернет",
@@ -71,7 +71,7 @@ let expenses: UnpopulatedExpense[] = [
 
 export function getExpenses(): ExpenseType[] {
     const categories = getExpenseCategoriesWithoutPopulation();
-    return expenses.map((item: Omit<ExpenseType, "category"> & { category: number }) => ({
+    return expenses.map((item: UnpopulatedExpense) => ({
         ...item,
         category: categories.find((c: any) => c.id === item.category)!
     }));

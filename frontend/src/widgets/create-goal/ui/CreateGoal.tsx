@@ -116,7 +116,7 @@ export const CreateGoal = ({isActive, setActive}: Props) => {
                     />
                 </div>
                 <div className="mb-2.5">
-                    <AccentButton className="w-full justify-center" large>
+                    <AccentButton disabled={isPending} className="w-full justify-center" large>
                         <Plus className="mr-1"/>
                         Создать цель
                     </AccentButton>
