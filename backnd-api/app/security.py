@@ -16,8 +16,16 @@ def _truncate_password(password: str) -> str:
     password_bytes = password.encode("utf-8")
     if len(password_bytes) <= _MAX_PASSWORD_BYTES:
         return password
+    # Truncate to 72 bytes, but ensure we don't cut in the middle of a UTF-8 character
     truncated_bytes = password_bytes[:_MAX_PASSWORD_BYTES]
-    return truncated_bytes.decode("utf-8", errors="ignore")
+    # Remove any incomplete UTF-8 sequences at the end
+    while truncated_bytes and truncated_bytes[-1] & 0b11000000 == 0b10000000:
+        truncated_bytes = truncated_bytes[:-1]
+    truncated_str = truncated_bytes.decode("utf-8", errors="ignore")
+    # Double-check: ensure re-encoding doesn't exceed 72 bytes
+    while len(truncated_str.encode("utf-8")) > _MAX_PASSWORD_BYTES:
+        truncated_str = truncated_str[:-1]
+    return truncated_str
 
 
 def verify_password(plain_password: str, password_hash: str) -> bool:
