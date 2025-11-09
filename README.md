@@ -57,17 +57,19 @@ Family Multibank — цифровая экосистема для совмест
 | Слой | Технологии | Назначение |
 | --- | --- | --- |
 | Frontend | Next.js 16, React 19, Tailwind CSS 4, @tanstack/react-query | Интерактивный интерфейс дашборда, виджеты, работа с API |
-| Backend | Django 4.2, Django REST Framework, Celery, Redis | Агрегация банковских данных, бизнес-логика кошельков и целей, очереди задач |
 | База данных | PostgreSQL 15 | Хранение счетов, целей, транзакций и пользователей |
 | Инфраструктура | Docker, docker-compose | Изолированное окружение для разработки и демонстрации |
 
+## Доступ к приложению и документации
+
+- Приложение развернуто по адресу: [http://fambank.ru](http://fambank.ru)
+- Документация Swagger доступна по адресу: [http://fambank.ru/api/redoc](http://fambank.ru/api/redoc)
+- Свой пример тестового банка доступен по адресу: [bank.fambank.ru](bank.fambank.ru)
+
 ## Структура репозитория
 
-- [`backend/`](backend/) — Django-проект с приложениями `accounts`, `banks`, `payments`, `products`.
 - [`frontend/`](frontend/) — Next.js-приложение с модульной структурой (app directory, widgets, entities).
-- [`docker-compose.yml`](docker-compose.yml:1) — общий оркестратор для фронтенда, бэкенда, Postgres и Redis.
-- [`backend/docker-compose.yml`](backend/docker-compose.yml:1) — отдельный compose-файл для разработки бэкенда.
-- [`backend/postgres/init.sql`](backend/postgres/init.sql:1) — инициализация схемы и базовых данных.
+- [`docker-compose.yml`](docker-compose.yml:1) — общий оркестратор для фронтенда, Postgres и Redis.
 
 ## Запуск проекта
 
@@ -79,21 +81,10 @@ Family Multibank — цифровая экосистема для совмест
    ```
 3. Доступ к сервисам:
    - Frontend: http://localhost:3000
-   - Backend API: http://localhost:8000
    - Postgres: `localhost:5432` (`postgres` / `postgres`)
    - Redis: `localhost:6379`
 
 ### Локальная разработка (без Docker)
-
-#### Backend
-```bash
-cd backend
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py runserver
-```
 
 #### Frontend
 ```bash
@@ -102,7 +93,7 @@ npm install
 npm run dev
 ```
 
-Настройки окружения задаются через `.env` файлы (`backend/.env`, `frontend/.env.local`).
+Настройки окружения задаются через `.env` файлы (`frontend/.env.local`).
 
 ## Сценарий демо
 1. Пользователь получает приглашение и подключает партнера.
