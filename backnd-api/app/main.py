@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .config import settings
 from .database import engine
 from .models import Base
-from .routers import accounts, auth, banks, consent, goals
+from .routers import accounts, auth, banks, child_accounts, consent, goals, payment_calendar
 
 app = FastAPI(
     title=settings.app_name,
@@ -27,6 +27,8 @@ app.include_router(accounts.router)
 app.include_router(consent.router)
 app.include_router(banks.router)
 app.include_router(goals.router)
+app.include_router(payment_calendar.router)
+app.include_router(child_accounts.router)
 
 
 @app.on_event("startup")

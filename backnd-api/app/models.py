@@ -94,3 +94,50 @@ class Goal(Base):
         onupdate=func.now(),
         nullable=False,
     )
+
+
+class PaymentCalendar(Base):
+    __tablename__ = "payment_calendar"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    account_id: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
+    name: Mapped[str] = mapped_column(String(200), nullable=False)
+    payment_date: Mapped[date] = mapped_column(Date, nullable=False, index=True)
+    amount: Mapped[float] = mapped_column(Numeric(15, 2), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+
+class ChildAccount(Base):
+    __tablename__ = "child_accounts"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    child_name: Mapped[str] = mapped_column(String(100), nullable=False)
+    balance: Mapped[float] = mapped_column(
+        Numeric(15, 2), server_default="0.00", nullable=False
+    )
+    bank_id: Mapped[int] = mapped_column(
+        ForeignKey("banks.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
+    )
+
+    user: Mapped[User] = relationship("User")
+    bank: Mapped["Bank"] = relationship("Bank")

@@ -148,3 +148,56 @@ class GoalRead(GoalBase):
 
     class Config:
         from_attributes = True
+
+
+class PaymentCalendarBase(BaseModel):
+    account_id: int
+    name: constr(strip_whitespace=True, min_length=1, max_length=200)
+    payment_date: date
+    amount: float
+
+
+class PaymentCalendarCreate(PaymentCalendarBase):
+    pass
+
+
+class PaymentCalendarUpdate(BaseModel):
+    account_id: int | None = None
+    name: constr(strip_whitespace=True, min_length=1, max_length=200) | None = None
+    payment_date: date | None = None
+    amount: float | None = None
+
+
+class PaymentCalendarRead(PaymentCalendarBase):
+    id: int
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class ChildAccountBase(BaseModel):
+    user_id: int
+    child_name: constr(strip_whitespace=True, min_length=1, max_length=100)
+    balance: float
+    bank_id: int
+
+
+class ChildAccountCreate(ChildAccountBase):
+    balance: float = 0.0
+
+
+class ChildAccountUpdate(BaseModel):
+    child_name: constr(strip_whitespace=True, min_length=1, max_length=100) | None = None
+    balance: float | None = None
+    bank_id: int | None = None
+
+
+class ChildAccountRead(ChildAccountBase):
+    id: int
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
