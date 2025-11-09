@@ -36,22 +36,25 @@ export const CreateLimit = ({isActive, setActive}: Props) => {
     });
 
     const queryClient = useQueryClient();
-
-    const {mutate: createLimit, isPending} = useMutation({
-        mutationFn: addLimit,
-        onSuccess: () => {
-            reset();
-            setActive(false);
-            queryClient.invalidateQueries({queryKey: ["limits"]});
-        },
-    });
+    const isPending = false;
+    // const {mutate: createLimit, isPending} = useMutation({
+    //     mutationFn: addLimit,
+    //     onSuccess: () => {
+    //         reset();
+    //         setActive(false);
+    //         queryClient.invalidateQueries({queryKey: ["limits"]});
+    //     },
+    // });
 
     const onSubmit = (data: yup.InferType<typeof schema>) => {
-        createLimit({
-            name: data.limitName,
-            limit: data.limitValue,
-            category: Number(data.limitCategory),
-        });
+        reset();
+        setActive(false);
+
+        // createLimit({
+        //     name: data.limitName,
+        //     limit: data.limitValue,
+        //     category: Number(data.limitCategory),
+        // });
     }
 
     return <ModalWindow isActive={isActive} setActive={setActive}>

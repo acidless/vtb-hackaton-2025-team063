@@ -8,17 +8,16 @@ import Avatar from "@/shared/ui/Avatar";
 import AccentButton from "@/shared/ui/AccentButton";
 import {useState} from "react";
 import {DepositChildAccount} from "@/widgets/deposit-child-account";
-import {useQuery} from "@tanstack/react-query";
-import {getChildAccount} from "@/entities/child-account";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
+import {ChildAccountType, getChildAccount} from "@/entities/child-account";
+import {PersonalAccountType, SharedAccountType} from "@/entities/account";
 
 export const ChildAccountSimple = () => {
     const [isModalActive, setModalActive] = useState(false);
 
-    const {data: account = null} = useQuery({
-        queryKey: ["child-account"],
-        queryFn: getChildAccount,
-        refetchInterval: 5000
-    });
+    const queryClient = useQueryClient();
+
+    const account = queryClient.getQueryData(["child-account"]) as ChildAccountType;
 
     return <section className="mx-4 md:ml-0 mb-20">
         <Heading level={2}>Детский счет</Heading>

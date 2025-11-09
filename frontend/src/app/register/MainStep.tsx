@@ -116,6 +116,8 @@ const MainStep = ({onSuccess}: Props) => {
                                         value={field.value || ""}
                                         onAccept={(value) => field.onChange(value)}
                                         placeholder="+7 (999) 999-99-99"
+                                        type="tel"
+                                        inputMode="numeric"
                                         className={`min-w-0 flex-1 large text-sm text-primary py-2.5 px-2.5 bg-tertiary rounded-xl font-normal outline-primary ${
                                             errors.phone ? "border-error" : ""
                                         }`}

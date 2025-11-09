@@ -34,20 +34,24 @@ export const DepositChildAccount = ({isActive, setActive}: Props) => {
     });
 
     const queryClient = useQueryClient();
+    const isPending = false;
 
-    const {mutate: sendDeposit, isPending} = useMutation({
-        mutationFn: depositMoney,
-        onSuccess: () => {
-            reset();
-            setActive(false);
-            queryClient.invalidateQueries({queryKey: ["child-account"]});
-            queryClient.invalidateQueries({queryKey: ["shared-accounts"]});
-            queryClient.invalidateQueries({queryKey: ["personal-accounts"]});
-        },
-    });
+    // const {mutate: sendDeposit, isPending} = useMutation({
+    //     mutationFn: depositMoney,
+    //     onSuccess: () => {
+    //         reset();
+    //         setActive(false);
+    //         queryClient.invalidateQueries({queryKey: ["child-account"]});
+    //         queryClient.invalidateQueries({queryKey: ["shared-accounts"]});
+    //         queryClient.invalidateQueries({queryKey: ["personal-accounts"]});
+    //     },
+    // });
 
     const onSubmit = (data: yup.InferType<typeof schema>) => {
-        sendDeposit(data.chilAccountnewAdd);
+        reset();
+        setActive(false);
+
+        //sendDeposit(data.chilAccountnewAdd);
     }
 
     return <ModalWindow isActive={isActive} setActive={setActive}>

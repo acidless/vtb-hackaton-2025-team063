@@ -5,18 +5,18 @@ import {Delete} from "@/shared/ui/icons/Delete";
 function useDelete(id: number | string, mutationFn: MutationFunction<unknown, any>, onSuccess: Function, deletionText: string) {
     const {showPopup, closePopup} = usePopup();
 
-    const {mutate, isPending} = useMutation({
-        mutationFn,
-        onSuccess: () => {
-            closePopup();
-            onSuccess();
-        },
-    });
+    // const {mutate, isPending} = useMutation({
+    //     mutationFn,
+    //     onSuccess: () => {
+    //         closePopup();
+    //         onSuccess();
+    //     },
+    // });
 
     function onDelete() {
-        if (isPending) {
-            return;
-        }
+        // if (isPending) {
+        //     return;
+        // }
 
         showPopup({
             text: deletionText,
@@ -24,7 +24,10 @@ function useDelete(id: number | string, mutationFn: MutationFunction<unknown, an
             icon: () => <Delete/>,
         });
 
-        mutate(id);
+        closePopup();
+        onSuccess();
+
+        // mutate(id);
     }
 
     return onDelete;

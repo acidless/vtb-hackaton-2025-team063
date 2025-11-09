@@ -1,24 +1,23 @@
 "use client";
 
-import {getLimits, Limit} from "@/entities/limit";
+import {getLimits, Limit, LimitType} from "@/entities/limit";
 import Heading from "@/shared/ui/typography/Heading";
 import {Plus} from "@/shared/ui/icons/Plus";
 import AccentButton from "@/shared/ui/AccentButton";
 import {useState} from "react";
 import {CreateLimit} from "@/widgets/create-limit";
-import {useQuery} from "@tanstack/react-query";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {Goal} from "@/entities/goal";
 import CollectionEmpty from "@/shared/ui/CollectionEmpty";
 import {AnimatePresence} from "framer-motion";
+import {ExpenseType} from "@/entities/expense";
 
 const Limits = () => {
     const [isModalOpen, setModalOpen] = useState(false);
 
-    const {data: limits = []} = useQuery({
-        queryKey: ["limits"],
-        queryFn: getLimits,
-        refetchInterval: 5000
-    });
+    const queryClient = useQueryClient();
+
+    const limits = queryClient.getQueryData(["limits"]) as LimitType[];
 
     return <section className="mx-4 md:mr-0 mb-[1.875rem]">
         <div className="flex items-center justify-between mb-1">

@@ -39,24 +39,27 @@ export const CreateWallet = ({isActive, setActive}: Props) => {
     });
 
     const queryClient = useQueryClient();
-
-    const {mutate: createWallet, isPending} = useMutation({
-        mutationFn: addWallet,
-        onSuccess: () => {
-            reset();
-            setActive(false);
-            queryClient.invalidateQueries({queryKey: ["wallets"]});
-        },
-    });
+    const isPending = false;
+    // const {mutate: createWallet, isPending} = useMutation({
+    //     mutationFn: addWallet,
+    //     onSuccess: () => {
+    //         reset();
+    //         setActive(false);
+    //         queryClient.invalidateQueries({queryKey: ["wallets"]});
+    //     },
+    // });
 
     const onSubmit = (data: yup.InferType<typeof schema>) => {
-        createWallet({
-            limit: data.walletLimit,
-            name: data.walletName,
-            bank: data.walletBank as BankKey,
-            category: Number(data.walletCategory),
-            period: data.walletPeriod as "week" | "month"
-        });
+        reset();
+        setActive(false);
+
+        // createWallet({
+        //     limit: data.walletLimit,
+        //     name: data.walletName,
+        //     bank: data.walletBank as BankKey,
+        //     category: Number(data.walletCategory),
+        //     period: data.walletPeriod as "week" | "month"
+        // });
     }
 
     return <ModalWindow isActive={isActive} setActive={setActive}>

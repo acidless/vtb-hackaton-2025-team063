@@ -6,34 +6,24 @@ import PersonalExpenses from "@/app/(main)/expenses/PersonalExpenses";
 import ExpenseHistory from "@/app/(main)/expenses/ExpenseHistory";
 import {DndContext, pointerWithin} from "@dnd-kit/core";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {addGoal, getGoals} from "@/entities/goal";
 
 type Props = {
     avatar: string;
 }
 
 const InteractiveExpenses = ({avatar}: Props) => {
-    const {data: expenses = []} = useQuery({
-        queryKey: ["expenses"],
-        queryFn: getExpenses,
-        refetchInterval: 5000
-    });
-
-    const {data: categories = []} = useQuery({
-        queryKey: ["expense-categories"],
-        queryFn: getExpenseCategories,
-        refetchInterval: 5000
-    });
-
     const queryClient = useQueryClient();
 
-    const {mutate: updateCategory, isPending} = useMutation({
-        mutationFn: updateExpenseCategory,
-        onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ["expense-categories"]});
-            queryClient.invalidateQueries({queryKey: ["expenses"]});
-        },
-    });
+    const expenses = queryClient.getQueryData(["expenses"]) as ExpenseType[];
+    const categories = queryClient.getQueryData(["expense-categories"]) as ExpenseCategoryType[];
+
+    // const {mutate: updateCategory, isPending} = useMutation({
+    //     mutationFn: updateExpenseCategory,
+    //     onSuccess: () => {
+    //         queryClient.invalidateQueries({queryKey: ["expense-categories"]});
+    //         queryClient.invalidateQueries({queryKey: ["expenses"]});
+    //     },
+    // });
 
     return <DndContext collisionDetection={pointerWithin} onDragEnd={(event) => {
         const {active, over} = event;
@@ -48,7 +38,7 @@ const InteractiveExpenses = ({avatar}: Props) => {
             return;
         }
 
-        updateCategory({categoryId: category.id, expenseId: expense.expense.id});
+        //updateCategory({categoryId: category.id, expenseId: expense.expense.id});
     }}>
         <PersonalExpenses avatar={avatar} expenseCategories={categories}/>
         <ExpenseHistory expenses={expenses}/>

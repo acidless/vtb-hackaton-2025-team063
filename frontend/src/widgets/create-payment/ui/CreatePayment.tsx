@@ -39,23 +39,25 @@ export const CreatePayment = ({isActive, setActive}: Props) => {
     });
 
     const queryClient = useQueryClient();
-
-    const {mutate: createPayment, isPending} = useMutation({
-        mutationFn: addPayment,
-        onSuccess: () => {
-            reset();
-            setActive(false);
-            queryClient.invalidateQueries({queryKey: ["payments"]});
-        },
-    });
+    const isPending = false;
+    // const {mutate: createPayment, isPending} = useMutation({
+    //     mutationFn: addPayment,
+    //     onSuccess: () => {
+    //         reset();
+    //         setActive(false);
+    //         queryClient.invalidateQueries({queryKey: ["payments"]});
+    //     },
+    // });
 
     const onSubmit = (data: yup.InferType<typeof schema>) => {
-        createPayment({
-            name: data.paymentName,
-            category: Number(data.paymentCategory),
-            date: data.paymentDate,
-            money: data.paymentValue
-        });
+        reset();
+        setActive(false);
+        // createPayment({
+        //     name: data.paymentName,
+        //     category: Number(data.paymentCategory),
+        //     date: data.paymentDate,
+        //     money: data.paymentValue
+        // });
     }
 
     return <ModalWindow isActive={isActive} setActive={setActive}>
