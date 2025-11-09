@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .config import settings
 from .database import engine
 from .models import Base
-from .routers import accounts, auth
+from .routers import accounts, auth, consent
 
 app = FastAPI(
     title=settings.app_name,
@@ -24,6 +24,7 @@ app.add_middleware(
 
 app.include_router(auth.router)
 app.include_router(accounts.router)
+app.include_router(consent.router)
 
 
 @app.on_event("startup")
