@@ -1,3 +1,4 @@
+import hashlib
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
@@ -12,30 +13,41 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 _MAX_PASSWORD_BYTES = 72
 
 
-def _truncate_password(password: str) -> str:
+def _prepare_password_for_bcrypt(password: str) -> str:
+    """
+    Prepare password for bcrypt hashing.
+    If password exceeds 72 bytes, pre-hash it with SHA-256 to ensure
+    it fits within bcrypt's 72-byte limit.
+    """
     password_bytes = password.encode("utf-8")
     if len(password_bytes) <= _MAX_PASSWORD_BYTES:
         return password
-    # Truncate to 72 bytes, but ensure we don't cut in the middle of a UTF-8 character
-    truncated_bytes = password_bytes[:_MAX_PASSWORD_BYTES]
-    # Remove any incomplete UTF-8 sequences at the end
-    while truncated_bytes and truncated_bytes[-1] & 0b11000000 == 0b10000000:
-        truncated_bytes = truncated_bytes[:-1]
-    truncated_str = truncated_bytes.decode("utf-8", errors="ignore")
-    # Double-check: ensure re-encoding doesn't exceed 72 bytes
-    while len(truncated_str.encode("utf-8")) > _MAX_PASSWORD_BYTES:
-        truncated_str = truncated_str[:-1]
-    return truncated_str
+    
+    # For passwords longer than 72 bytes, pre-hash with SHA-256
+    # SHA-256 always produces 32 bytes (64 hex characters)
+    # This ensures the input to bcrypt is always <= 72 bytes
+    sha256_hash = hashlib.sha256(password_bytes).hexdigest()
+    return sha256_hash
 
 
 def verify_password(plain_password: str, password_hash: str) -> bool:
-    truncated = _truncate_password(plain_password)
-    return pwd_context.verify(truncated, password_hash)
+    """
+    Verify a password against a hash.
+    Handles both regular bcrypt hashes and pre-hashed passwords.
+    """
+    # Check if the hash is from a pre-hashed password (starts with $2b$ or $2a$)
+    # We need to prepare the password the same way it was hashed
+    prepared_password = _prepare_password_for_bcrypt(plain_password)
+    return pwd_context.verify(prepared_password, password_hash)
 
 
 def hash_password(password: str) -> str:
-    truncated = _truncate_password(password)
-    return pwd_context.hash(truncated)
+    """
+    Hash a password using bcrypt.
+    For passwords longer than 72 bytes, pre-hashes with SHA-256 first.
+    """
+    prepared_password = _prepare_password_for_bcrypt(password)
+    return pwd_context.hash(prepared_password)
 
 
 def create_access_token(
