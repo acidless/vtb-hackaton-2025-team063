@@ -19,7 +19,7 @@ const ExpensesHistogram = ({expenseCategories}: Props) => {
     }, [expenseCategories]);
 
     const histogramData = useMemo(() => {
-        return expenseCategories.map(cat => ({id: cat.id, value: cat.spent, color: cat.color}));
+        return expenseCategories.map(cat => ({id: cat.id, value: cat.spent, color: cat.color, name: cat.name}));
     }, [expenseCategories]);
 
     const isLoading = useShowingSkeleton(expenseCategories);
@@ -33,7 +33,8 @@ const ExpensesHistogram = ({expenseCategories}: Props) => {
                 </button>
             }
 
-            <InfoPopup text="Зажмите и перетащите операцию для изменения категории" time={2000} isActive={isHelpActive}
+            <InfoPopup text="Зажмите и перетащите операцию для изменения категории" time={2000}
+                       isActive={isHelpActive}
                        setActive={setHelpActive}/>
         </div>
         <div className="flex items-center justify-start gap-1 flex-wrap">

@@ -15,13 +15,6 @@ const RegisterForm = () => {
     const [userData, setUserData] = useState<Partial<UserType>>({});
     const router = useRouter();
 
-    useEffect(() => {
-        const value = localStorage.getItem("user");
-        if(value) {
-            router.push("/dashboard");
-        }
-    }, []);
-
     function onMainStepEnd(user: Partial<UserType>) {
         setUserData((prevUser) => ({...prevUser, ...user}));
         setStep(1);

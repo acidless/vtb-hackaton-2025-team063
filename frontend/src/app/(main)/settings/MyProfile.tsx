@@ -15,6 +15,8 @@ const MaskedPhoneInput = forwardRef<HTMLInputElement, any>((props, ref) => (
         inputRef={ref}
         mask="+{7} (000) 000-00-00"
         unmask={false}
+        type="tel"
+        inputMode="numeric"
         className="min-w-0 flex-1 large text-sm text-primary py-2.5 px-2.5 bg-tertiary rounded-xl font-normal outline-primary"
     />
 ));

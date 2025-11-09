@@ -1,10 +1,8 @@
 export async function fetchMock(url: string, data?: any): Promise<any> {
-    // Server-side: use internal Docker network URL
-    // Client-side: use relative URLs to call Next.js API routes
     const baseUrl =
         typeof window === "undefined"
-            ? process.env.MOCK_BASE_URL_INTERNAL || "http://frontend:3000"
-            : ""; // Use relative URLs in browser to call Next.js API routes
+            ? process.env.MOCK_BASE_URL_INTERNAL || "http://localhost:3000"
+            : "";
 
     const response = await fetch(`${baseUrl}${url}`, {
         cache: "no-store",
