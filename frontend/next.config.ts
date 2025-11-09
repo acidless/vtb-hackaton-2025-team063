@@ -15,4 +15,22 @@ export default withPWA({
     env: {
         NEXT_PUBLIC_APP_VERSION: version,
     },
+    async headers() {
+        return [
+            {
+                source: "/api/:path*",
+                headers: [
+                    { key: "Access-Control-Allow-Origin", value: "http://fambank.ru" },
+                ]
+            }
+        ]
+    },
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: '*',
+            },
+        ],
+    },
 });
