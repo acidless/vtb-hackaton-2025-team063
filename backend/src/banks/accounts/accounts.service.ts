@@ -1,6 +1,7 @@
 import {Injectable} from '@nestjs/common';
 import {BanksService} from "../banks.service";
 import {ConsentsService} from "../consents/consents.service";
+import {AccountType} from "../banks.types";
 
 @Injectable()
 export class AccountsService {
@@ -32,11 +33,11 @@ export class AccountsService {
 
     public async getAccounts(userId: number) {
         const consents = await this.consentsService.getUserConsents(userId);
-        const responses = {};
+        const responses: Record<string, AccountType[]> = {};
 
         const promises: Promise<any>[] = [];
         for (const consent of consents) {
-            promises.push(this.banksService.requestBankAPI<{ data: { account: any[] } }>(consent.bankId, {
+            promises.push(this.banksService.requestBankAPI<{ data: { account: AccountType[] } }>(consent.bankId, {
                 url: `/accounts?client_id=${consent.clientId}`,
                 method: "GET",
                 headers: {

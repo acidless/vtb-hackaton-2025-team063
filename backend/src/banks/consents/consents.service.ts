@@ -19,17 +19,21 @@ export class ConsentsService {
     public async createConsent(bankId: string, userId: number, consentDTO: CreateConsentDto) {
         const requestingBank = this.configService.get<string>("CLIENT_ID");
 
-        const consentData = await this.bankService.requestBankAPI<{ consent_id: string }>(bankId, {
+        const consentData = await this.bankService.requestBankAPI<{ consent_id: string, status: string; }>(bankId, {
             url: "/account-consents/request",
             method: "POST",
             data: {
                 "client_id": consentDTO.client_id,
-                "permissions": ["ReadAccountsDetail", "ReadBalances"],
+                "permissions": ["ReadAccountsDetail", "ReadBalances", "ReadTransactionsDetail"],
                 "reason": "Агрегация счетов для HackAPI",
                 "requesting_bank": requestingBank,
                 "requesting_bank_name": "Семейный Мультибанк"
             }
         });
+
+        if (consentData.status === "pending") {
+            return consentData;
+        }
 
         await this.consentsRepository.delete({bankId, user: {id: userId}});
 
@@ -64,9 +68,9 @@ export class ConsentsService {
         return this.consentsRepository.find({where: {user: {id: userId}}});
     }
 
-    public async getUserBankConsent(bankId:string, userId: number) {
+    public async getUserBankConsent(bankId: string, userId: number) {
         const consent = await this.consentsRepository.findOne({where: {bankId, user: {id: userId}}});
-        if(!consent) {
+        if (!consent) {
             throw new ForbiddenException("У вас нет согласия на эту операцию");
         }
 

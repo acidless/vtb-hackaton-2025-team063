@@ -1,22 +1,27 @@
-import {BadRequestException, HttpStatus, Injectable, NotFoundException} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
+import {InjectRepository} from '@nestjs/typeorm';
+import {User} from './user.entity';
 import {DataSource, EntityManager, Repository} from 'typeorm';
 import {UserCreateDTO, UserEditDTO, UserLoginDTO} from "./user.dto";
 import {Base64Service} from "../common/base64.service";
+import {AccountsService} from "../banks/accounts/accounts.service";
+import {TransactionsService} from "../banks/accounts/transactions/transactions.service";
 
 @Injectable()
 export class UsersService {
     constructor(
         @InjectRepository(User)
-        private usersRepository: Repository<User>,
-        private base64Service: Base64Service,
-        private dataSource: DataSource
-    ) {}
+        private readonly usersRepository: Repository<User>,
+        private readonly base64Service: Base64Service,
+        private readonly dataSource: DataSource,
+        private readonly accountsService: AccountsService,
+        private readonly transactionsService: TransactionsService
+    ) {
+    }
 
     public async createUser(user: UserCreateDTO): Promise<User> {
         const foundUser = await this.usersRepository.findOne({where: {phone: user.phone}});
-        if(foundUser) {
+        if (foundUser) {
             throw new BadRequestException("Пользователь с таким номером телефона уже существует");
         }
 
@@ -26,7 +31,7 @@ export class UsersService {
             const newUser = manager.create(User, {...user, partner: {id: user.partner}, avatar: userAvatarURL});
             await manager.save(newUser);
 
-            if(user.partner) {
+            if (user.partner) {
                 await manager.update(User, {id: user.partner}, {partner: {id: newUser.id}});
             }
 
@@ -36,7 +41,7 @@ export class UsersService {
 
     public async getUserByPhone(userLoginDTO: UserLoginDTO): Promise<User> {
         const user = await this.usersRepository.findOne({where: {phone: userLoginDTO.phone}});
-        if(!user) {
+        if (!user) {
             throw new NotFoundException("Пользователь не найден");
         }
 
@@ -44,12 +49,33 @@ export class UsersService {
     }
 
     public async editUser(userId: number, userEditDTO: UserEditDTO) {
-        if(!userEditDTO) {
+        if (!userEditDTO) {
             throw new BadRequestException("Укажите значения для изменения");
         }
 
         await this.usersRepository.update({id: userId}, {...userEditDTO});
 
-        return this.usersRepository.findOne({ where: { id: userId } });
+        return this.usersRepository.findOne({where: {id: userId}});
+    }
+
+    public async getUserExtendedInfo(userId: number) {
+        const accounts = await this.accountsService.getAccounts(userId);
+
+        const account = Object.values(accounts).flat(1)[0];
+        const accountDigits = account ? account.account[0].identification.slice(-4) : null;
+
+        const balance = Math.round(await this.accountsService.getTotalBalance(userId));
+
+        let monthlyIncome = 0;
+        const transactions = await this.transactionsService.getTransactions(userId);
+        for (const transaction of Object.values(transactions).flat(1)) {
+            if (transaction.creditDebitIndicator === "Credit" && transaction.status === "completed") {
+                monthlyIncome += parseFloat(transaction.amount.amount);
+            }
+        }
+
+        monthlyIncome = Math.round(monthlyIncome);
+
+        return {account: accountDigits, balance, monthlyIncome};
     }
 }

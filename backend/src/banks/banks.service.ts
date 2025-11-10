@@ -28,7 +28,7 @@ export class BanksService {
             if(requestConfig.method === "GET") {
                 const response = await this.redis.get(key);
                 if(response) {
-                    return JSON.parse(response);
+                    return JSON.parse(response) as T;
                 }
             }
 

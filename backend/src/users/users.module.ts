@@ -4,9 +4,11 @@ import {User} from "./user.entity";
 import { UsersService } from './users.service';
 import {CommonModule} from "../common/common.module";
 import { UsersController } from './users.controller';
+import {AccountsModule} from "../banks/accounts/accounts.module";
+import {TransactionsModule} from "../banks/accounts/transactions/transactions.module";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([User]), CommonModule],
+    imports: [TypeOrmModule.forFeature([User]), CommonModule, AccountsModule, TransactionsModule],
     providers: [UsersService],
     controllers: [UsersController],
     exports: [UsersService]

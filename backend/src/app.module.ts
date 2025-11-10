@@ -14,11 +14,11 @@ import {ConsentsModule} from './banks/consents/consents.module';
 import {BanksModule} from './banks/banks.module';
 import {AccountsModule} from "./banks/accounts/accounts.module";
 import {FamilyModule} from './family/family.module';
-import {FamilyAccountsModule} from './family-accounts/family-accounts.module';
 import {RedisModule} from './redis/redis.module';
 import {CategoriesModule} from './expenses/categories/categories.module';
 import {LimitsModule} from './expenses/limits/limits.module';
 import {Limit} from "./expenses/limits/limit.entity";
+import {TransactionsModule} from "./banks/accounts/transactions/transactions.module";
 
 
 @Module({
@@ -44,11 +44,11 @@ import {Limit} from "./expenses/limits/limit.entity";
         UsersModule,
         CommonModule,
         AuthModule,
+        TransactionsModule,
         AccountsModule,
         ConsentsModule,
         BanksModule,
         FamilyModule,
-        FamilyAccountsModule,
         CategoriesModule,
         LimitsModule,
     ],
