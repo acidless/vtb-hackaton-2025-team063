@@ -4,18 +4,21 @@ import {UsersModule} from './users/users.module';
 import {ServeStaticModule} from '@nestjs/serve-static';
 import {join} from 'path';
 import {CommonModule} from './common/common.module';
-import { ConfigModule } from '@nestjs/config';
+import {ConfigModule} from '@nestjs/config';
 import {User} from "./users/user.entity";
 import {Consent} from "./banks/consents/consent.entity";
 import {AppController} from './app.controller';
 import {AppService} from './app.service';
 import {AuthModule} from './auth/auth.module';
-import { ConsentsModule } from './banks/consents/consents.module';
-import { BanksModule } from './banks/banks.module';
+import {ConsentsModule} from './banks/consents/consents.module';
+import {BanksModule} from './banks/banks.module';
 import {AccountsModule} from "./banks/accounts/accounts.module";
-import { FamilyModule } from './family/family.module';
-import { FamilyAccountsModule } from './family-accounts/family-accounts.module';
-import { RedisModule } from './redis/redis.module';
+import {FamilyModule} from './family/family.module';
+import {FamilyAccountsModule} from './family-accounts/family-accounts.module';
+import {RedisModule} from './redis/redis.module';
+import {CategoriesModule} from './expenses/categories/categories.module';
+import {LimitsModule} from './expenses/limits/limits.module';
+import {Limit} from "./expenses/limits/limit.entity";
 
 
 @Module({
@@ -27,7 +30,7 @@ import { RedisModule } from './redis/redis.module';
             username: process.env.DB_USER || 'postgres',
             password: process.env.DB_PASSWORD || '',
             database: process.env.DB_NAME || 'family_multibank',
-            entities: [User, Consent],
+            entities: [User, Consent, Limit],
             synchronize: true,
         }),
         RedisModule,
@@ -46,6 +49,8 @@ import { RedisModule } from './redis/redis.module';
         BanksModule,
         FamilyModule,
         FamilyAccountsModule,
+        CategoriesModule,
+        LimitsModule,
     ],
     controllers: [AppController],
     providers: [AppService],
