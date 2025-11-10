@@ -16,6 +16,7 @@ export class CodeController {
     @UseGuards(JwtAuthGuard)
     public async create(@User("id") userId: number) {
         const code = await this.codeService.makeCode(userId);
-        return {code};
+        const expiresAt = await this.codeService.getCodeExpiration(userId);
+        return {code, expiresAt};
     }
 }

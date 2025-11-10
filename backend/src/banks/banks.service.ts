@@ -4,14 +4,14 @@ import {lastValueFrom} from "rxjs";
 import {BanksConfig} from "./banks.config";
 import {ConfigService} from "@nestjs/config";
 import {AxiosRequestConfig} from "axios";
-import Redis from "ioredis";
+import {RedisService} from "../redis/redis.service";
 
 @Injectable()
 export class BanksService {
     private tokens: Record<string, { token: string; expiresAt: number }> = {};
 
     constructor(private readonly httpService: HttpService,
-                @Inject('REDIS_CLIENT') private readonly redis: Redis,
+                private readonly redisService: RedisService,
                 private readonly configService: ConfigService) {
     }
 
@@ -25,31 +25,22 @@ export class BanksService {
             const url = `${bank.baseUrl}${requestConfig.url}`;
             const key = `${url}-${clientId}`;
 
-            if(requestConfig.method === "GET") {
-                const response = await this.redis.get(key);
-                if(response) {
-                    return JSON.parse(response) as T;
-                }
-            }
+            return this.redisService.withCache<T>(key, 300, async () => {
+                const response = await lastValueFrom(
+                    this.httpService.request({
+                        ...requestConfig,
+                        url: url,
+                        headers: {
+                            ...requestConfig.headers,
+                            Authorization: `Bearer ${token}`,
+                            "X-Requesting-Bank": clientId,
+                            'Content-Type': 'application/json',
+                        },
+                    }),
+                );
 
-            const response = await lastValueFrom(
-                this.httpService.request({
-                    ...requestConfig,
-                    url: url,
-                    headers: {
-                        ...requestConfig.headers,
-                        Authorization: `Bearer ${token}`,
-                        "X-Requesting-Bank": clientId,
-                        'Content-Type': 'application/json',
-                    },
-                }),
-            );
-
-            if(requestConfig.method === "GET") {
-                await this.redis.set(key, JSON.stringify(response.data), "EX", 300);
-            }
-
-            return response.data as T;
+                return response.data as T;
+            }, () => requestConfig.method === "GET");
         });
     }
 

@@ -18,7 +18,11 @@ export class FamilyController {
     @UseGuards(JwtAuthGuard)
     public async get(@User() user: UserEntity) {
         const member = await this.familyService.getFamilyMember(user.id);
-        return [user, member];
+        if(member) {
+            return [user, member];
+        }
+
+        return [user];
     }
 
     @ApiOperation({ summary: 'Получение расширенных данных пользователей семьи' })

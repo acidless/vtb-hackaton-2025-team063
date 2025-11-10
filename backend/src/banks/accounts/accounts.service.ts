@@ -44,7 +44,7 @@ export class AccountsService {
                     "X-Consent-Id": consent.id,
                 }
             }).then(response => responses[consent.bankId] = response.data.account)
-              .catch(err => err));
+              .catch(err => console.log(err)));
         }
 
         await Promise.all(promises);

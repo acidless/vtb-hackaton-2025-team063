@@ -2,9 +2,9 @@ import {WalletType} from "@/entities/wallet";
 import {getExpenseCategories} from "@/app/api/expenses/categories/data";
 
 let wallets: (Omit<WalletType, "category"> & {category: number})[] = [
-    {id: 1, name: "Развелечения", bank: "alfa", period:"week", category: 1, money: 10000, limit: 20000},
-    {id: 2, name: "Продукты", bank: "sber", period:"week", category: 2, money: 0, limit: 40000},
-    {id: 3, name: "ЖКХ и связь", bank: "alfa", period:"week", category: 3, money: 4500, limit: 5000},
+    {id: 1, name: "Развелечения", bank: "abank", period:"week", category: 1, money: 10000, limit: 20000},
+    {id: 2, name: "Продукты", bank: "sbank", period:"week", category: 2, money: 0, limit: 40000},
+    {id: 3, name: "ЖКХ и связь", bank: "abank", period:"week", category: 3, money: 4500, limit: 5000},
 ];
 
 export function getWallets() {

@@ -19,6 +19,8 @@ import {CategoriesModule} from './expenses/categories/categories.module';
 import {LimitsModule} from './expenses/limits/limits.module';
 import {Limit} from "./expenses/limits/limit.entity";
 import {TransactionsModule} from "./banks/accounts/transactions/transactions.module";
+import { PaymentsModule } from './payments/payments.module';
+import {Payment} from "./payments/payment.entity";
 
 
 @Module({
@@ -30,7 +32,7 @@ import {TransactionsModule} from "./banks/accounts/transactions/transactions.mod
             username: process.env.DB_USER || 'postgres',
             password: process.env.DB_PASSWORD || '',
             database: process.env.DB_NAME || 'family_multibank',
-            entities: [User, Consent, Limit],
+            entities: [User, Consent, Limit, Payment],
             synchronize: true,
         }),
         RedisModule,
@@ -51,6 +53,7 @@ import {TransactionsModule} from "./banks/accounts/transactions/transactions.mod
         FamilyModule,
         CategoriesModule,
         LimitsModule,
+        PaymentsModule,
     ],
     controllers: [AppController],
     providers: [AppService],

@@ -2,29 +2,19 @@
 
 import {motion} from "framer-motion";
 import RegisterHead from "@/app/register/RegisterHead";
-import {UserType} from "@/entities/user";
+import {useFormattedPhone, UserInputType} from "@/entities/user";
 import Image from "next/image";
 import Heading from "@/shared/ui/typography/Heading";
 import AccentButton from "@/shared/ui/AccentButton";
-import {banks, type BankKey} from "@/entities/bank";
-import IMask from "imask";
-import {useEffect, useState} from "react";
+import {banks} from "@/entities/bank";
 
 type Props = {
-    user: Partial<UserType>;
+    user: Partial<UserInputType>;
     onSuccess: () => void;
 }
 
 const FinalStep = ({user, onSuccess}: Props) => {
-    const mask = IMask.createMask({mask: "+7 (000) 000-00-00"});
-    const [formattedPhone, setFormattedPhone] = useState("");
-
-    useEffect(() => {
-        if(user.phone) {
-            mask.resolve(user.phone);
-            setFormattedPhone(mask.value);
-        }
-    }, [user.phone]);
+    const formattedPhone = useFormattedPhone(user.phone!);
 
     return <>
         <RegisterHead>
@@ -38,7 +28,7 @@ const FinalStep = ({user, onSuccess}: Props) => {
             transition={{duration: 0.3}}>
             <div className="w-fit px-10 py-2.5 rounded-xl bg-white flex flex-col items-center gap-2 text-center mb-10">
                 <div className="w-[7.5rem] h-[7.5rem] relative">
-                    <Image className="rounded-full" src={user.photo!} alt={user.name!} fill sizes="7.5rem"/>
+                    <Image className="rounded-full object-cover" src={user.photoSrc!} alt={user.name!} fill sizes="7.5rem"/>
                 </div>
                 <div>
                     <Heading level={3}>{user.name}</Heading>

@@ -8,7 +8,7 @@ import {AccountsModule} from "../banks/accounts/accounts.module";
 import {TransactionsModule} from "../banks/accounts/transactions/transactions.module";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([User]), CommonModule, AccountsModule, TransactionsModule],
+    imports: [TypeOrmModule.forFeature([User]), AccountsModule, TransactionsModule],
     providers: [UsersService],
     controllers: [UsersController],
     exports: [UsersService]

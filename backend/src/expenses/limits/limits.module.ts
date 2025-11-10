@@ -4,9 +4,10 @@ import {TypeOrmModule} from "@nestjs/typeorm";
 import {Limit} from "./limit.entity";
 import { LimitsController } from './limits.controller';
 import {FamilyModule} from "../../family/family.module";
+import {RedisModule} from "../../redis/redis.module";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Limit]), FamilyModule],
+  imports: [TypeOrmModule.forFeature([Limit]), FamilyModule, RedisModule],
   providers: [LimitsService],
   controllers: [LimitsController]
 })

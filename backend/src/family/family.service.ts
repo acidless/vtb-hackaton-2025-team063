@@ -1,15 +1,15 @@
-import {Inject, Injectable} from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
 import {User} from "../users/user.entity";
 import {Repository} from "typeorm";
-import Redis from "ioredis";
+import {RedisService} from "../redis/redis.service";
 
 @Injectable()
 export class FamilyService {
     public constructor(
         @InjectRepository(User)
-        private usersRepository: Repository<User>,
-        @Inject('REDIS_CLIENT') private readonly redis: Redis) {
+        private readonly usersRepository: Repository<User>,
+        private readonly redisService: RedisService) {
     }
 
     public async getFamilyMember(userId: number) {
@@ -17,16 +17,12 @@ export class FamilyService {
     }
 
     public async getFamilyMemberId(userId: number) {
-        const cachedId = await this.redis.get(`partner:${userId}`);
-        if(cachedId) {
-            return JSON.parse(cachedId);
-        }
+        const partner = await this.redisService.withCache(`partner:${userId}`, 86400, () => {
+            return this.usersRepository.findOne({where: {partner: {id: userId}}});;
+        })
 
-        const partner = await this.usersRepository.findOne({where: {partner: {id: userId}}});
-
-        await this.redis.set(`partner:${userId}`, partner ? partner.id.toString() : "null", "EX", 86400);
         if(partner) {
-            await this.redis.set(`partner:${partner.id}`, userId.toString(), "EX", 86400);
+            await this.redisService.redis.set(`partner:${partner.id}`, userId.toString(), "EX", 86400);
         }
 
         return partner?.id;

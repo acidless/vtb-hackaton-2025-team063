@@ -1,27 +1,27 @@
 "use client";
 
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import MainStep from "@/app/register/MainStep";
 import PhotoStep from "@/app/register/PhotoStep";
-import {registerUser, UserType} from "@/entities/user";
+import {registerUser, UserInputType} from "@/entities/user";
 import BankSelectStep from "@/app/register/BankSelectStep";
 import FinalStep from "@/app/register/FinalStep";
-import { useRouter } from "next/navigation";
+import {useRouter} from "next/navigation";
 import {useMutation} from "@tanstack/react-query";
 import {BankKey} from "@/entities/bank";
 
 const RegisterForm = () => {
     const [step, setStep] = useState(0);
-    const [userData, setUserData] = useState<Partial<UserType>>({});
+    const [userData, setUserData] = useState<Partial<UserInputType>>({});
     const router = useRouter();
 
-    function onMainStepEnd(user: Partial<UserType>) {
+    function onMainStepEnd(user: Partial<UserInputType>) {
         setUserData((prevUser) => ({...prevUser, ...user}));
         setStep(1);
     }
 
-    function onPhotoStepEnd(photo: string) {
-        setUserData((prevUser) => ({...prevUser, photo}));
+    function onPhotoStepEnd(photo: File, photoSrc: string) {
+        setUserData((prevUser) => ({...prevUser, photo, photoSrc}));
         setStep(2);
     }
 
@@ -33,13 +33,22 @@ const RegisterForm = () => {
     const {mutate: register, isPending} = useMutation({
         mutationFn: registerUser,
         onSuccess: (response) => {
-            localStorage.setItem("user", JSON.stringify(response));
             router.push("/dashboard");
         },
     });
 
     function onRegisterFinished() {
-        register({name: userData.name!, phone: userData.phone!, image_url: userData.photo!});
+        const formData = new FormData();
+        formData.set("name", userData.name!);
+        formData.set("phone", userData.phone!.replace(/\D/g, ""));
+        formData.set("avatar", userData.photo!);
+
+        const familyCode = userData.code?.toString();
+        if(familyCode) {
+            formData.set("familyCode", familyCode);
+        }
+
+        register(formData);
     }
 
     return <section className="min-h-screen w-full max-w-md login-page flex flex-col px-4 relative">

@@ -1,15 +1,22 @@
-import {fetchData} from "@/shared/lib/fetchMock";
-import {UserInput, UserResponse} from "@/entities/user";
+import {UserEditType, UserType} from "@/entities/user";
+import universalFetch from "@/shared/lib/universalFetch";
 
-export async function registerUser(user: UserInput): Promise<UserResponse> {
-    return fetchData("/auth/register", {
+export async function registerUser(user: FormData) {
+    return universalFetch("/auth", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-            ...user,
-            image_url: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541",
-            email: "email@example.com",
-            "password": "Password123"
-        }),
+        body: user,
+    });
+}
+
+export async function authUser(): Promise<UserType> {
+    return universalFetch("/auth", {
+        method: "GET",
+    });
+}
+
+export async function updateUser(userData: UserEditType): Promise<UserType> {
+    return universalFetch("/users/me", {
+        method: "PATCH",
+        body: userData
     });
 }

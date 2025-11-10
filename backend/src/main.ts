@@ -9,6 +9,11 @@ import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    origin: process.env.CLIENT_URL || 'http://localhost:3001',
+    credentials: true,
+  });
+
   const config = new DocumentBuilder()
       .setTitle('Family Multibank API')
       .setDescription('API для семейного мультибанка')

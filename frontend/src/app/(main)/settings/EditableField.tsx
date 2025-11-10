@@ -4,19 +4,33 @@ import {ElementType, useEffect, useRef, useState} from "react";
 import AccentButton from "@/shared/ui/AccentButton";
 import {Edit} from "@/shared/ui/icons/Edit";
 import { motion } from "framer-motion";
+import {MutationFunction, useMutation} from "@tanstack/react-query";
+import Loader from "@/shared/ui/loaders/Loader";
 
 type Props = {
     value: string;
-    onChange: (value: string) => void;
+    onSuccess: () => void;
+    transformValue: (value: string) => any;
+    mutationFn: MutationFunction<any, any>;
     InputComponent?: ElementType;
 }
 
-const EditableField = ({value, onChange, InputComponent = "input"}: Props) => {
+const EditableField = ({value, onSuccess, mutationFn, transformValue, InputComponent = "input"}: Props) => {
     const [isEditing, setEditing] = useState(false);
     const [currValue, setValue] = useState(value);
     const [isSaved, setSaved] = useState(false);
     const timeout = useRef<NodeJS.Timeout | null>(null);
     const input = useRef<HTMLInputElement | null>(null);
+
+    const {mutate, isPending} = useMutation({
+        mutationFn,
+        onSuccess: () => {
+            setEditing(false);
+            setSaved(true);
+            timeout.current = setTimeout(() => setSaved(false), 2000);
+            onSuccess();
+        },
+    });
 
     useEffect(() => {
         return function() {
@@ -35,11 +49,7 @@ const EditableField = ({value, onChange, InputComponent = "input"}: Props) => {
     }, [isEditing]);
 
     function onSave() {
-        setEditing(false);
-        onChange(currValue);
-        setSaved(true);
-
-        timeout.current = setTimeout(() => setSaved(false), 2000);
+        mutate(transformValue(currValue));
     }
 
     return <div className="bg-tertiary rounded-xl px-2.5 h-[2.625rem] flex items-center">
@@ -48,7 +58,7 @@ const EditableField = ({value, onChange, InputComponent = "input"}: Props) => {
                     animate={{opacity: 1, y: 0}}
                     exit={{opacity: 0, y: -10}}
                     transition={{duration: 0.3}}>
-            <form className="flex items-center justify-between w-full" action="">
+            <form className="flex items-center justify-between w-full" onSubmit={(e) => e.preventDefault()}>
                 {isEditing
                     ? <InputComponent
                         ref={input}
@@ -60,10 +70,15 @@ const EditableField = ({value, onChange, InputComponent = "input"}: Props) => {
                 }
 
                 {isEditing
-                    ? <motion.span initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}
-                                   transition={{duration: 0.3}}>
-                        <AccentButton className="text-xs py-1.5" onClick={onSave}>Сохранить изменения</AccentButton>
-                    </motion.span>
+                    ? isPending
+                        ? <motion.div initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}
+                                       transition={{duration: 0.3}}>
+                            <Loader border={0.15} size={1.5}/>
+                        </motion.div>
+                        : <motion.span initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}
+                                       transition={{duration: 0.3}}>
+                            <AccentButton type="button" className="text-xs py-1.5" onClick={onSave}>Сохранить изменения</AccentButton>
+                        </motion.span>
                     : isSaved
                         ? <motion.span initial={{opacity: 0}} animate={{opacity: 1}} exit={{opacity: 0}}
                                        transition={{duration: 0.3}}

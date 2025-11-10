@@ -3,7 +3,6 @@ import {InjectRepository} from '@nestjs/typeorm';
 import {User} from './user.entity';
 import {DataSource, EntityManager, Repository} from 'typeorm';
 import {UserCreateDTO, UserEditDTO, UserLoginDTO} from "./user.dto";
-import {Base64Service} from "../common/base64.service";
 import {AccountsService} from "../banks/accounts/accounts.service";
 import {TransactionsService} from "../banks/accounts/transactions/transactions.service";
 
@@ -12,7 +11,6 @@ export class UsersService {
     constructor(
         @InjectRepository(User)
         private readonly usersRepository: Repository<User>,
-        private readonly base64Service: Base64Service,
         private readonly dataSource: DataSource,
         private readonly accountsService: AccountsService,
         private readonly transactionsService: TransactionsService
@@ -25,10 +23,8 @@ export class UsersService {
             throw new BadRequestException("Пользователь с таким номером телефона уже существует");
         }
 
-        const userAvatarURL = await this.base64Service.saveBase64Image(user.avatar);
-
         return this.dataSource.transaction(async (manager: EntityManager) => {
-            const newUser = manager.create(User, {...user, partner: {id: user.partner}, avatar: userAvatarURL});
+            const newUser = manager.create(User, {...user, partner: user.partner ? {id: user.partner} : undefined});
             await manager.save(newUser);
 
             if (user.partner) {
@@ -37,6 +33,15 @@ export class UsersService {
 
             return newUser;
         });
+    }
+
+    public async findUser(userId: number): Promise<User> {
+        const user = await this.usersRepository.findOne({where: {id: userId}});
+        if (!user) {
+            throw new NotFoundException("Пользователь не найден");
+        }
+
+        return user;
     }
 
     public async getUserByPhone(userLoginDTO: UserLoginDTO): Promise<User> {

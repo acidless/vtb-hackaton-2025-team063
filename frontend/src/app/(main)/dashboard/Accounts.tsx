@@ -1,24 +1,19 @@
 "use client";
 
-import {AccountAggregate, getPersonalAccounts} from "@/entities/account";
+import {AccountAggregate} from "@/entities/account";
 import {useQuery} from "@tanstack/react-query";
+import {getFamilyFinance} from "@/entities/family/api/api";
 
 const Accounts = () => {
-    const {data: personalAccounts = null} = useQuery({
-        queryKey: ["personal-accounts"],
-        queryFn: getPersonalAccounts,
+    const {data: familyFinance = []} = useQuery({
+        queryKey: ["family-finance"],
+        queryFn: getFamilyFinance,
         refetchInterval: 5000
     });
 
-    const persons = Object.values(personalAccounts || {});
-
-    if (!persons[0] || !persons[1]) {
-        return null;
-    }
-
     return <section className="flex items-center mb-6 gap-2.5 mx-4 md:mr-0">
-        <AccountAggregate className="flex-1" account={persons[0]}/>
-        <AccountAggregate className="flex-1" account={persons[1]}/>
+        <AccountAggregate className="flex-1" account={familyFinance[0]}/>
+        {familyFinance.length > 1 && <AccountAggregate className="flex-1" account={familyFinance[1]}/>}
     </section>
 }
 

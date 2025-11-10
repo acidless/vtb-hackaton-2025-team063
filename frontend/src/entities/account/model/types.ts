@@ -1,11 +1,7 @@
-export type PersonalAccountType = {
-    name: string;
-    avatar: string;
-    balance: number;
-    accountDigits: string;
-}
+import {UserType} from "@/entities/user";
 
-export type SharedAccountType = {
+export type PersonalAccountType = UserType & {
+    account: string | null;
     balance: number;
     monthlyIncome: number;
 }

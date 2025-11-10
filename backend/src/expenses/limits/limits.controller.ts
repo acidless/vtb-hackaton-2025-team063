@@ -12,11 +12,11 @@ export class LimitsController {
     }
 
     @ApiOperation({ summary: 'Создание лимита' })
-    @ApiResponse({ status: 200, description: 'Созданный лимит' })
+    @ApiResponse({ status: 201, description: 'Созданный лимит' })
     @ApiCookieAuth('access_token')
     @Post()
     @UseGuards(JwtAuthGuard)
-    @HttpCode(200)
+    @HttpCode(201)
     public async create(@User("id") userId: number, @Body() limitDTO: LimitDTO) {
         return this.limitsService.create(userId, limitDTO);
     }
@@ -37,6 +37,6 @@ export class LimitsController {
     @HttpCode(204)
     @UseGuards(JwtAuthGuard)
     public async delete(@Param("limitId") limitId: number, @User("id") userId: number) {
-        const result = await this.limitsService.delete(userId, limitId);
+        await this.limitsService.delete(userId, limitId);
     }
 }

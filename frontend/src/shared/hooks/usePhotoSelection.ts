@@ -2,6 +2,7 @@ import {ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState} from
 
 function usePhotoSelection(setPhoto: Dispatch<SetStateAction<string | null>>) {
     const [isCameraActive, setCameraActive] = useState(false);
+    const [file, setFile] = useState<File | null>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -51,12 +52,14 @@ function usePhotoSelection(setPhoto: Dispatch<SetStateAction<string | null>>) {
             return;
         }
 
+        setFile(file);
+
         const reader = new FileReader();
         reader.onload = ev => setPhoto(ev.target?.result as string);
         reader.readAsDataURL(file);
     }
 
-    return {isCameraActive, setCameraActive, onFileChange, takePhoto, videoRef, canvasRef};
+    return {file, isCameraActive, setCameraActive, onFileChange, takePhoto, videoRef, canvasRef};
 }
 
 export default usePhotoSelection;

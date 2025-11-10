@@ -1,11 +1,11 @@
 "use client";
 
-import {type PersonalAccountType} from "@/entities/account/model/types";
 import Heading from "@/shared/ui/typography/Heading";
-import Image from "next/image";
 import MoneyAmount from "@/shared/ui/MoneyAmount";
 import {motion} from "framer-motion";
 import Avatar from "@/shared/ui/Avatar";
+import {PersonalAccountType} from "@/entities/account";
+import getAbsoluteSeverUrl from "@/shared/lib/getAbsoluteServerUrl";
 
 type Props = {
     className?: string;
@@ -19,7 +19,7 @@ export const AccountAggregate = ({account, className = "", ...props}: Props) => 
                     animate={{opacity: 1, y: 0}}
                     transition={{duration: 0.3, ease: 'easeOut'}}>
             <div className="flex items-center gap-2 mb-2">
-                <Avatar avatar={account.avatar} alt={account.name}/>
+                <Avatar avatar={getAbsoluteSeverUrl(account.avatar)} alt={account.name}/>
                 <Heading level={3}>{account.name}</Heading>
             </div>
             <div className="text-light">

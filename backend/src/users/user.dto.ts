@@ -11,8 +11,7 @@ export class UserDTO {
     @IsPhoneNumber("RU")
     phone: string;
 
-    @ApiProperty({example: "data:image/png;base64,...", description: 'Изображение в кодировке base64'})
-    @IsString()
+    @ApiProperty({example: "data:image/png;base64,...", description: 'Изображение'})
     avatar: string;
 
     @ApiProperty({nullable: true, description: 'Код приглашения для формирования семьи'})

@@ -5,6 +5,7 @@ import {Repository} from "typeorm";
 import {Consent} from "./consent.entity";
 import {CreateConsentDto} from "./consent.dto";
 import {ConfigService} from "@nestjs/config";
+import {RedisService} from "../../redis/redis.service";
 
 @Injectable()
 export class ConsentsService {
@@ -12,6 +13,7 @@ export class ConsentsService {
         @InjectRepository(Consent)
         private readonly consentsRepository: Repository<Consent>,
         private readonly configService: ConfigService,
+        private readonly redisService: RedisService,
         private readonly bankService: BanksService) {
 
     }
@@ -45,6 +47,8 @@ export class ConsentsService {
         });
         await this.consentsRepository.save(consent);
 
+        this.redisService.redis.del(`consents:${userId}`);
+
         return consent;
     }
 
@@ -61,11 +65,14 @@ export class ConsentsService {
 
         if (!response) {
             await this.consentsRepository.remove(consent);
+            this.redisService.redis.del(`consents:${userId}`);
         }
     }
 
     public async getUserConsents(userId: number) {
-        return this.consentsRepository.find({where: {user: {id: userId}}});
+        return this.redisService.withCache(`consents:${userId}`, 3600, () => {
+            return this.consentsRepository.find({where: {user: {id: userId}}});
+        });
     }
 
     public async getUserBankConsent(bankId: string, userId: number) {

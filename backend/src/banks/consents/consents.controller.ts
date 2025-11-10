@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, HttpCode, Param, Post, UseGuards} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpCode, Param, Post, UseGuards} from '@nestjs/common';
 import {JwtAuthGuard} from "../../auth/jwt-auth.guard";
 import {ConsentsService} from "./consents.service";
 import {CreateConsentDto} from "./consent.dto";
@@ -9,6 +9,15 @@ import {ApiCookieAuth, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger
 @Controller('consents')
 export class ConsentsController {
     public constructor(private consentsService: ConsentsService) {
+    }
+
+    @ApiOperation({ summary: 'Получение согласий банков пользователя' })
+    @ApiResponse({ status: 200, description: 'Данные согласий' })
+    @ApiCookieAuth('access_token')
+    @Get()
+    @UseGuards(JwtAuthGuard)
+    public async getAll(@User('id') userId: number) {
+        return this.consentsService.getUserConsents(userId);
     }
 
     @ApiOperation({ summary: 'Создание согласия для банка' })

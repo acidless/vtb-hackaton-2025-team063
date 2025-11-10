@@ -1,17 +1,17 @@
-import {Inject, Injectable, NotFoundException} from '@nestjs/common';
+import {Injectable, NotFoundException} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
 import {In, Repository} from "typeorm";
 import {Limit} from "./limit.entity";
-import Redis from "ioredis";
 import {LimitDTO} from "./limit.dto";
 import {FamilyService} from "../../family/family.service";
+import {RedisService} from "../../redis/redis.service";
 
 @Injectable()
 export class LimitsService {
     public constructor(
         @InjectRepository(Limit)
         private readonly limitRepository: Repository<Limit>,
-        @Inject('REDIS_CLIENT') private readonly redis: Redis,
+        private readonly redisService: RedisService,
         private readonly familyService: FamilyService,
     ) {
     }
@@ -21,7 +21,7 @@ export class LimitsService {
         await this.limitRepository.save(limit);
 
         const partnerId = await this.familyService.getFamilyMemberId(userId);
-        await this.redis.del(this.getCacheKey(userId, partnerId));
+        await this.redisService.redis.del(this.getCacheKey(userId, partnerId));
 
         return limit;
     }
@@ -29,30 +29,21 @@ export class LimitsService {
     public async delete(userId: number, limitId: number) {
         const partnerId = await this.familyService.getFamilyMemberId(userId);
 
-        const limit = await this.limitRepository.findOne({where: {id: limitId, user: {id: In([userId, partnerId])}}});
-        if(!limit) {
+        const removed = await this.limitRepository.delete({id: limitId, user: {id: In([userId, partnerId])}});
+        if (!removed.affected || removed.affected === 0) {
             throw new NotFoundException("Лимит для удаления не найден");
         }
 
-        await this.limitRepository.remove(limit);
-
-        await this.redis.del(this.getCacheKey(userId, partnerId));
+        await this.redisService.redis.del(this.getCacheKey(userId, partnerId));
     }
 
     public async getAll(userId: number) {
         const partnerId = await this.familyService.getFamilyMemberId(userId);
         const cacheKey = this.getCacheKey(userId, partnerId);
 
-        const cached = await this.redis.get(cacheKey);
-        if (cached) {
-            return JSON.parse(cached);
-        }
-
-        const limits = await this.limitRepository.find({where: {user: {id: In([userId, partnerId])}}});
-
-        await this.redis.setex(cacheKey, 3600, JSON.stringify(limits));
-
-        return limits;
+        return this.redisService.withCache(cacheKey, 3600, () => {
+            return this.limitRepository.find({where: {user: {id: In([userId, partnerId])}}});
+        });
     }
 
     private getCacheKey(userId: number, partnerId?: number) {

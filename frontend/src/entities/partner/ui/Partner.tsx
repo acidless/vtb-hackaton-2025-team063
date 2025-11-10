@@ -1,9 +1,10 @@
-import {PartnerType} from "@/entities/partner";
 import Avatar from "@/shared/ui/Avatar";
 import ModalWindow from "@/shared/ui/ModalWindow";
 import {Dispatch, SetStateAction, useState} from "react";
 import AccentButton from "@/shared/ui/AccentButton";
 import {motion} from "framer-motion";
+import {UserType} from "@/entities/user";
+import getAbsoluteSeverUrl from "@/shared/lib/getAbsoluteServerUrl";
 
 
 type ModalProps = {
@@ -24,7 +25,7 @@ const DisconnectPartner = ({isActive, setActive}: ModalProps) => {
 }
 
 type Props = {
-    partner: PartnerType;
+    partner: UserType;
 }
 
 export const Partner = ({partner}: Props) => {
@@ -37,29 +38,23 @@ export const Partner = ({partner}: Props) => {
                     exit={{opacity: 0, y: -10}}
                     transition={{duration: 0.3}}>
             <div className="flex items-center gap-2">
-                <Avatar avatar={partner.avatar}/>
+                <Avatar avatar={getAbsoluteSeverUrl(partner.avatar)}/>
                 <p className="text-base font-medium">{partner.name}</p>
             </div>
             <div className="flex flex-col gap-0.5 items-end">
                 <Status partner={partner}/>
-                {partner.status === "connected" &&
-                    <button onClick={() => setModalOpen(true)}
-                            className="text-light text-[0.6rem] cursor-pointer">Отключить</button>}
+                <button onClick={() => setModalOpen(true)}
+                        className="text-light text-[0.6rem] cursor-pointer">Отключить
+                </button>
             </div>
         </motion.div>
-        {partner.status === "connected" && <DisconnectPartner isActive={isModalOpen} setActive={setModalOpen}/>}
+        <DisconnectPartner isActive={isModalOpen} setActive={setModalOpen}/>
     </article>
 }
 
-const Status = ({
-                    partner
-                }: Props) => {
+const Status = ({partner}: Props) => {
     const baseClass = "py-1.5 px-2.5 rounded-2xl text-xs text-white tracking-wide";
 
-    switch (partner.status) {
-        case "connected":
-            return <p className={`${baseClass} bg-primary`}>Партнер подключен {partner.date.toLocaleDateString()}</p>;
-        case "disconnected":
-            return <p className={`${baseClass} bg-error`}>Партнер отклонен</p>;
-    }
+    return <p className={`${baseClass} bg-primary`}>Партнер
+        подключен {new Date(partner.connectedAt).toLocaleDateString()}</p>;
 }

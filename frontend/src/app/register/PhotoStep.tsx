@@ -9,14 +9,22 @@ import MainHead from "@/app/register/MainHead";
 import usePhotoSelection from "@/shared/hooks/usePhotoSelection";
 
 type Props = {
-    onSuccess: (photo: string) => void;
+    onSuccess: (photo: File, photoSrc: string) => void;
 }
 
 const PhotoStep = ({onSuccess}: Props) => {
     const [photo, setPhoto] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const {isCameraActive, setCameraActive, takePhoto, onFileChange, videoRef, canvasRef} = usePhotoSelection(setPhoto);
+    const {
+        file,
+        isCameraActive,
+        setCameraActive,
+        takePhoto,
+        onFileChange,
+        videoRef,
+        canvasRef
+    } = usePhotoSelection(setPhoto);
 
     return (
         <>
@@ -32,7 +40,7 @@ const PhotoStep = ({onSuccess}: Props) => {
                     <Heading level={3}>Добавьте фото</Heading>
                 </div>
 
-                {photo && (
+                {photo && file && (
                     <>
                         <div className="mb-2 flex justify-center">
                             <img src={photo} alt="Фото пользователя"
@@ -41,7 +49,7 @@ const PhotoStep = ({onSuccess}: Props) => {
                         <AccentButton
                             large background="bg-accent"
                             className="w-full mb-4 justify-center gap-1.5 text-base! py-2.5! font-normal!"
-                            onClick={() => onSuccess(photo)}
+                            onClick={() => onSuccess(file, photo)}
                         >
                             Использовать это фото
                         </AccentButton>
