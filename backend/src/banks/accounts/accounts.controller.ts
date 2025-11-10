@@ -23,6 +23,7 @@ export class AccountsController {
     @Get("/balance")
     @UseGuards(JwtAuthGuard)
     public async getTotalBalance(@User("id") userId: number) {
-        return this.accountsService.getTotalBalance(userId);
+        const totalBalance = await this.accountsService.getTotalBalance(userId);
+        return {totalBalance};
     }
 }

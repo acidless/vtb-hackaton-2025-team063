@@ -1,7 +1,8 @@
-import { IsString, IsPhoneNumber, IsOptional } from 'class-validator';
+import {IsString, IsPhoneNumber, IsOptional, MaxLength} from 'class-validator';
 
 export class UserDTO {
     @IsString()
+    @MaxLength(255)
     name: string;
 
     @IsPhoneNumber("RU")
@@ -13,6 +14,17 @@ export class UserDTO {
     @IsString()
     @IsOptional()
     familyCode?: string;
+}
+
+export class UserEditDTO {
+    @IsString()
+    @IsOptional()
+    @MaxLength(255)
+    name?: string;
+
+    @IsPhoneNumber("RU")
+    @IsOptional()
+    phone?: string;
 }
 
 export class UserLoginDTO {

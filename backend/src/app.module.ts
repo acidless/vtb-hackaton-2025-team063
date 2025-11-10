@@ -13,6 +13,8 @@ import {AuthModule} from './auth/auth.module';
 import { ConsentsModule } from './banks/consents/consents.module';
 import { BanksModule } from './banks/banks.module';
 import {AccountsModule} from "./banks/accounts/accounts.module";
+import { FamilyModule } from './family/family.module';
+import { FamilyAccountsModule } from './family-accounts/family-accounts.module';
 
 
 @Module({
@@ -40,6 +42,8 @@ import {AccountsModule} from "./banks/accounts/accounts.module";
         AccountsModule,
         ConsentsModule,
         BanksModule,
+        FamilyModule,
+        FamilyAccountsModule,
     ],
     controllers: [AppController],
     providers: [AppService],
