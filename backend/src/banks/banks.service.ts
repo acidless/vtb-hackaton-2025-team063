@@ -15,7 +15,7 @@ export class BanksService {
                 private readonly configService: ConfigService) {
     }
 
-    public async requestBankAPI<T>(bankKey: string, requestConfig: AxiosRequestConfig) {
+    public async requestBankAPI<T>(bankKey: string, requestConfig: AxiosRequestConfig, cacheKey?: string) {
         const token = await this.getAccessToken(bankKey);
         const bank = BanksConfig[bankKey];
 
@@ -23,7 +23,7 @@ export class BanksService {
 
         return this.errorHandledRequest(async () => {
             const url = `${bank.baseUrl}${requestConfig.url}`;
-            const key = `${url}:${clientId}:${requestConfig.headers?["X-Consent-Id"] : ""}`;
+            const key = cacheKey || `${url}:${clientId}:${requestConfig.headers?["X-Consent-Id"] : ""}`;
 
             return this.redisService.withCache<T>(key, 300, async () => {
                 const response = await lastValueFrom(

@@ -22,6 +22,8 @@ import {TransactionsModule} from "./banks/accounts/transactions/transactions.mod
 import { PaymentsModule } from './payments/payments.module';
 import {Payment} from "./payments/payment.entity";
 import {EventEmitterModule} from "@nestjs/event-emitter";
+import {Goal} from "./banks/accounts/goals/goal.entity";
+import {GoalsModule} from "./banks/accounts/goals/goals.module";
 
 
 @Module({
@@ -33,7 +35,7 @@ import {EventEmitterModule} from "@nestjs/event-emitter";
             username: process.env.DB_USER || 'postgres',
             password: process.env.DB_PASSWORD || '',
             database: process.env.DB_NAME || 'family_multibank',
-            entities: [User, Consent, Limit, Payment],
+            entities: [User, Consent, Limit, Payment, Goal],
             synchronize: true,
         }),
         EventEmitterModule.forRoot(),
@@ -49,6 +51,7 @@ import {EventEmitterModule} from "@nestjs/event-emitter";
         CommonModule,
         AuthModule,
         TransactionsModule,
+        GoalsModule,
         AccountsModule,
         ConsentsModule,
         BanksModule,

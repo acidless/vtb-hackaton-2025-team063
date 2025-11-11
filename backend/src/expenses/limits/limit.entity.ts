@@ -27,7 +27,5 @@ export class Limit {
         onDelete: 'CASCADE',
         eager: false,
     })
-    @JoinColumn({ name: 'user_id' })
-    @Index()
     user: User;
 }

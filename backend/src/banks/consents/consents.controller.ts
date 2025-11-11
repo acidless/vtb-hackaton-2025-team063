@@ -4,6 +4,7 @@ import {ConsentsService} from "./consents.service";
 import {CreateConsentDto} from "./consent.dto";
 import {User} from "../../common/decorators/user.decorator";
 import {ApiCookieAuth, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {ValidateBankIdPipe} from "../../common/pipes/validate-bank-id.pipe";
 
 @ApiTags("Разрешения банков")
 @Controller('consents')
@@ -26,7 +27,7 @@ export class ConsentsController {
     @Post("/:bankId")
     @HttpCode(201)
     @UseGuards(JwtAuthGuard)
-    public async create(@Param("bankId") bankId: string, @User('id') userId: number, @Body() createConsentDto: CreateConsentDto) {
+    public async create(@Param("bankId", ValidateBankIdPipe) bankId: string, @User('id') userId: number, @Body() createConsentDto: CreateConsentDto) {
         return this.consentsService.createConsent(bankId, userId, createConsentDto);
     }
 
@@ -36,7 +37,7 @@ export class ConsentsController {
     @Delete("/:bankId")
     @HttpCode(204)
     @UseGuards(JwtAuthGuard)
-    public async delete(@Param("bankId") bankId: string, @User('id') userId: number) {
+    public async delete(@Param("bankId", ValidateBankIdPipe) bankId: string, @User('id') userId: number) {
         await this.consentsService.deleteConsent(bankId, userId);
     }
 }

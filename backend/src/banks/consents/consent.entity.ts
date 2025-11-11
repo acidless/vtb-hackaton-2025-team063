@@ -1,4 +1,4 @@
-import {Column, Entity, ManyToOne, PrimaryColumn} from 'typeorm';
+import {Column, Entity, Index, ManyToOne, PrimaryColumn} from 'typeorm';
 import {User} from "../../users/user.entity";
 
 @Entity()
@@ -7,6 +7,7 @@ export class Consent {
     id: string;
 
     @Column()
+    @Index()
     bankId: string;
 
     @Column()

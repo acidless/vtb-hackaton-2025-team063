@@ -69,30 +69,34 @@ export class UsersService {
 
     public async getUserExtendedInfo(userId: number) {
         return this.redisService.withCache(`finance:${userId}`, 300, async () => {
-            const accounts = await this.accountsService.getAccounts(userId);
+            const getAccountDigits = this.accountsService.getAccounts(userId)
+                .then(accounts => Object.values(accounts).flat(1)[0])
+                .then((account) => account ? account.account.at(-1)!.identification.slice(-4) : null);
 
-            const account = Object.values(accounts).flat(1)[0];
-            const accountDigits = account ? account.account[0].identification.slice(-4) : null;
+            const getBalance = this.accountsService.getTotalBalance(userId)
+                .then(balance => Math.round(balance));
 
-            const balance = Math.round(await this.accountsService.getTotalBalance(userId));
+            const getIncome = this.transactionsService.getTransactions(userId)
+                .then((transactions) => {
+                    let monthlyIncome = 0;
+                    for (const transaction of Object.values(transactions).flat(1)) {
+                        if (transaction.creditDebitIndicator === "Credit" && transaction.status === "completed") {
+                            monthlyIncome += parseFloat(transaction.amount.amount);
+                        }
+                    }
 
-            let monthlyIncome = 0;
-            const transactions = await this.transactionsService.getTransactions(userId);
-            for (const transaction of Object.values(transactions).flat(1)) {
-                if (transaction.creditDebitIndicator === "Credit" && transaction.status === "completed") {
-                    monthlyIncome += parseFloat(transaction.amount.amount);
-                }
-            }
+                    return monthlyIncome;
+                });
 
-            monthlyIncome = Math.round(monthlyIncome);
+            const [account, balance, monthlyIncome] = await Promise.all([getAccountDigits, getBalance, getIncome]);
 
-            return {account: accountDigits, balance, monthlyIncome};
+            return {account, balance, monthlyIncome};
         });
     }
 
-    @OnEvent('cache.invalidate.consents', { async: true })
+    @OnEvent('cache.invalidate.consents', {async: true})
     async handleCacheInvalidation(event: CacheInvalidateEvent) {
-        const { entityId } = event;
+        const {entityId} = event;
 
         await this.redisService.invalidateCache("finance", entityId);
     }

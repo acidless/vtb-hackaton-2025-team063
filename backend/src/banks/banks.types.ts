@@ -1,6 +1,8 @@
 export type AccountType = {
     accountId: string;
     nickname: string;
+    status: "Enabled" | "closed";
+    accountSubType: "Checking" | "Savings";
     account: {
         identification: string;
     }[];

@@ -21,6 +21,6 @@ export class Payment {
     @Column({default: false})
     payed: boolean;
 
-    @ManyToOne(() => User, { onDelete: 'CASCADE' })
-    user?: User;
+    @ManyToOne(() => User, { onDelete: 'CASCADE', eager: false })
+    user: User;
 }

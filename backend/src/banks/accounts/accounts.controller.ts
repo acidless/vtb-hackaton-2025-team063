@@ -1,8 +1,10 @@
-import {Controller, Get, Param, UseGuards} from '@nestjs/common';
+import {Body, Controller, Get, HttpCode, Param, Post, UseGuards} from '@nestjs/common';
 import {AccountsService} from "./accounts.service";
 import {JwtAuthGuard} from "../../auth/jwt-auth.guard";
 import {User} from "../../common/decorators/user.decorator";
 import {ApiCookieAuth, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {ValidateBankIdPipe} from "../../common/pipes/validate-bank-id.pipe";
+import {AccountDTO} from "./account.dto";
 
 @ApiTags("Счета")
 @Controller('accounts')
@@ -10,8 +12,8 @@ export class AccountsController {
     public constructor(private readonly accountsService: AccountsService) {
     }
 
-    @ApiOperation({ summary: 'Получение счетов пользователя во всех банках' })
-    @ApiResponse({ status: 200, description: 'Список счетов' })
+    @ApiOperation({summary: 'Получение счетов пользователя во всех банках'})
+    @ApiResponse({status: 200, description: 'Список счетов'})
     @ApiCookieAuth('access_token')
     @Get()
     @UseGuards(JwtAuthGuard)
@@ -19,17 +21,31 @@ export class AccountsController {
         return this.accountsService.getAccounts(userId);
     }
 
-    @ApiOperation({ summary: 'Получение баланса счета' })
-    @ApiResponse({ status: 200, description: 'Баланс счета' })
+    @ApiOperation({summary: 'Создание нового счета'})
+    @ApiResponse({status: 201, description: 'Созданный счет'})
+    @ApiCookieAuth('access_token')
+    @Post("/:bankId")
+    @HttpCode(201)
+    @UseGuards(JwtAuthGuard)
+    public async create(@Param("bankId", ValidateBankIdPipe) bankId: string, @User("id") userId: number, @Body() accountDTO: AccountDTO) {
+        return this.accountsService.createAccount(userId, bankId, accountDTO);
+    }
+
+    @ApiOperation({summary: 'Получение баланса счета'})
+    @ApiResponse({status: 200, description: 'Баланс счета'})
     @ApiCookieAuth('access_token')
     @Get("/:bankId/:accountId/balance")
     @UseGuards(JwtAuthGuard)
-    public async getBalance(@Param() params: object, @User("id") userId: number) {
-        return this.accountsService.getBalance(params["accountId"], params["bankId"], userId);
+    public async getBalance(
+        @Param('bankId', ValidateBankIdPipe) bankId: string,
+        @Param('accountId') accountId: string,
+        @User('id') userId: number,
+    ) {
+        return this.accountsService.getBalance(accountId, bankId, userId);
     }
 
-    @ApiOperation({ summary: 'Получения суммы балансов всех счетов пользователя' })
-    @ApiResponse({ status: 200, description: 'Баланс всех счетов' })
+    @ApiOperation({summary: 'Получения суммы балансов всех счетов пользователя'})
+    @ApiResponse({status: 200, description: 'Баланс всех счетов'})
     @ApiCookieAuth('access_token')
     @Get("/balance")
     @UseGuards(JwtAuthGuard)
