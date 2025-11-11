@@ -4,7 +4,7 @@ type Props = {
 }
 
 const MoneyAmount = ({value, showCurrency = true}: Props) => {
-    return <>{value.toLocaleString("ru-RU", { useGrouping: true, minimumFractionDigits: 0 })}{showCurrency ? '₽' : ''}</>;
+    return <>{Math.floor(value).toLocaleString("ru-RU", { useGrouping: true, minimumFractionDigits: 0 })}{showCurrency ? '₽' : ''}</>;
 }
 
 export default MoneyAmount;

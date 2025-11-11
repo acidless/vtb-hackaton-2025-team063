@@ -23,7 +23,7 @@ export const schema = yup
                     return true;
                 }
 
-                return value > new Date();
+                return value >= new Date();
             }),
 
         paymentCategory: yup

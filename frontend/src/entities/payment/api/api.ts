@@ -1,20 +1,19 @@
 import { fetchMock } from "@/shared/lib/fetchMock";
 import {PaymentType} from "@/entities/payment";
-import {ExpenseType} from "@/entities/expense";
+import universalFetch from "@/shared/lib/universalFetch";
 
 export async function getPayments(): Promise<PaymentType[]> {
-    const payments = await fetchMock("/api/payments");
-    return payments.map((payment: PaymentType) => ({
-        ...payment,
-        date: new Date(payment.date),
-    }));
+    const payments = await universalFetch<PaymentType[]>("/payments", {
+        method: "GET",
+    });
+
+    return payments.map(p => ({...p, date: new Date(p.date)}));
 }
 
-export async function addPayment(newPayment: Omit<PaymentType, "id" | "payed" | "category"> & {category: number}): Promise<PaymentType> {
-    const payment = await fetchMock("/api/payments", {
+export async function addPayment(newPayment: Omit<PaymentType, "id" | "payed">): Promise<PaymentType> {
+    const payment = await universalFetch<PaymentType>("/payments", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(newPayment),
+        body: newPayment,
     });
 
     payment.date = new Date(payment.date);
@@ -22,7 +21,7 @@ export async function addPayment(newPayment: Omit<PaymentType, "id" | "payed" | 
 }
 
 export async function deletePayment(paymentId: number): Promise<void> {
-    await fetchMock(`/api/payments/?id=${paymentId}`, {
+    await universalFetch(`/payments/${paymentId}`, {
         method: "DELETE",
     });
 }

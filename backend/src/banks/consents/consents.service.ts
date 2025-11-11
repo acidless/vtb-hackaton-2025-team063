@@ -9,13 +9,14 @@ import {RedisService} from "../../redis/redis.service";
 
 @Injectable()
 export class ConsentsService {
+    private keyBase = "consents";
+
     public constructor(
         @InjectRepository(Consent)
         private readonly consentsRepository: Repository<Consent>,
         private readonly configService: ConfigService,
         private readonly redisService: RedisService,
         private readonly bankService: BanksService) {
-
     }
 
     public async createConsent(bankId: string, userId: number, consentDTO: CreateConsentDto) {
@@ -26,7 +27,7 @@ export class ConsentsService {
             method: "POST",
             data: {
                 "client_id": consentDTO.client_id,
-                "permissions": ["ReadAccountsDetail", "ReadBalances", "ReadTransactionsDetail"],
+                "permissions": ["ReadAccountsDetail", "ReadBalances", "ReadTransactionsDetail", "ManageAccounts"],
                 "reason": "Агрегация счетов для HackAPI",
                 "requesting_bank": requestingBank,
                 "requesting_bank_name": "Семейный Мультибанк"
@@ -46,31 +47,30 @@ export class ConsentsService {
             clientId: consentDTO.client_id
         });
         await this.consentsRepository.save(consent);
-
-        this.redisService.redis.del(`consents:${userId}`);
+        await this.redisService.invalidateCache(this.keyBase, userId);
 
         return consent;
     }
 
-    public async deleteConsent(bankId: string, consentId: string, userId: number) {
-        const consent = await this.consentsRepository.findOne({where: {bankId, user: {id: userId}, id: consentId}});
+    public async deleteConsent(bankId: string, userId: number) {
+        const consent = await this.consentsRepository.findOne({where: {bankId, user: {id: userId}}});
         if (!consent) {
             throw new NotFoundException("Согласие не найдено");
         }
 
         const response = await this.bankService.requestBankAPI(bankId, {
-            url: `/account-consents/${consentId}`,
+            url: `/account-consents/${consent.id}`,
             method: "DELETE",
         });
 
         if (!response) {
             await this.consentsRepository.remove(consent);
-            this.redisService.redis.del(`consents:${userId}`);
+            await this.redisService.invalidateCache(this.keyBase, userId);
         }
     }
 
     public async getUserConsents(userId: number) {
-        return this.redisService.withCache(`consents:${userId}`, 3600, () => {
+        return this.redisService.withCache(`${this.keyBase}:${userId}`, 3600, () => {
             return this.consentsRepository.find({where: {user: {id: userId}}});
         });
     }

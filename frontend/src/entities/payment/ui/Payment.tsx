@@ -24,7 +24,7 @@ export const Payment = ({payment, onDepositClick}: Props) => {
                 <div className="flex items-center gap-1 justify-between mb-0.5">
                     <p className="text-xs font-medium text-ellipsis min-w-0 overflow-hidden whitespace-nowrap">{payment.name}</p>
                     <p className="shrink-0 text-sm font-medium">
-                        <MoneyAmount value={payment.money}/>
+                        <MoneyAmount value={payment.value}/>
                     </p>
                 </div>
                 <div className="flex items-center gap-1 justify-between">

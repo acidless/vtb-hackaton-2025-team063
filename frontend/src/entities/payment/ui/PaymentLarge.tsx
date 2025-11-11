@@ -31,7 +31,7 @@ export const PaymentLarge = ({payment, onDepositClick}: Props) => {
                 </div>
                 <div className="flex flex-col items-end">
                     <p className="shrink-0 text-xl font-semibold">
-                        <MoneyAmount value={payment.money}/>
+                        <MoneyAmount value={payment.value}/>
                     </p>
                     <Status onDepositClick={onDepositClick} payment={payment}/>
                 </div>

@@ -21,6 +21,7 @@ import {Limit} from "./expenses/limits/limit.entity";
 import {TransactionsModule} from "./banks/accounts/transactions/transactions.module";
 import { PaymentsModule } from './payments/payments.module';
 import {Payment} from "./payments/payment.entity";
+import {EventEmitterModule} from "@nestjs/event-emitter";
 
 
 @Module({
@@ -35,7 +36,7 @@ import {Payment} from "./payments/payment.entity";
             entities: [User, Consent, Limit, Payment],
             synchronize: true,
         }),
-        RedisModule,
+        EventEmitterModule.forRoot(),
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', 'uploads'),
             serveRoot: '/uploads',
@@ -43,6 +44,7 @@ import {Payment} from "./payments/payment.entity";
         ConfigModule.forRoot({
             isGlobal: true,
         }),
+        RedisModule,
         UsersModule,
         CommonModule,
         AuthModule,
@@ -58,5 +60,4 @@ import {Payment} from "./payments/payment.entity";
     controllers: [AppController],
     providers: [AppService],
 })
-export class AppModule {
-}
+export class AppModule {}

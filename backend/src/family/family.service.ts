@@ -29,6 +29,6 @@ export class FamilyService {
     }
 
     public getFamilyKey(userId: number, partnerId?: number) {
-        return [userId, partnerId].filter(Boolean).sort();
+        return [userId, partnerId].filter(Boolean).sort().join(":");
     }
 }

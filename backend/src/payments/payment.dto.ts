@@ -1,5 +1,6 @@
 import {IsString, MaxLength, IsNumber, Max, Min, IsDateString} from 'class-validator';
 import {ApiProperty} from "@nestjs/swagger";
+import {IsFutureDate} from "../common/decorators/is-future-date-decorator";
 
 export class PaymentDTO {
     @ApiProperty({example: 'На квартиру', description: 'Название платежа'})
@@ -19,5 +20,6 @@ export class PaymentDTO {
 
     @ApiProperty({example: "Mon, 10 Nov 2025 21:00:40 GMT", description: 'Дата платежа'})
     @IsDateString()
+    @IsFutureDate({ message: 'Дата платежа должна быть позже текущего момента' })
     date: string;
 }

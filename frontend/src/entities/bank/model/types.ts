@@ -8,17 +8,17 @@ export type BankKey = "abank" | "sbank" | "vbank" | "family";
 
 export const banks: Record<BankKey, Bank> = {
     "abank": {
-        name: "Альфабанк",
+        name: "Awesome Bank",
         color: "#FF5A5F",
         iconBg: "linear-gradient(135deg, #ff5ea8, #ff4088)"
     },
     "sbank": {
-        name: "Сбербанк",
+        name: "Smart Bank",
         color: "#00C897",
         iconBg: "linear-gradient(135deg, #21e1b3, #1ec99b)",
     },
     "vbank": {
-        name: "ВТБ",
+        name: "Virtual Bank",
         color: "#0066FF",
         iconBg: "linear-gradient(135deg, #7aa2ff, #5e8aff)"
     },
@@ -28,3 +28,8 @@ export const banks: Record<BankKey, Bank> = {
         iconBg: "#791EFF"
     }
 };
+
+export type Consent = {
+    bankId: string;
+    clientId: string;
+}

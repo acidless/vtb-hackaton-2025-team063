@@ -27,7 +27,7 @@ const NearestPayment = ({payment, onDepositClick}: Props) => {
                 <div className="-mb-1">
                     <Heading level={3} className="text-white">
                     <span className="font-medium">
-                        <MoneyAmount value={payment.money}/>
+                        <MoneyAmount value={payment.value}/>
                     </span>
                     </Heading>
                 </div>

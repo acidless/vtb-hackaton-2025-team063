@@ -8,6 +8,8 @@ import {RedisService} from "../../redis/redis.service";
 
 @Injectable()
 export class LimitsService {
+    private keyBase = "limits";
+
     public constructor(
         @InjectRepository(Limit)
         private readonly limitRepository: Repository<Limit>,
@@ -21,7 +23,9 @@ export class LimitsService {
         await this.limitRepository.save(limit);
 
         const partnerId = await this.familyService.getFamilyMemberId(userId);
-        await this.redisService.redis.del(this.getCacheKey(userId, partnerId));
+
+        const familyKey = this.familyService.getFamilyKey(userId, partnerId);
+        await this.redisService.invalidateCache(this.keyBase, familyKey);
 
         return limit;
     }
@@ -34,20 +38,16 @@ export class LimitsService {
             throw new NotFoundException("Лимит для удаления не найден");
         }
 
-        await this.redisService.redis.del(this.getCacheKey(userId, partnerId));
+        const familyKey = this.familyService.getFamilyKey(userId, partnerId);
+        await this.redisService.invalidateCache(this.keyBase, familyKey);
     }
 
     public async getAll(userId: number) {
         const partnerId = await this.familyService.getFamilyMemberId(userId);
-        const cacheKey = this.getCacheKey(userId, partnerId);
+        const familyKey = this.familyService.getFamilyKey(userId, partnerId);
 
-        return this.redisService.withCache(cacheKey, 3600, () => {
+        return this.redisService.withCache(`${this.keyBase}:${familyKey}`, 3600, () => {
             return this.limitRepository.find({where: {user: {id: In([userId, partnerId])}}});
         });
-    }
-
-    private getCacheKey(userId: number, partnerId?: number) {
-        const cacheKey = this.familyService.getFamilyKey(userId, partnerId);
-        return `limits:${cacheKey}`;
     }
 }

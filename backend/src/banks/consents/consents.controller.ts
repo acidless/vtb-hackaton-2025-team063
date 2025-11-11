@@ -33,10 +33,10 @@ export class ConsentsController {
     @ApiOperation({ summary: 'Удаление согласия для банка' })
     @ApiResponse({ status: 204 })
     @ApiCookieAuth('access_token')
-    @Delete("/:bankId/:consentId")
+    @Delete("/:bankId")
     @HttpCode(204)
     @UseGuards(JwtAuthGuard)
-    public async delete(@Param() params: object, @User('id') userId: number) {
-        await this.consentsService.deleteConsent(params["bankId"], params["consentId"], userId);
+    public async delete(@Param("bankId") bankId: string, @User('id') userId: number) {
+        await this.consentsService.deleteConsent(bankId, userId);
     }
 }

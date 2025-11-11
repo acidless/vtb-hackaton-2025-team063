@@ -7,7 +7,7 @@ let payments: (Omit<PaymentType, "category"> & { category: number })[] = [
         id: 1,
         category: 3,
         date: new Date(2025, 10, 3),
-        money: 5000,
+        value: 5000,
         name: "На квартиру",
         payed: true
     },
@@ -15,7 +15,7 @@ let payments: (Omit<PaymentType, "category"> & { category: number })[] = [
         id: 2,
         category: 9,
         date: new Date(2025, 10, 2),
-        money: 4500,
+        value: 4500,
         name: "Детский счет",
         payed: false
     },
@@ -24,7 +24,7 @@ let payments: (Omit<PaymentType, "category"> & { category: number })[] = [
         category: 7,
         date: new Date(2025, 10, 10),
         name: "Подписка",
-        money: 500,
+        value: 500,
         payed: false
     },
     {
@@ -32,7 +32,7 @@ let payments: (Omit<PaymentType, "category"> & { category: number })[] = [
         category: 9,
         date: new Date(2025, 10, 20),
         name: "Кредит",
-        money: 10000,
+        value: 10000,
         payed: false
     }
 ];
@@ -66,7 +66,7 @@ export function executePayment(paymentId: number) {
             addExpense({
                 date: new Date(),
                 name: payment.name,
-                value: payment.money,
+                value: payment.value,
                 outcome: true,
                 category: payment.category,
                 bank: "ВТБ"

@@ -54,7 +54,7 @@ export const CreatePayment = ({isActive, setActive}: Props) => {
             name: data.paymentName,
             category: Number(data.paymentCategory),
             date: data.paymentDate,
-            money: data.paymentValue
+            value: data.paymentValue
         });
     }
 

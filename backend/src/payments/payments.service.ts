@@ -8,6 +8,8 @@ import {PaymentDTO} from "./payment.dto";
 
 @Injectable()
 export class PaymentsService {
+    private keyBase = "payments";
+
     public constructor(
         @InjectRepository(Payment)
         private readonly paymentRepository: Repository<Payment>,
@@ -17,7 +19,9 @@ export class PaymentsService {
 
     public async getAll(userId: number) {
         const memberId = await this.familyService.getFamilyMemberId(userId);
-        return this.redisService.withCache(`payments:${this.familyService.getFamilyKey(userId, memberId)}`, 3600, async () => {
+        const familyKey = this.familyService.getFamilyKey(userId, memberId);
+
+        return this.redisService.withCache(`${this.keyBase}:${familyKey}`, 3600, async () => {
             return this.paymentRepository.find({where: {user: {id: In([userId, memberId])}}});
         });
     }
@@ -27,7 +31,9 @@ export class PaymentsService {
         await this.paymentRepository.save(newPayment);
 
         const memberId = await this.familyService.getFamilyMemberId(userId);
-        await this.redisService.redis.del(`payments:${this.familyService.getFamilyKey(userId, memberId)}`);
+
+        const familyKey = this.familyService.getFamilyKey(userId, memberId);
+        await this.redisService.invalidateCache(this.keyBase, familyKey);
 
         return newPayment;
     }
@@ -40,6 +46,7 @@ export class PaymentsService {
             throw new NotFoundException("Платеж не найден");
         }
 
-        await this.redisService.redis.del(`payments:${this.familyService.getFamilyKey(userId, memberId)}`);
+        const familyKey = this.familyService.getFamilyKey(userId, memberId);
+        await this.redisService.invalidateCache(this.keyBase, familyKey);
     }
 }

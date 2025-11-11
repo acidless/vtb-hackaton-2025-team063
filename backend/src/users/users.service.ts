@@ -5,6 +5,9 @@ import {DataSource, EntityManager, Repository} from 'typeorm';
 import {UserCreateDTO, UserEditDTO, UserLoginDTO} from "./user.dto";
 import {AccountsService} from "../banks/accounts/accounts.service";
 import {TransactionsService} from "../banks/accounts/transactions/transactions.service";
+import {RedisService} from "../redis/redis.service";
+import {OnEvent} from "@nestjs/event-emitter";
+import {CacheInvalidateEvent} from "../common/events/cache-invalidate.event";
 
 @Injectable()
 export class UsersService {
@@ -13,7 +16,8 @@ export class UsersService {
         private readonly usersRepository: Repository<User>,
         private readonly dataSource: DataSource,
         private readonly accountsService: AccountsService,
-        private readonly transactionsService: TransactionsService
+        private readonly transactionsService: TransactionsService,
+        private readonly redisService: RedisService,
     ) {
     }
 
@@ -64,23 +68,32 @@ export class UsersService {
     }
 
     public async getUserExtendedInfo(userId: number) {
-        const accounts = await this.accountsService.getAccounts(userId);
+        return this.redisService.withCache(`finance:${userId}`, 300, async () => {
+            const accounts = await this.accountsService.getAccounts(userId);
 
-        const account = Object.values(accounts).flat(1)[0];
-        const accountDigits = account ? account.account[0].identification.slice(-4) : null;
+            const account = Object.values(accounts).flat(1)[0];
+            const accountDigits = account ? account.account[0].identification.slice(-4) : null;
 
-        const balance = Math.round(await this.accountsService.getTotalBalance(userId));
+            const balance = Math.round(await this.accountsService.getTotalBalance(userId));
 
-        let monthlyIncome = 0;
-        const transactions = await this.transactionsService.getTransactions(userId);
-        for (const transaction of Object.values(transactions).flat(1)) {
-            if (transaction.creditDebitIndicator === "Credit" && transaction.status === "completed") {
-                monthlyIncome += parseFloat(transaction.amount.amount);
+            let monthlyIncome = 0;
+            const transactions = await this.transactionsService.getTransactions(userId);
+            for (const transaction of Object.values(transactions).flat(1)) {
+                if (transaction.creditDebitIndicator === "Credit" && transaction.status === "completed") {
+                    monthlyIncome += parseFloat(transaction.amount.amount);
+                }
             }
-        }
 
-        monthlyIncome = Math.round(monthlyIncome);
+            monthlyIncome = Math.round(monthlyIncome);
 
-        return {account: accountDigits, balance, monthlyIncome};
+            return {account: accountDigits, balance, monthlyIncome};
+        });
+    }
+
+    @OnEvent('cache.invalidate.consents', { async: true })
+    async handleCacheInvalidation(event: CacheInvalidateEvent) {
+        const { entityId } = event;
+
+        await this.redisService.invalidateCache("finance", entityId);
     }
 }

@@ -1,19 +1,44 @@
-import {Bank} from "@/entities/bank";
+import {Bank, BankKey, deleteConsent} from "@/entities/bank";
 import {Check} from "@/shared/ui/icons/Check";
+import { motion } from "framer-motion";
+import {useQueryClient} from "@tanstack/react-query";
+import useDelete from "@/shared/hooks/useDelete";
+import SwipeForDelete from "@/shared/ui/SwipeForDelete";
 
 type Props = {
+    bankId: BankKey;
     bank: Bank;
     isConnected: boolean;
+    onClick: (bankId: BankKey) => void;
 }
 
-export const ConnectableBank = ({bank, isConnected}: Props) => {
-    return <article className={`${isConnected ? "bg-primary-light" : "bg-tertiary"} rounded-xl flex items-center justify-between px-1.5 py-2.5`}>
-        <div className="flex items-center gap-2">
-            <div style={{background: bank.iconBg}}
-                 className="w-8 h-8 rounded-md text-lg flex justify-center items-center">🏦
-            </div>
-            <p className="text-base font-semibold">{bank.name}</p>
-        </div>
-        {isConnected && <div className="text-active"><Check/></div>}
-    </article>
+export const ConnectableBank = ({bankId, bank, isConnected, onClick}: Props) => {
+    const queryClient = useQueryClient();
+    const onDelete = useDelete(bankId, deleteConsent, onSuccess, "Удаление согласия...");
+
+    function onSuccess() {
+        queryClient.invalidateQueries({queryKey: ["consents"]});
+    }
+
+    return <div className="relative overflow-hidden">
+        <SwipeForDelete canSwipe={isConnected} onDelete={onDelete}>
+            <article
+                onClick={() => onClick(bankId)}
+                className={`${isConnected ? "bg-primary-light" : "bg-tertiary"} rounded-xl cursor-pointer px-1.5 py-2.5`}>
+                <motion.div className="flex items-center justify-between"
+                            initial={{opacity: 0, y: 10}}
+                            animate={{opacity: 1, y: 0}}
+                            exit={{opacity: 0, y: -10}}
+                            transition={{duration: 0.3}}>
+                    <div className="flex items-center gap-2">
+                        <div style={{background: bank.iconBg}}
+                             className="w-8 h-8 rounded-md text-lg flex justify-center items-center">🏦
+                        </div>
+                        <p className="text-base font-semibold">{bank.name}</p>
+                    </div>
+                    {isConnected && <div className="text-active"><Check/></div>}
+                </motion.div>
+            </article>
+        </SwipeForDelete>
+    </div>
 }

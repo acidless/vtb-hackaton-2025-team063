@@ -121,7 +121,7 @@ export const PaymentsCalendar = ({payments, currentDate, setCurrentDate, large}:
                                             exit={{opacity: 0, y: -6}}
                                             transition={{duration: 0.15}}
                                             className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 z-10 ${colorClass} text-white rounded-md shadow-md p-1.5 text-[0.625rem]`}>
-                                            <MoneyAmount value={payment.money}/>
+                                            <MoneyAmount value={payment.value}/>
                                             <div
                                                 className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 bg-inherit rounded-xs"></div>
                                         </motion.div>

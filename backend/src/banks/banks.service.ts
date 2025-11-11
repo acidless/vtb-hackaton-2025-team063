@@ -23,7 +23,7 @@ export class BanksService {
 
         return this.errorHandledRequest(async () => {
             const url = `${bank.baseUrl}${requestConfig.url}`;
-            const key = `${url}-${clientId}`;
+            const key = `${url}:${clientId}:${requestConfig.headers?["X-Consent-Id"] : ""}`;
 
             return this.redisService.withCache<T>(key, 300, async () => {
                 const response = await lastValueFrom(
