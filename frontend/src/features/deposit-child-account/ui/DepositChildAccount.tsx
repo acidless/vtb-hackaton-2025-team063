@@ -10,16 +10,17 @@ import {yupResolver} from "@hookform/resolvers/yup"
 import {schema} from "@/widgets/deposit-child-account/model/schema";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {addGoal} from "@/entities/goal";
-import {depositMoney} from "@/entities/child-account";
+import {ChildAccountType, depositMoney} from "@/entities/child-account";
 import AnimatedLoader from "@/shared/ui/loaders/AnimatedLoader";
 import * as yup from "yup";
 
 type Props = {
     isActive: boolean;
     setActive: Dispatch<SetStateAction<boolean>>;
+    activeAccount: ChildAccountType | null;
 }
 
-export const DepositChildAccount = ({isActive, setActive}: Props) => {
+export const DepositChildAccount = ({isActive, setActive, activeAccount}: Props) => {
     const {
         register,
         handleSubmit,
@@ -40,9 +41,10 @@ export const DepositChildAccount = ({isActive, setActive}: Props) => {
         onSuccess: () => {
             reset();
             setActive(false);
-            queryClient.invalidateQueries({queryKey: ["child-account"]});
-            queryClient.invalidateQueries({queryKey: ["shared-accounts"]});
-            queryClient.invalidateQueries({queryKey: ["personal-accounts"]});
+            queryClient.invalidateQueries({queryKey: ["child-accounts"]});
+            queryClient.invalidateQueries({queryKey: ["family-finance"]});
+            queryClient.invalidateQueries({queryKey: ["family-expenses"]});
+            queryClient.invalidateQueries({queryKey: ["transactions"]});
         },
     });
 

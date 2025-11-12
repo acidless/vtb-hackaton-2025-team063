@@ -1,6 +1,6 @@
 import Heading from "@/shared/ui/typography/Heading";
 import ModalWindow from "@/shared/ui/ModalWindow";
-import {Dispatch, SetStateAction} from "react";
+import {Dispatch, SetStateAction, useEffect} from "react";
 import {Controller, useForm} from "react-hook-form";
 import Input from "@/shared/ui/inputs/Input";
 import AccentButton from "@/shared/ui/AccentButton";
@@ -8,21 +8,23 @@ import {Card} from "@/shared/ui/icons/Card";
 import {yupResolver} from "@hookform/resolvers/yup"
 import {schema} from "@/widgets/change-child-account-limit/model/schema";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {changeLimit, depositMoney} from "@/entities/child-account";
+import {changeLimit, ChildAccountType, depositMoney} from "@/entities/child-account";
 import * as yup from "yup";
 import AnimatedLoader from "@/shared/ui/loaders/AnimatedLoader";
 
 type Props = {
     isActive: boolean;
     setActive: Dispatch<SetStateAction<boolean>>;
+    activeAccount: ChildAccountType | null;
 }
 
-export const ChangeChildAccountLimit = ({isActive, setActive}: Props) => {
+export const ChangeChildAccountLimit = ({isActive, setActive, activeAccount}: Props) => {
     const {
         register,
         handleSubmit,
         reset,
         control,
+        setValue,
         formState: {errors},
     } = useForm({
         resolver: yupResolver(schema),
@@ -31,6 +33,12 @@ export const ChangeChildAccountLimit = ({isActive, setActive}: Props) => {
         }
     });
 
+    useEffect(() => {
+        const limit = activeAccount?.moneyPerDay;
+
+        setValue("chilAccountnewLimit", limit ? Math.floor(limit) : "");
+    }, [activeAccount]);
+
     const queryClient = useQueryClient();
 
     const {mutate: sendNewLimit, isPending} = useMutation({
@@ -38,12 +46,12 @@ export const ChangeChildAccountLimit = ({isActive, setActive}: Props) => {
         onSuccess: () => {
             reset();
             setActive(false);
-            queryClient.invalidateQueries({queryKey: ["child-account"]});
+            queryClient.invalidateQueries({queryKey: ["child-accounts"]});
         },
     });
 
     const onSubmit = (data: yup.InferType<typeof schema>) => {
-        sendNewLimit(data.chilAccountnewLimit);
+        sendNewLimit({moneyPerDay: data.chilAccountnewLimit, accountId: activeAccount?.id!});
     }
 
     return <ModalWindow isActive={isActive} setActive={setActive}>
