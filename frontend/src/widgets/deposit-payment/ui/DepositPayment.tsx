@@ -30,7 +30,7 @@ export const DepositPayment = ({isActive, setActive, currentPaymentId}: Props) =
             queryClient.invalidateQueries({queryKey: ["shared-accounts"]});
             queryClient.invalidateQueries({queryKey: ["personal-accounts"]});
             queryClient.invalidateQueries({queryKey: ["transactions"]});
-            queryClient.invalidateQueries({queryKey: ["transactions-categories"]});
+            queryClient.invalidateQueries({queryKey: ["family-expenses"]});
         },
     });
 

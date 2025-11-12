@@ -6,6 +6,8 @@ import {RedisService} from "../redis/redis.service";
 
 @Injectable()
 export class FamilyService {
+    private baseKey = "partner";
+
     public constructor(
         @InjectRepository(User)
         private readonly usersRepository: Repository<User>,
@@ -17,18 +19,14 @@ export class FamilyService {
     }
 
     public async getFamilyMemberId(userId: number) {
-        const partner = await this.redisService.withCache(`partner:${userId}`, 86400, () => {
-            return this.usersRepository.findOne({where: {partner: {id: userId}}});;
+        const partner = await this.redisService.withCache(`${this.baseKey}:${userId}`, 86400, () => {
+            return this.usersRepository.findOne({where: {partner: {id: userId}}});
         })
 
         if(partner) {
-            await this.redisService.redis.set(`partner:${partner.id}`, userId.toString(), "EX", 86400);
+            await this.redisService.redis.set(`${this.baseKey}:${partner.id}`, userId.toString(), "EX", 86400);
         }
 
         return partner?.id;
-    }
-
-    public getFamilyKey(userId: number, partnerId?: number) {
-        return [userId, partnerId].filter(Boolean).sort().join(":");
     }
 }

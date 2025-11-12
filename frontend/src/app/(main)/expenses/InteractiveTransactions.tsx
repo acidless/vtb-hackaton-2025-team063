@@ -1,11 +1,12 @@
 "use client";
 
-import {getTransactionsCategories, TransactionCategories} from "@/entities/transaction-category";
+import {TransactionCategories} from "@/entities/transaction-category";
 import {getTransactions, TransactionType, updateTransactionCategory} from "@/entities/transaction";
 import PersonalExpenses from "@/app/(main)/expenses/PersonalExpenses";
 import TransactionHistory from "@/app/(main)/expenses/TransactionHistory";
 import {DndContext, pointerWithin} from "@dnd-kit/core";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {getFamilyExpenses} from "@/entities/family/api/api";
 
 type Props = {
     avatar: string;
@@ -19,8 +20,8 @@ const InteractiveExpenses = ({avatar}: Props) => {
     });
 
     const {data: categories = []} = useQuery({
-        queryKey: ["transactions-categories"],
-        queryFn: getTransactionsCategories,
+        queryKey: ["family-expenses"],
+        queryFn: getFamilyExpenses,
         refetchInterval: 5000
     });
 
@@ -30,10 +31,10 @@ const InteractiveExpenses = ({avatar}: Props) => {
         mutationFn: updateTransactionCategory,
         onMutate: async ({categoryId, transactionId}) => {
             await queryClient.cancelQueries({queryKey: ["transactions"]});
-            await queryClient.cancelQueries({queryKey: ["transactions-categories"]});
+            await queryClient.cancelQueries({queryKey: ["family-expenses"]});
 
             const previousTransactions = queryClient.getQueryData(["transactions"]);
-            const previousCategories = queryClient.getQueryData(["transactions-categories"]);
+            const previousCategories = queryClient.getQueryData(["family-expenses"]);
 
             queryClient.setQueryData(["transactions"], (old: TransactionType[] = []) =>
                 old.map(tx =>
@@ -52,13 +53,13 @@ const InteractiveExpenses = ({avatar}: Props) => {
                 queryClient.setQueryData(["transactions"], context.previousTransactions);
             }
             if (context?.previousCategories) {
-                queryClient.setQueryData(["transactions-categories"], context.previousCategories);
+                queryClient.setQueryData(["family-expenses"], context.previousCategories);
             }
         },
 
         onSettled: () => {
             queryClient.invalidateQueries({queryKey: ["transactions"]});
-            queryClient.invalidateQueries({queryKey: ["transactions-categories"]});
+            queryClient.invalidateQueries({queryKey: ["family-expenses"]});
         },
     });
 
@@ -77,7 +78,7 @@ const InteractiveExpenses = ({avatar}: Props) => {
 
         updateCategory({categoryId: Number(category.id), transactionId: transaction.transaction.id});
     }}>
-        <PersonalExpenses avatar={avatar} expenseCategories={categories}/>
+        <PersonalExpenses avatar={avatar} expenseCategories={categories[0].categories}/>
         <TransactionHistory transactions={transactions}/>
     </DndContext>
 }

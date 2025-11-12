@@ -1,5 +1,5 @@
 export type ChildAccountType = {
-    moneyCollected: number;
+    balance: number;
     moneyPerDay: number;
     avatar: string;
 };

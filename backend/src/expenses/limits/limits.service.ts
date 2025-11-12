@@ -3,8 +3,9 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {In, Repository} from "typeorm";
 import {Limit} from "./limit.entity";
 import {LimitDTO} from "./limit.dto";
-import {FamilyService} from "../../family/family.service";
 import {RedisService} from "../../redis/redis.service";
+import {FamilyCacheService} from "../../family/family-cache.service";
+import {FamilyService} from "../../family/family.service";
 
 @Injectable()
 export class LimitsService {
@@ -15,6 +16,7 @@ export class LimitsService {
         private readonly limitRepository: Repository<Limit>,
         private readonly redisService: RedisService,
         private readonly familyService: FamilyService,
+        private readonly familyCacheService: FamilyCacheService,
     ) {
     }
 
@@ -22,10 +24,7 @@ export class LimitsService {
         const limit = this.limitRepository.create({...limitDTO, user: {id: userId}});
         await this.limitRepository.save(limit);
 
-        const partnerId = await this.familyService.getFamilyMemberId(userId);
-
-        const familyKey = this.familyService.getFamilyKey(userId, partnerId);
-        await this.redisService.invalidateCache(this.keyBase, familyKey);
+        await this.familyCacheService.invalidateFamilyCache(this.keyBase, userId);
 
         return {...limit, spent: 0};
     }
@@ -38,13 +37,12 @@ export class LimitsService {
             throw new NotFoundException("Лимит для удаления не найден");
         }
 
-        const familyKey = this.familyService.getFamilyKey(userId, partnerId);
-        await this.redisService.invalidateCache(this.keyBase, familyKey);
+        await this.familyCacheService.invalidateFamilyCache(this.keyBase, userId);
     }
 
     public async getAll(userId: number) {
         const partnerId = await this.familyService.getFamilyMemberId(userId);
-        const familyKey = this.familyService.getFamilyKey(userId, partnerId);
+        const familyKey = this.familyCacheService.getFamilyKey(userId, partnerId);
 
         return this.redisService.withCache(`${this.keyBase}:${familyKey}`, 3600, async () => {
             const limits = await this.limitRepository.find({where: {user: {id: In([userId, partnerId])}}});

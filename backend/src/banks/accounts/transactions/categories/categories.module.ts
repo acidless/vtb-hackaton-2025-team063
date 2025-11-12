@@ -7,6 +7,7 @@ import { CategoriesController } from './categories.controller';
 @Module({
     imports: [TransactionsModule, RedisModule],
     providers: [CategoriesService],
-    controllers: [CategoriesController]
+    controllers: [CategoriesController],
+    exports: [CategoriesService],
 })
 export class CategoriesModule {}

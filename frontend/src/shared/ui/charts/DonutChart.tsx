@@ -44,7 +44,7 @@ const DonutChart = ({data, height = 140, size = 70, clickable = true, children}:
                             <foreignObject
                                 x={x - 30}
                                 y={y - 12}
-                                width={60}
+                                width={elem.value.toString().length * 12}
                                 height={24}
                                 style={{overflow: "visible"}}
                             >

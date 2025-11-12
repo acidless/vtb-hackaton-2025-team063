@@ -50,7 +50,7 @@ export class TransactionsService {
 
                             transactions.push(...transformed);
                         })
-                            .catch(err => console.error(err))
+                        .catch(err => console.error(err))
                     )
                 }
             }

@@ -10,6 +10,7 @@ import * as crypto from "node:crypto";
 import { extname } from 'node:path';
 import {UsersService} from "../users/users.service";
 import {User} from "../common/decorators/user.decorator";
+import AvatarInterceptor from "../common/interceptors/avatar.interceptor";
 
 @ApiTags('Аутентификация')
 @Controller('auth')
@@ -23,15 +24,7 @@ export class AuthController {
     @ApiConsumes('multipart/form-data')
     @Post()
     @HttpCode(201)
-    @UseInterceptors(FileInterceptor('avatar', {
-        storage: diskStorage({
-            destination: './uploads',
-            filename: (req, file, cb) => {
-                const randomName = `avatar-${crypto.randomUUID()}`;
-                return cb(null, `${randomName}${extname(file.originalname)}`);
-            },
-        }),
-    }),)
+    @UseInterceptors(AvatarInterceptor)
     public async register(@UploadedFile() file: Express.Multer.File, @Body() dto: UserDTO, @Res() res: Response) {
         const data = await this.authService.register({...dto, avatar: `/uploads/${file.filename}`});
 

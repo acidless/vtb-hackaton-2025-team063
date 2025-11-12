@@ -8,15 +8,15 @@ import {getPayments} from "@/entities/payment";
 import {dehydrate, HydrationBoundary, QueryClient} from "@tanstack/react-query";
 import {getGoals} from "@/entities/goal";
 import {getWallets} from "@/entities/wallet";
-import {getTransactionsCategories} from "@/entities/transaction-category";
 import TransactionList from "@/app/(main)/budget/ExpenseList";
+import {getFamilyExpenses} from "@/entities/family/api/api";
 
 export default async function Budget() {
     const queryClient = new QueryClient();
 
     await Promise.all([
         queryClient.prefetchQuery({queryKey: ["goals"], queryFn: getGoals}),
-        queryClient.prefetchQuery({queryKey: ["transactions-categories"], queryFn: getTransactionsCategories}),
+        queryClient.prefetchQuery({queryKey: ["family-expenses"], queryFn: getFamilyExpenses}),
         queryClient.prefetchQuery({queryKey: ["transactions"], queryFn: getTransactions}),
         queryClient.prefetchQuery({queryKey: ["wallets"], queryFn: getWallets}),
         queryClient.prefetchQuery({queryKey: ["payments"],queryFn: getPayments})

@@ -6,11 +6,12 @@ import {CodeModule} from './code/code.module';
 import {FamilyController} from './family.controller';
 import {UsersModule} from "../users/users.module";
 import {RedisModule} from "../redis/redis.module";
+import {FamilyCacheService} from "./family-cache.service";
 
 @Module({
     imports: [TypeOrmModule.forFeature([User]), UsersModule, CodeModule, RedisModule],
-    providers: [FamilyService],
-    exports: [FamilyService],
+    providers: [FamilyService, FamilyCacheService],
+    exports: [FamilyService, FamilyCacheService],
     controllers: [FamilyController],
 })
 export class FamilyModule {

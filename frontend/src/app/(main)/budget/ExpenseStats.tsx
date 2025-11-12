@@ -3,12 +3,12 @@
 import Heading from "@/shared/ui/typography/Heading";
 import {Expenses as ExpensesBlock} from "@/widgets/expenses";
 import {useQuery} from "@tanstack/react-query";
-import {getTransactionsCategories} from "@/entities/transaction-category";
+import {getFamilyExpenses} from "@/entities/family/api/api";
 
 const ExpenseStats = () => {
     const {data: expenseCategories = []} = useQuery({
-        queryKey: ["transactions-categories"],
-        queryFn: getTransactionsCategories,
+        queryKey: ["family-expenses"],
+        queryFn: getFamilyExpenses,
         refetchInterval: 5000
     });
 
@@ -16,7 +16,7 @@ const ExpenseStats = () => {
         <div className="mb-2.5">
             <Heading level={2}>Статистика расходов</Heading>
         </div>
-        <ExpensesBlock expenseCategories={expenseCategories}/>
+        <ExpensesBlock expenseCategories={expenseCategories[0].categories}/>
     </section>
 }
 
