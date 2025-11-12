@@ -15,7 +15,11 @@ export type TransactionType = {
         amount: string;
         currency: string;
     };
+    transactionInformation: string;
     creditDebitIndicator: "Debit" | "Credit";
     status: "completed" | string;
     valueDateTime: string;
+    merchant?: {
+        mccCode: string;
+    }
 };

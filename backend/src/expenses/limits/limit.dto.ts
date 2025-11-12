@@ -19,6 +19,6 @@ export class LimitDTO {
 
     @ApiProperty({example: "week", description: 'Срок лимита'})
     @IsString()
-    @IsIn(["week", "month", "year"])
-    period: "week" | "month" | "year";
+    @IsIn(["week", "month"])
+    period: "week" | "month";
 }

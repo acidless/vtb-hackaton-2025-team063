@@ -15,6 +15,10 @@ export const schema = yup
             .min(1, "Минимальный лимит - 1₽")
             .max(10000000, "Максимальный лимит - 10 000 000₽"),
 
+        limitPeriod: yup
+            .string()
+            .required("Выберите период лимита"),
+
         limitCategory: yup
             .string()
             .required("Укажите категорию лимита"),

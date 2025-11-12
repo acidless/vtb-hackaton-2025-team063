@@ -1,8 +1,8 @@
 import {getExpenseCategoriesWithoutPopulation} from "@/app/api/expenses/categories/data";
-import {ExpenseType} from "@/entities/expense";
+import {TransactionType} from "@/entities/transaction";
 import {getFamilyAccounts} from "@/app/api/users/family/data";
 
-type UnpopulatedExpense = Omit<ExpenseType, "category"> & { category: number };
+type UnpopulatedExpense = Omit<TransactionType, "category"> & { category: number };
 
 let expenses: UnpopulatedExpense[] = [
     {
@@ -70,7 +70,7 @@ let expenses: UnpopulatedExpense[] = [
     }
 ];
 
-export function getExpenses(): ExpenseType[] {
+export function getExpenses(): TransactionType[] {
     const categories = getExpenseCategoriesWithoutPopulation();
     return expenses
         .sort((e1, e2) => new Date(e2.date).getTime() - new Date(e1.date)

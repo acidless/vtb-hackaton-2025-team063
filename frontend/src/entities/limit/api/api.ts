@@ -1,20 +1,19 @@
-import { fetchMock } from "@/shared/lib/fetchMock";
 import {LimitType} from "@/entities/limit";
+import universalFetch from "@/shared/lib/universalFetch";
 
 export async function getLimits(): Promise<LimitType[]> {
-    return fetchMock("/api/expenses/limits");
+    return universalFetch("/limits");
 }
 
-export async function addLimit(newLimit: Omit<LimitType, "id" | "category"> & {category: number}): Promise<LimitType> {
-    return fetchMock("/api/expenses/limits", {
+export async function addLimit(newLimit: Omit<LimitType, "id" | "spent">): Promise<LimitType> {
+    return universalFetch("/limits", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(newLimit),
+        body: newLimit,
     });
 }
 
 export async function deleteLimit(limitId: number): Promise<void> {
-    await fetchMock(`/api/expenses/limits/?id=${limitId}`, {
+    await universalFetch(`/limits/${limitId}`, {
         method: "DELETE",
     });
 }

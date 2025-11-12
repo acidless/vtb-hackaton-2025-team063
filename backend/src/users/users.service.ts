@@ -78,10 +78,13 @@ export class UsersService {
 
             const getIncome = this.transactionsService.getTransactions(userId)
                 .then((transactions) => {
+                    let fromDate = new Date();
+                    fromDate.setMonth(fromDate.getMonth() - 1);
+
                     let monthlyIncome = 0;
-                    for (const transaction of Object.values(transactions).flat(1)) {
-                        if (transaction.creditDebitIndicator === "Credit" && transaction.status === "completed") {
-                            monthlyIncome += parseFloat(transaction.amount.amount);
+                    for (const transaction of transactions) {
+                        if (transaction.date > fromDate && !transaction.outcome && transaction.status === "completed") {
+                            monthlyIncome += transaction.value;
                         }
                     }
 

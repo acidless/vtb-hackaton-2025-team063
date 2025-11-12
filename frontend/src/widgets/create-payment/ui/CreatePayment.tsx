@@ -9,7 +9,7 @@ import Select from "@/shared/ui/inputs/Select";
 import {Card} from "@/shared/ui/icons/Card";
 import {yupResolver} from "@hookform/resolvers/yup"
 import {schema} from "@/widgets/create-payment/model/schema";
-import {ExpensesCategoriesOptions} from "@/entities/expense-category";
+import {TransactionsCategoriesOptions} from "@/entities/transaction-category";
 import DatePicker from "@/shared/ui/inputs/DatePicker";
 import * as yup from "yup";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
@@ -112,7 +112,7 @@ export const CreatePayment = ({isActive, setActive}: Props) => {
                             <Select value={field.value} error={errors.paymentCategory?.message}
                                     onChange={(val) => field.onChange(val)} large
                                     placeholder="Выберите категорию" id="paymentCategory"
-                                    options={ExpensesCategoriesOptions}/>
+                                    options={TransactionsCategoriesOptions}/>
                         )}
                     />
                 </div>

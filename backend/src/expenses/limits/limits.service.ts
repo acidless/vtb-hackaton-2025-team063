@@ -27,7 +27,7 @@ export class LimitsService {
         const familyKey = this.familyService.getFamilyKey(userId, partnerId);
         await this.redisService.invalidateCache(this.keyBase, familyKey);
 
-        return limit;
+        return {...limit, spent: 0};
     }
 
     public async delete(userId: number, limitId: number) {
@@ -46,8 +46,9 @@ export class LimitsService {
         const partnerId = await this.familyService.getFamilyMemberId(userId);
         const familyKey = this.familyService.getFamilyKey(userId, partnerId);
 
-        return this.redisService.withCache(`${this.keyBase}:${familyKey}`, 3600, () => {
-            return this.limitRepository.find({where: {user: {id: In([userId, partnerId])}}});
+        return this.redisService.withCache(`${this.keyBase}:${familyKey}`, 3600, async () => {
+            const limits = await this.limitRepository.find({where: {user: {id: In([userId, partnerId])}}});
+            return limits.map(limit => ({...limit, spent: 0}));
         });
     }
 }

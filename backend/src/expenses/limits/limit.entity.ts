@@ -19,9 +19,9 @@ export class Limit {
 
     @Column({
         type: "enum",
-        enum: ["week", "month", "year"],
+        enum: ["week", "month"],
     })
-    period: "week" | "month" | "year";
+    period: "week" | "month";
 
     @ManyToOne(() => User, {
         onDelete: 'CASCADE',

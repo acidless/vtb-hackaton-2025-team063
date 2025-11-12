@@ -9,10 +9,10 @@ import Select from "@/shared/ui/inputs/Select";
 import {Card} from "@/shared/ui/icons/Card";
 import {yupResolver} from "@hookform/resolvers/yup"
 import {schema} from "@/widgets/create-wallet/model/schema";
-import {ExpensesCategoriesOptions} from "@/entities/expense-category";
+import {TransactionsCategoriesOptions} from "@/entities/transaction-category";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {addWallet} from "@/entities/wallet";
-import {BankKey, banks} from "@/entities/bank";
+import {BankKey} from "@/entities/bank";
 import * as yup from "yup";
 import AnimatedLoader from "@/shared/ui/loaders/AnimatedLoader";
 import BankSelect from "@/shared/ui/inputs/BankSelect";
@@ -34,7 +34,6 @@ export const CreateWallet = ({isActive, setActive}: Props) => {
             walletName: "",
             walletBank: "",
             walletCategory: "",
-            walletPeriod: "",
             walletLimit: "" as any,
         },
     });
@@ -56,7 +55,6 @@ export const CreateWallet = ({isActive, setActive}: Props) => {
             name: data.walletName,
             bank: data.walletBank as BankKey,
             category: Number(data.walletCategory),
-            period: data.walletPeriod as "week" | "month"
         });
     }
 
@@ -102,19 +100,7 @@ export const CreateWallet = ({isActive, setActive}: Props) => {
                         render={({field}) => (
                             <Select error={errors.walletCategory?.message} onChange={(value) => field.onChange(value)}
                                     large value={field.value} placeholder="Выберите категорию" id="walletCategory"
-                                    options={ExpensesCategoriesOptions}/>
-                        )}
-                    />
-                </div>
-                <div className="mb-2.5 flex flex-col">
-                    <label className="font-medium text-sm mb-1" htmlFor="walletPeriod">Период</label>
-                    <Controller
-                        name="walletPeriod"
-                        control={control}
-                        render={({field}) => (
-                            <Select error={errors.walletPeriod?.message} onChange={(value) => field.onChange(value)}
-                                    large value={field.value} placeholder="Выберите период" id="walletPeriod"
-                                    options={[{value: "week", label: "Неделя"}, {value: "month", label: "Месяц"}]}/>
+                                    options={TransactionsCategoriesOptions}/>
                         )}
                     />
                 </div>

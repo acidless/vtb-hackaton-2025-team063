@@ -3,12 +3,12 @@
 import Heading from "@/shared/ui/typography/Heading";
 import {Expenses as ExpensesBlock} from "@/widgets/expenses";
 import {useQuery} from "@tanstack/react-query";
-import {getExpenseCategories} from "@/entities/expense-category";
+import {getTransactionsCategories} from "@/entities/transaction-category";
 
 const ExpenseStats = () => {
     const {data: expenseCategories = []} = useQuery({
-        queryKey: ["expense-categories"],
-        queryFn: getExpenseCategories,
+        queryKey: ["transactions-categories"],
+        queryFn: getTransactionsCategories,
         refetchInterval: 5000
     });
 

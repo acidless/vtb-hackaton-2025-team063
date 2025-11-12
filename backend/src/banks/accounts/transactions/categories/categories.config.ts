@@ -1,3 +1,15 @@
+export enum CATEGORIES {
+    ENTERTAINMENT = 1,
+    GROCERIES,
+    COMMUNICATION,
+    TRANSPORT,
+    CLOTHES,
+    GIFTS,
+    HEALTHCARE,
+    RESTAURANTS,
+    OTHER
+}
+
 export const CategoriesConfig = {
     1: {
         name: "Развлечения",

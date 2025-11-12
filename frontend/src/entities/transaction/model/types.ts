@@ -1,8 +1,9 @@
-import {ExpenseCategoryType} from "@/entities/expense-category";
-
-export type ExpenseType = {
+export type TransactionType = {
     id: string;
-    category: ExpenseCategoryType;
+    category: {
+        id: number;
+        name: string;
+    };
     name: string;
     value: number;
     outcome: boolean;
@@ -10,7 +11,7 @@ export type ExpenseType = {
     date: Date;
 }
 
-export function toExcelData(expenses: ExpenseType[]) {
+export function toExcelData(expenses: TransactionType[]) {
     return expenses.map(item => ({
         "Название": item.name,
         "Дата операции": new Date(item.date).toLocaleDateString("ru-RU"),

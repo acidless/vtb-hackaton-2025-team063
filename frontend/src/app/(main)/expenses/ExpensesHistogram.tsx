@@ -1,14 +1,14 @@
 "use client";
 
 import Histogram from "@/shared/ui/charts/Histogram";
-import {ExpenseCategory, ExpenseCategoryType} from "@/entities/expense-category";
+import {TransactionCategories, TransactionCategory, TransactionCategoryType} from "@/entities/transaction-category";
 import React, {useMemo, useState} from "react";
 import {Info} from "@/shared/ui/icons/Info";
 import InfoPopup from "@/shared/ui/popups/InfoPopup";
 import useShowingSkeleton from "@/shared/hooks/useShowingSkeleton";
 
 type Props = {
-    expenseCategories: ExpenseCategoryType[];
+    expenseCategories: TransactionCategoryType[];
 }
 
 const ExpensesHistogram = ({expenseCategories}: Props) => {
@@ -19,7 +19,7 @@ const ExpensesHistogram = ({expenseCategories}: Props) => {
     }, [expenseCategories]);
 
     const histogramData = useMemo(() => {
-        return expenseCategories.map(cat => ({id: cat.id, value: cat.spent, color: cat.color, name: cat.name}));
+        return expenseCategories.map(cat => ({id: cat.id, value: cat.spent, color: TransactionCategories[cat.id].color, name: cat.name}));
     }, [expenseCategories]);
 
     const isLoading = useShowingSkeleton(expenseCategories);
@@ -28,7 +28,7 @@ const ExpensesHistogram = ({expenseCategories}: Props) => {
         <div className="mb-2.5 relative">
             <Histogram data={histogramData}/>
             {!isHelpActive && !isLoading &&
-                <button onClick={() => setHelpActive(true)} className="w-5 h-5 absolute top-0 right-0 text-[#C4C4C4]">
+                <button onClick={() => setHelpActive(true)} className="w-5 h-5 absolute top-0 right-0 text-[#C4C4C4] cursor-pointer">
                     <Info/>
                 </button>
             }
@@ -39,7 +39,7 @@ const ExpensesHistogram = ({expenseCategories}: Props) => {
         </div>
         <div className="flex items-center justify-start gap-1 flex-wrap">
             {nonEmptyCategories.map(cat => (
-                <ExpenseCategory key={cat.name} overflowText={false} expenseCategory={cat}/>
+                <TransactionCategory key={cat.name} overflowText={false} transactionCategory={cat}/>
             ))}
         </div>
     </>

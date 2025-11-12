@@ -1,8 +1,8 @@
-import {ExpenseCategoryType} from "@/entities/expense-category";
-
 export type LimitType = {
     id: number;
-    category: ExpenseCategoryType;
+    category: number;
     name: string;
     limit: number;
+    spent: number;
+    period: "week" | "month";
 }

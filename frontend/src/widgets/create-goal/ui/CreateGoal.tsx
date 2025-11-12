@@ -36,7 +36,7 @@ export const CreateGoal = ({isActive, setActive}: Props) => {
             goalValue: "" as any,
             goalDate: null as any,
             goalIcon: "money",
-            goalBankId: null as any,
+            goalBankId: "" as any,
         },
     });
 

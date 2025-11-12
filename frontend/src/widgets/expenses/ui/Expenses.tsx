@@ -1,12 +1,12 @@
 "use client";
 
 import DonutChart from "@/shared/ui/charts/DonutChart";
-import {ExpenseCategory, ExpenseCategoryType} from "@/entities/expense-category";
+import {TransactionCategories, TransactionCategory, TransactionCategoryType} from "@/entities/transaction-category";
 import React, {useMemo} from "react";
 import useShowingSkeleton from "@/shared/hooks/useShowingSkeleton";
 
 type Props = {
-    expenseCategories: ExpenseCategoryType[];
+    expenseCategories: TransactionCategoryType[];
 }
 
 export const Expenses = ({expenseCategories}: Props) => {
@@ -19,7 +19,7 @@ export const Expenses = ({expenseCategories}: Props) => {
     }, [filteredCategories]);
 
     const chartData = useMemo(() => {
-        return [...sortedCategories].reverse().map(c => ({value: c.spent, color: c.color}));
+        return [...sortedCategories].reverse().map(c => ({value: c.spent, color: TransactionCategories[c.id].color}));
     }, [sortedCategories]);
 
     const isShowingSkeleton = useShowingSkeleton(expenseCategories);
@@ -44,7 +44,7 @@ export const Expenses = ({expenseCategories}: Props) => {
                             className="grid grid-flow-col auto-rows-max gap-1 auto-cols-[90%] md:auto-cols-auto"
                             style={{gridTemplateRows: "repeat(3, auto)"}}>
                             {sortedCategories.map(category => (
-                                <ExpenseCategory key={category.name} expenseCategory={category}/>
+                                <TransactionCategory key={category.name} transactionCategory={category}/>
                             ))}
                             {Array.from({length: 3}).map((_, i) => (
                                 <div key={i} className="w-4"></div>

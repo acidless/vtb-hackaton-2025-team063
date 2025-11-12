@@ -4,7 +4,7 @@ import {motion} from "framer-motion";
 import MoneyAmount from "@/shared/ui/MoneyAmount";
 import ProgressBar from "@/shared/ui/ProgressBar";
 import {deleteLimit, LimitType} from "@/entities/limit";
-import {ExpenseCategoryAvatar} from "@/entities/expense-category";
+import {TransactionCategoryAvatar} from "@/entities/transaction-category";
 import SwipeForDelete from "@/shared/ui/SwipeForDelete";
 import {useQueryClient} from "@tanstack/react-query";
 import useDelete from "@/shared/hooks/useDelete";
@@ -14,7 +14,7 @@ type Props = {
 }
 
 export const Limit = ({limit}: Props) => {
-    const percent = Math.round((limit.category.spent / limit.limit) * 100);
+    const percent = Math.round((limit.spent / limit.limit) * 100);
     const isOverflow = percent >= 100;
 
     const queryClient = useQueryClient();
@@ -35,11 +35,11 @@ export const Limit = ({limit}: Props) => {
                             animate={{opacity: 1, y: 0}}
                             exit={{opacity: 0, y: -10}}
                             transition={{duration: 0.3}}>
-                    <ExpenseCategoryAvatar expenseCategory={limit.category}/>
+                    <TransactionCategoryAvatar categoryId={limit.category}/>
                     <div className="flex flex-col min-w-0">
                         <p className="text-primary font-medium text-ellipsis overflow-hidden whitespace-nowrap">{limit.name}</p>
                         <p className="text-light font-light text-xs">
-                            <MoneyAmount value={limit.category.spent} showCurrency={false}/>
+                            <MoneyAmount value={limit.spent} showCurrency={false}/>
                             <span> из </span>
                             <MoneyAmount value={limit.limit} showCurrency={false}/>
                         </p>
@@ -49,7 +49,7 @@ export const Limit = ({limit}: Props) => {
                             {percent}%
                         </p>
                         <div className="w-20">
-                            <ProgressBar value={limit.category.spent} max={limit.limit} indicators={true}/>
+                            <ProgressBar value={limit.spent} max={limit.limit} indicators={true}/>
                         </div>
                     </div>
                 </motion.div>

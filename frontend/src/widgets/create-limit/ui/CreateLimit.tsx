@@ -8,7 +8,7 @@ import AccentButton from "@/shared/ui/AccentButton";
 import Select from "@/shared/ui/inputs/Select";
 import {Card} from "@/shared/ui/icons/Card";
 import {yupResolver} from "@hookform/resolvers/yup"
-import {ExpensesCategoriesOptions} from "@/entities/expense-category";
+import {TransactionsCategoriesOptions} from "@/entities/transaction-category";
 import {schema} from "@/widgets/create-limit/model/schema";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {addLimit} from "@/entities/limit";
@@ -31,7 +31,8 @@ export const CreateLimit = ({isActive, setActive}: Props) => {
         defaultValues: {
             limitCategory: "",
             limitName: "",
-            limitValue: "" as any
+            limitValue: "" as any,
+            limitPeriod: "" as any
         },
     });
 
@@ -51,6 +52,7 @@ export const CreateLimit = ({isActive, setActive}: Props) => {
             name: data.limitName,
             limit: data.limitValue,
             category: Number(data.limitCategory),
+            period: data.limitPeriod as any,
         });
     }
 
@@ -89,6 +91,18 @@ export const CreateLimit = ({isActive, setActive}: Props) => {
                     </div>
                 </div>
                 <div className="mb-2.5 flex flex-col">
+                    <label className="font-medium text-sm mb-1" htmlFor="limitPeriod">Период</label>
+                    <Controller
+                        name="limitPeriod"
+                        control={control}
+                        render={({field}) => (
+                            <Select error={errors.limitPeriod?.message as string} onChange={(value) => field.onChange(value)}
+                                    large value={field.value} placeholder="Выберите период" id="limitPeriod"
+                                    options={[{value: "week", label: "Неделя"}, {value: "month", label: "Месяц"}]}/>
+                        )}
+                    />
+                </div>
+                <div className="mb-2.5 flex flex-col">
                     <label className="font-medium text-sm mb-1" htmlFor="limitCategory">Категория</label>
                     <Controller
                         name="limitCategory"
@@ -98,7 +112,7 @@ export const CreateLimit = ({isActive, setActive}: Props) => {
                                 <Select error={errors.limitCategory?.message} value={field.value}
                                         onChange={(val) => field.onChange(val)} large
                                         placeholder="Выберите категорию" id="limitCategory"
-                                        options={ExpensesCategoriesOptions}/>
+                                        options={TransactionsCategoriesOptions}/>
                             </>
                         )}
                     />

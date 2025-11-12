@@ -40,7 +40,7 @@ export class AccountsService {
         for (const consent of consents) {
             promises.push(this.getBankAccounts(userId, consent.bankId, onlyEnabled, consent)
                 .then(response => responses[consent.bankId] = response)
-                .catch(err => console.log(err)));
+                .catch(err => console.error(err)));
         }
 
         await Promise.all(promises);

@@ -1,6 +1,6 @@
 "use client";
 
-import {type ExpenseType, Expense, toExcelData} from "@/entities/expense";
+import {type TransactionType, Transaction, toExcelData} from "@/entities/transaction";
 import Heading from "@/shared/ui/typography/Heading";
 import React from "react";
 import useShowingSkeleton from "@/shared/hooks/useShowingSkeleton";
@@ -10,19 +10,19 @@ import {Export} from "@/shared/ui/icons/Export";
 import {exportToExcel} from "@/shared/lib/exportToExcel";
 
 type Props = {
-    expenses: ExpenseType[];
+    transactions: TransactionType[];
 }
 
-const ExpenseHistory = ({expenses}: Props) => {
-    const [currentExpenses, {setPage, firstPage, lastPage}] = usePagination(expenses, 5);
+const TransactionHistory = ({transactions}: Props) => {
+    const [currentTransactions, {setPage, firstPage, lastPage}] = usePagination(transactions, 5);
 
-    const isShowindSkeletons = useShowingSkeleton(expenses);
+    const isShowindSkeletons = useShowingSkeleton(transactions);
 
     return <section className="mx-4 md:mx-0 md:mr-4 mb-[1.875rem]">
         <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
                 <Heading level={2}>История трат</Heading>
-                <button onClick={() => exportToExcel(toExcelData(expenses))} className="text-inactive">
+                <button onClick={() => exportToExcel(toExcelData(transactions))} className="text-inactive">
                     <Export/>
                 </button>
             </div>
@@ -32,10 +32,10 @@ const ExpenseHistory = ({expenses}: Props) => {
             {isShowindSkeletons
                 ? Array.from({length: 5}).map((_, i) => (
                     <div key={i} className="bg-tertiary h-16 rounded-xl animate-pulse"></div>))
-                : currentExpenses.map((expense) => (<Expense key={expense.id} expense={expense}/>))
+                : currentTransactions.map((transaction) => (<Transaction key={transaction.id} transaction={transaction}/>))
             }
         </div>
     </section>;
 }
 
-export default ExpenseHistory;
+export default TransactionHistory;

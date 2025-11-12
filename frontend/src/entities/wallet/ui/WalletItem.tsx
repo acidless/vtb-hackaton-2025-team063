@@ -3,7 +3,7 @@
 import {motion} from "framer-motion";
 import MoneyAmount from "@/shared/ui/MoneyAmount";
 import ProgressBar from "@/shared/ui/ProgressBar";
-import {ExpenseCategoryAvatar} from "@/entities/expense-category";
+import {TransactionCategoryAvatar} from "@/entities/transaction-category";
 import {Status} from "@/entities/wallet/ui/Status";
 import SwipeForDelete from "@/shared/ui/SwipeForDelete";
 import {deleteWallet, WalletType} from "@/entities/wallet";
@@ -39,7 +39,7 @@ export const WalletItem = ({item}: Props) => {
                         exit={{opacity: 0, y: -10}}
                         transition={{duration: 0.3}}
                     >
-                        <ExpenseCategoryAvatar expenseCategory={item.category}/>
+                        <TransactionCategoryAvatar expenseCategory={item.category}/>
                         <div className="flex flex-col min-w-0">
                             <p className="text-primary font-medium text-ellipsis overflow-hidden whitespace-nowrap">
                                 {item.name}

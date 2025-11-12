@@ -19,10 +19,6 @@ export const schema = yup
             .string()
             .required("Укажите категорию кошелька"),
 
-        walletPeriod: yup
-            .string()
-            .required("Выберите период списания"),
-
         walletBank: yup
             .string()
             .required("Выберите банк"),
