@@ -13,7 +13,7 @@ import {AnimatePresence} from "framer-motion";
 const Limits = () => {
     const [isModalOpen, setModalOpen] = useState(false);
 
-    const {data: limits = []} = useQuery({
+    const {data: limits = [], isError} = useQuery({
         queryKey: ["limits"],
         queryFn: getLimits,
         refetchInterval: 5000

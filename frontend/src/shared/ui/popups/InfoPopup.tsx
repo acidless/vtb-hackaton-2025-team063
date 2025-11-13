@@ -30,7 +30,7 @@ const InfoPopup = ({text, time, isActive, setActive, top = 0, className = "", ba
 
     return <div
         style={{backgroundColor: background, top: `${top}rem`}}
-        className={`popup absolute left-1/2 -translate-x-1/2 w-max max-w-full rounded-[1.6875rem] transition-all duration-300 flex items-center gap-1
+        className={`popup absolute z-50 left-1/2 -translate-x-1/2 w-max max-w-full rounded-[1.6875rem] transition-all duration-300 flex items-center gap-1
          p-3.5 text-white ${isActive ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1/2 pointer-events-none"} ${className}`}>
         <p className="text-xs font-normal text-white tracking-wider">{text}</p>
         {icon()}

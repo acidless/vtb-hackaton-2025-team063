@@ -64,14 +64,14 @@ export default function RootLayout({children}: Readonly<{ children: ReactNode; }
         <ColorSchemeScript defaultColorScheme="light"/>
     </head>
     <body className={`${sfPro.variable} antialiased bg-[#F8F9FB] text-white relative`}>
-        <ReactQueryProvider>
-            <MantineClientProvider>
-                <PopupProvider>
+        <MantineClientProvider>
+            <PopupProvider>
+                <ReactQueryProvider>
                     {children}
-                </PopupProvider>
-            </MantineClientProvider>
-            <ServiceWorker/>
-        </ReactQueryProvider>
+                    <ServiceWorker/>
+                </ReactQueryProvider>
+            </PopupProvider>
+        </MantineClientProvider>
     </body>
     </html>
 }
