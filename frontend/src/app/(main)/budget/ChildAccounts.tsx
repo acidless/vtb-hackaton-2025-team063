@@ -2,15 +2,15 @@
 
 import Heading from "@/shared/ui/typography/Heading";
 import {useState} from "react";
-import {DepositChildAccount} from "@/features/deposit-child-account";
 import {ChangeChildAccountLimit} from "@/features/change-child-account-limit";
 import {useQuery} from "@tanstack/react-query";
 import {
     ChildAccountExtended,
-    ChildAccountType,
+    ChildAccountType, depositChildAccount,
     getChildAccounts
 } from "@/entities/child-account";
 import {ChildAccountsCarousel} from "@/widgets/chil-accounts-carousel";
+import {DepositModal} from "@/widgets/deposit-modal/ui/DepositModal";
 
 export const ChildAccounts = () => {
     const [isAddMoneyModalActive, setAddMoneyModalActive] = useState(false);
@@ -43,7 +43,8 @@ export const ChildAccounts = () => {
                                                                              onChangeLimitClick={onChangeLimitClick}/>}/>
         <ChangeChildAccountLimit isActive={isChangeLimitModalActive} setActive={setChangeLimitModalActive}
                                  activeAccount={selectedAccount}/>
-        <DepositChildAccount isActive={isAddMoneyModalActive} setActive={setAddMoneyModalActive}
-                             activeAccount={selectedAccount}/>
+        <DepositModal isActive={isAddMoneyModalActive} setActive={setAddMoneyModalActive}
+                      activeAccountId={selectedAccount?.id} entityName="child-account"
+                      mutationFn={depositChildAccount}/>
     </section>
 }

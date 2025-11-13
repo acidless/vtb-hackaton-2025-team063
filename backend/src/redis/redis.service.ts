@@ -29,7 +29,6 @@ export class RedisService {
 
     public async invalidateCache(keyBase: string, ...entitiesId: (null | number | string)[]) {
         const pattern = `${keyBase}:${entitiesId.join(":")}`;
-
         if (pattern.includes('*')) {
             const stream = this.redis.scanStream({
                 match: pattern,

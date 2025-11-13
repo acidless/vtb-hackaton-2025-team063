@@ -19,18 +19,10 @@ export class AccountsService {
     public async getTotalBalance(userId: number) {
         let totalBalance = 0;
 
-        const promises: Promise<any>[] = [];
-
-        const banksToAccounts = await this.getAccounts(userId, true);
-        for (const [bankId, accounts] of Object.entries(banksToAccounts)) {
-            for (const account of accounts as any[]) {
-                promises.push(this.getBalance(account.accountId, bankId, userId).then(balance => {
-                    totalBalance += balance;
-                }));
-            }
+        const accounts = await this.getAccountsForPayments(userId);
+        for (const account of Object.values(accounts).flat(1)) {
+            totalBalance += account.balance!;
         }
-
-        await Promise.all(promises);
 
         return Math.round(totalBalance * 100) / 100;
     }
@@ -58,6 +50,8 @@ export class AccountsService {
             const promises: Promise<any>[] = [];
             for (const bank of Object.keys(accounts)) {
                 for (const account of accounts[bank]) {
+                    account.balance = 0;
+
                     promises.push(this.getBalance(account.accountId, bank, userId)
                         .then(balance => account.balance = balance)
                         .catch(err => console.error(err)));
@@ -192,6 +186,7 @@ export class AccountsService {
     }
 
     @OnEvent('cache.invalidate.accounts', {async: true})
+    @OnEvent('cache.invalidate.consents', {async: true})
     private async handleExtendedCacheInvalidation(event: CacheInvalidateEvent) {
         const [userId] = event.entityIds;
 

@@ -10,7 +10,7 @@ type Props = {
 
 export const ChildAccountCreateDummy = ({onClick}: Props) => {
     return <article onClick={onClick}
-                    className="cursor-pointer min-h-28 bg-tertiary rounded-xl py-2 px-1.5 flex items-center justify-center h-full">
+                    className="cursor-pointer min-h-24 bg-tertiary rounded-xl py-2 px-1.5 flex items-center justify-center h-full">
         <motion.div initial={{opacity: 0, y: 10}}
                     animate={{opacity: 1, y: 0}}
                     exit={{opacity: 0, y: -10}}

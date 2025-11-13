@@ -1,5 +1,5 @@
 export type GoalType = {
-    id: number;
+    id: string;
     name: string;
     icon?: string;
     date: Date;

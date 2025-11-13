@@ -9,7 +9,6 @@ import {AccountsService} from "../accounts.service";
 import {TransactionsService} from "../transactions/transactions.service";
 import {WalletDTO} from "./wallet.dto";
 import {DepositDTO} from "../transactions/transaction.dto";
-import {use} from "passport";
 import {OnEvent} from "@nestjs/event-emitter";
 import {CacheInvalidateEvent} from "../../../common/events/cache-invalidate.event";
 

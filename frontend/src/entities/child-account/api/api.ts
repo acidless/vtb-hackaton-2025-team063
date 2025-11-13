@@ -1,4 +1,3 @@
-import {fetchMock} from "@/shared/lib/fetchMock";
 import {ChildAccountType} from "@/entities/child-account";
 import universalFetch from "@/shared/lib/universalFetch";
 import {DepositType} from "@/entities/transaction";
@@ -30,11 +29,11 @@ export async function changeLimit({moneyPerDay, accountId}: {
     });
 }
 
-export async function depositMoney(data: DepositType & { chilAccountId?: string }): Promise<ChildAccountType> {
+export async function depositChildAccount(data: DepositType & { entityId?: string }): Promise<ChildAccountType> {
     const body = Object.assign({}, data);
-    delete body.chilAccountId;
+    delete body.entityId;
 
-    return universalFetch(`/child-accounts/${data.chilAccountId}`, {
+    return universalFetch(`/child-accounts/${data.entityId}`, {
         method: "PUT",
         body,
     });

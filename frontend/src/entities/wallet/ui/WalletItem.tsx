@@ -12,10 +12,11 @@ import useDelete from "@/shared/hooks/useDelete";
 
 type Props = {
     item: WalletType;
+    onClick: (wallet: WalletType) => void;
 };
 
-export const WalletItem = ({item}: Props) => {
-    const percent = Math.round(((item.limit - item.money) / item.limit) * 100);
+export const WalletItem = ({item, onClick}: Props) => {
+    const percent = Math.round(((item.amount - item.currentAmount) / item.amount) * 100);
     const isOverflow = percent >= 100;
 
     const queryClient = useQueryClient();
@@ -28,7 +29,8 @@ export const WalletItem = ({item}: Props) => {
     return (
         <div className="relative overflow-hidden">
             <SwipeForDelete onDelete={onDelete}>
-                <motion.article className="bg-tertiary rounded-xl px-2.5 py-3"
+                <motion.article onClick={() => onClick(item)}
+                                className="cursor-pointer bg-tertiary rounded-xl px-2.5 py-3"
                                 exit={{opacity: 0, height: 0, paddingTop: 0, paddingBottom: 0}}
                                 transition={{duration: 0.3}}
                                 layout>
@@ -39,16 +41,16 @@ export const WalletItem = ({item}: Props) => {
                         exit={{opacity: 0, y: -10}}
                         transition={{duration: 0.3}}
                     >
-                        <TransactionCategoryAvatar expenseCategory={item.category}/>
+                        <TransactionCategoryAvatar categoryId={item.categoryId}/>
                         <div className="flex flex-col min-w-0">
                             <p className="text-primary font-medium text-ellipsis overflow-hidden whitespace-nowrap">
                                 {item.name}
                             </p>
                             <p className="text-light font-light text-xs flex items-center gap-[0.15rem]">
                                 <span className="hidden xxs:inline-block">Осталось</span>
-                                <span><MoneyAmount value={Math.max(0, item.money)}/></span>
+                                <span><MoneyAmount value={Math.max(0, item.currentAmount)}/></span>
                                 <span>из</span>
-                                <span><MoneyAmount value={item.limit}/></span>
+                                <span><MoneyAmount value={item.amount}/></span>
                             </p>
                         </div>
                         <div className="shrink-0 ml-auto flex flex-col items-end">
@@ -56,9 +58,9 @@ export const WalletItem = ({item}: Props) => {
                                 {percent}%
                             </p>
                             <div className="w-20 mb-1.5">
-                                <ProgressBar value={item.limit - item.money} max={item.limit} indicators/>
+                                <ProgressBar value={item.amount - item.currentAmount} max={item.amount} indicators/>
                             </div>
-                            <Status isDirty={item.isDirty} percent={percent}/>
+                            <Status percent={percent}/>
                         </div>
                     </motion.div>
                 </motion.article>

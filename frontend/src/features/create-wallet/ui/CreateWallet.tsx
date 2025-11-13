@@ -16,6 +16,7 @@ import {BankKey} from "@/entities/bank";
 import * as yup from "yup";
 import AnimatedLoader from "@/shared/ui/loaders/AnimatedLoader";
 import BankSelect from "@/shared/ui/inputs/BankSelect";
+import {AccountSelection} from "@/widgets/account-selection";
 
 type Props = {
     isActive: boolean;
@@ -32,9 +33,10 @@ export const CreateWallet = ({isActive, setActive}: Props) => {
         resolver: yupResolver(schema),
         defaultValues: {
             walletName: "",
+            walletAccountFrom: null as any,
             walletBank: "",
             walletCategory: "",
-            walletLimit: "" as any,
+            walletAmount: "" as any,
         },
     });
 
@@ -46,15 +48,22 @@ export const CreateWallet = ({isActive, setActive}: Props) => {
             reset();
             setActive(false);
             queryClient.invalidateQueries({queryKey: ["wallets"]});
+            queryClient.invalidateQueries({queryKey: ["child-accounts"]});
+            queryClient.invalidateQueries({queryKey: ["family-finance"]});
+            queryClient.invalidateQueries({queryKey: ["transactions"]});
+            queryClient.invalidateQueries({queryKey: ["family-expenses"]});
         },
     });
 
     const onSubmit = (data: yup.InferType<typeof schema>) => {
         createWallet({
-            limit: data.walletLimit,
+            amount: data.walletAmount,
             name: data.walletName,
-            bank: data.walletBank as BankKey,
-            category: Number(data.walletCategory),
+            bankId: data.walletBank as BankKey,
+            categoryId: Number(data.walletCategory),
+            fromAccountId: data.walletAccountFrom.accountId,
+            fromAccount: data.walletAccountFrom.account[0].identification,
+            fromBank: data.walletAccountFrom.bankId,
         });
     }
 
@@ -76,21 +85,34 @@ export const CreateWallet = ({isActive, setActive}: Props) => {
                     />
                 </div>
                 <div className="mb-2.5 flex flex-col">
-                    <label className="font-medium text-sm mb-1" htmlFor="walletLimit">Лимит</label>
+                    <label className="font-medium text-sm mb-1" htmlFor="walletAmount">Лимит</label>
                     <div className="relative text-placeholder">
                         <Controller
-                            name="walletLimit"
+                            name="walletAmount"
                             control={control}
                             render={({field}) => (
                                 <>
                                     <Input className="w-full pr-9" id="walletLimit" type="number"
                                            placeholder="Например, 100 000₽"
-                                           error={errors.walletLimit?.message} large {...field}/>
+                                           error={errors.walletAmount?.message} large {...field}/>
                                     <Card className="absolute right-2 top-[0.5rem] w-5"/>
                                 </>
                             )}
                         />
                     </div>
+                </div>
+                <div className="mb-2.5 flex flex-col">
+                    <label className="font-medium text-sm mb-1" htmlFor="walletAccountFrom">Выберите счет</label>
+                    <Controller
+                        name="walletAccountFrom"
+                        control={control}
+                        render={({field}) => (
+                            <AccountSelection {...field} id="walletAccountFrom"
+                                              error={errors.walletAccountFrom?.message as string}
+                                              value={field.value} onChange={(val) => field.onChange(val)}
+                            />
+                        )}
+                    />
                 </div>
                 <div className="mb-2.5 flex flex-col">
                     <label className="font-medium text-sm mb-1" htmlFor="walletCategory">Категория</label>

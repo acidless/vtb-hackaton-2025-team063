@@ -7,7 +7,7 @@ import AccentButton from "@/shared/ui/AccentButton";
 import {Card} from "@/shared/ui/icons/Card";
 import {yupResolver} from "@hookform/resolvers/yup"
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {changeLimit, ChildAccountType, depositMoney} from "@/entities/child-account";
+import {changeLimit, ChildAccountType, depositChildAccount} from "@/entities/child-account";
 import * as yup from "yup";
 import AnimatedLoader from "@/shared/ui/loaders/AnimatedLoader";
 import {schema} from "@/features/change-child-account-limit/model/schema";

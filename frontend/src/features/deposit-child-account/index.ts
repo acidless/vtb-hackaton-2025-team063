@@ -1,1 +1,0 @@
-export {DepositChildAccount} from "@/features/deposit-child-account/ui/DepositChildAccount"

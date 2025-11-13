@@ -57,10 +57,10 @@ export class PaymentsService {
             fromAccountId: depositDTO.fromAccountId,
             fromAccount: depositDTO.fromAccount,
             amount: depositDTO.amount,
-            toAccountId: "acc-1721",
-            toAccount: "4081781006301044691",
+            toAccountId: "acc-1729",
+            toAccount: "4081781006309031834",
             fromBank: depositDTO.fromBank,
-            toBank: "vbank",
+            toBank: "abank",
             comment: "Выполнение платежа",
         });
 

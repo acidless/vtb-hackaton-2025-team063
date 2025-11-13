@@ -1,6 +1,6 @@
 import {GoalType} from "@/entities/goal";
-import { fetchMock } from "@/shared/lib/fetchMock";
 import universalFetch from "@/shared/lib/universalFetch";
+import {DepositType} from "@/entities/transaction";
 
 export async function getGoals(): Promise<GoalType[]> {
     const goals = await universalFetch<GoalType[]>("/goals");
@@ -23,5 +23,15 @@ export async function addGoal(newGoal: Omit<GoalType, "id" | "collected">): Prom
 export async function deleteGoal(goalId: number): Promise<void> {
     await universalFetch(`/goals/${goalId}`, {
         method: "DELETE",
+    });
+}
+
+export async function depositGoal(data: DepositType & { entityId?: string }): Promise<GoalType> {
+    const body = Object.assign({}, data);
+    delete body.entityId;
+
+    return universalFetch(`/goals/${data.entityId}`, {
+        method: "PUT",
+        body,
     });
 }

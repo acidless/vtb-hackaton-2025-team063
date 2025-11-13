@@ -77,8 +77,8 @@ export class LimitsService {
 
                 for (const limit of categoryToLimits[cat.id]) {
 
-                    const weekMatch = limit.period === "week" && now - transaction.date.getTime() <= WEEK_DURATION;
-                    const monthMatch = limit.period === "month" && now - transaction.date.getTime() <= MONTH_DURATION;
+                    const weekMatch = limit.period === "week" && now - new Date(transaction.date).getTime() <= WEEK_DURATION;
+                    const monthMatch = limit.period === "month" && now - new Date(transaction.date).getTime() <= MONTH_DURATION;
 
                     if (weekMatch || monthMatch) {
                         limit.spent! += transaction.value;

@@ -83,12 +83,12 @@ export class UsersService {
 
                     let monthlyIncome = 0;
                     for (const transaction of transactions) {
-                        if (transaction.date > fromDate && !transaction.outcome && transaction.status === "completed") {
+                        if (new Date(transaction.date).getTime() >= fromDate.getTime() && !transaction.outcome && transaction.status === "completed") {
                             monthlyIncome += transaction.value;
                         }
                     }
 
-                    return monthlyIncome;
+                    return Math.round(monthlyIncome * 100) / 100;
                 });
 
             const [account, balance, monthlyIncome] = await Promise.all([getAccountDigits, getBalance, getIncome]);

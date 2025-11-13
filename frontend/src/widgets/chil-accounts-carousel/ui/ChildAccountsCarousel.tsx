@@ -20,7 +20,7 @@ export const ChildAccountsCarousel = ({childAccounts, component}: Props) => {
                 root: "px-9",
                 controls: "px-0! pointer-events-none",
                 control: "pointer-events-auto bg-white shadow-md hover:bg-gray-50 rounded-full w-7 h-7 flex items-center justify-center border border-gray-200",
-                indicators: "-bottom-4!",
+                indicators: "-bottom-3!",
                 indicator: "transition-all",
             }}>
                 {

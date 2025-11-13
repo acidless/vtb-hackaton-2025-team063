@@ -14,9 +14,10 @@ import useDelete from "@/shared/hooks/useDelete";
 
 type Props = {
     goal: GoalType;
+    onClick: (goal: GoalType) => void;
 }
 
-export const Goal = ({goal}: Props) => {
+export const Goal = ({goal, onClick}: Props) => {
     const queryClient = useQueryClient();
     const onDelete = useDelete(goal.id, deleteGoal, onSuccess, "Удаление цели...");
 
@@ -27,7 +28,7 @@ export const Goal = ({goal}: Props) => {
 
     return <div className="relative overflow-hidden">
         <SwipeForDelete onDelete={onDelete}>
-            <motion.article className="bg-tertiary rounded-xl py-1.5 pl-1.5 pr-2.5"
+            <motion.article onClick={() => onClick(goal)} className="bg-tertiary rounded-xl py-1.5 pl-1.5 pr-2.5 cursor-pointer"
                      exit={{ opacity: 0, height: 0, paddingTop: 0, paddingBottom: 0 }}
                      transition={{ duration: 0.3 }}
                      layout>

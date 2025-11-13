@@ -1,20 +1,30 @@
-import { fetchMock } from "@/shared/lib/fetchMock";
 import {WalletType} from "@/entities/wallet";
+import {DepositType} from "@/entities/transaction";
+import universalFetch from "@/shared/lib/universalFetch";
 
 export async function getWallets(): Promise<WalletType[]> {
-    return fetchMock("/api/accounts/wallets");
+    return universalFetch("/wallets");
 }
 
-export async function addWallet(newWallet: Omit<WalletType, "id" | "category" | "money"> & {category: number}): Promise<WalletType> {
-    return fetchMock("/api/accounts/wallets", {
+export async function addWallet(newWallet: Omit<WalletType, "id" | "currentAmount"> & DepositType): Promise<WalletType> {
+    return universalFetch("/wallets", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(newWallet),
+        body: newWallet,
     });
 }
 
 export async function deleteWallet(walletId: number): Promise<void> {
-    await fetchMock(`/api/accounts/wallets/?id=${walletId}`, {
+    await universalFetch(`/wallets/${walletId}`, {
         method: "DELETE",
+    });
+}
+
+export async function depositWallet(data: DepositType & { entityId?: string }): Promise<WalletType> {
+    const body = Object.assign({}, data);
+    delete body.entityId;
+
+    return universalFetch(`/wallets/${data.entityId}`, {
+        method: "PUT",
+        body,
     });
 }

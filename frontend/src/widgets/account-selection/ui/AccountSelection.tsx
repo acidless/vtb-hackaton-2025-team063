@@ -11,7 +11,7 @@ type Props = {
     error?: string | null;
     value: AccountType | null;
     onChange(account: AccountType | null): void;
-    excluded?: string[];
+    excluded?: (string | undefined)[];
     id?: string;
 }
 
