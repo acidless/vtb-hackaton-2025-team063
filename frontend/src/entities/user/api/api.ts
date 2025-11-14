@@ -8,6 +8,13 @@ export async function registerUser(user: FormData) {
     });
 }
 
+export async function loginUser(body: { phone: string }): Promise<UserType> {
+    return universalFetch("/auth", {
+        method: "PUT",
+        body
+    });
+}
+
 export async function authUser(): Promise<UserType> {
     return universalFetch("/auth", {
         method: "GET",

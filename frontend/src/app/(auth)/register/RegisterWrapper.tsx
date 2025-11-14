@@ -1,16 +1,18 @@
 "use client";
 
 import {useState} from "react";
-import MainStep from "@/app/register/MainStep";
-import PhotoStep from "@/app/register/PhotoStep";
+import MainStep from "@/app/(auth)/register/MainStep";
+import PhotoStep from "@/app/(auth)/register/PhotoStep";
 import {registerUser, UserInputType} from "@/entities/user";
-import BankSelectStep from "@/app/register/BankSelectStep";
-import FinalStep from "@/app/register/FinalStep";
+import BankSelectStep from "@/app/(auth)/register/BankSelectStep";
+import FinalStep from "@/app/(auth)/register/FinalStep";
 import {useRouter} from "next/navigation";
 import {useMutation} from "@tanstack/react-query";
 import {BankKey} from "@/entities/bank";
+import phoneToPlain from "@/shared/lib/phoneToPlain";
+import Link from "next/link";
 
-const RegisterForm = () => {
+const RegisterWrapper = () => {
     const [step, setStep] = useState(0);
     const [userData, setUserData] = useState<Partial<UserInputType>>({});
     const router = useRouter();
@@ -32,7 +34,7 @@ const RegisterForm = () => {
 
     const {mutate: register, isPending} = useMutation({
         mutationFn: registerUser,
-        onSuccess: (response) => {
+        onSuccess: () => {
             router.push("/dashboard");
         },
     });
@@ -40,7 +42,7 @@ const RegisterForm = () => {
     function onRegisterFinished() {
         const formData = new FormData();
         formData.set("name", userData.name!);
-        formData.set("phone", userData.phone!.replace(/\D/g, ""));
+        formData.set("phone", phoneToPlain(userData.phone!));
         formData.set("avatar", userData.photo!);
 
         const familyCode = userData.code?.toString();
@@ -56,6 +58,12 @@ const RegisterForm = () => {
         {step === 1 && <PhotoStep onSuccess={onPhotoStepEnd}/>}
         {step === 2 && <BankSelectStep onSuccess={onBanksStepEnd}/>}
         {step === 3 && <FinalStep user={userData} onSuccess={onRegisterFinished}/>}
+        <div className="flex justify-center items-center mt-2 text-light text-sm">
+            <p className="flex items-center justify-center gap-1">
+                Не зарегистрированы?
+                <Link className="text-active" href="/login">Регистрация</Link>
+            </p>
+        </div>
 
         <div
             className="absolute bottom-7 left-1/2 -translate-x-1/2 flex items-center justify-center gap-0.5 w-full">
@@ -67,4 +75,4 @@ const RegisterForm = () => {
     </section>
 }
 
-export default RegisterForm;
+export default RegisterWrapper;

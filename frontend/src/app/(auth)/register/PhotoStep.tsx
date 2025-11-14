@@ -5,7 +5,7 @@ import Heading from "@/shared/ui/typography/Heading";
 import AccentButton from "@/shared/ui/AccentButton";
 import {Export} from "@/shared/ui/icons/Export";
 import {motion} from "framer-motion";
-import MainHead from "@/app/register/MainHead";
+import MainHead from "@/app/(auth)/MainHead";
 import usePhotoSelection from "@/shared/hooks/usePhotoSelection";
 
 type Props = {

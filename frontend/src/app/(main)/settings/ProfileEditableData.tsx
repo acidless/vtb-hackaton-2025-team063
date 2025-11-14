@@ -3,6 +3,7 @@ import {updateUser, useFormattedPhone, UserType} from "@/entities/user";
 import {forwardRef} from "react";
 import {IMaskInput} from "react-imask";
 import {useQueryClient} from "@tanstack/react-query";
+import phoneToPlain from "@/shared/lib/phoneToPlain";
 
 const MaskedPhoneInput = forwardRef<HTMLInputElement, any>((props, ref) => (
     <IMaskInput
@@ -32,7 +33,7 @@ const ProfileEditableData = ({user}: Props) => {
         <EditableField value={user?.name || ""} mutationFn={updateUser} transformValue={(name) => ({name})}
                        onSuccess={onSuccess}/>
         <EditableField InputComponent={MaskedPhoneInput} value={formattedPhone} mutationFn={updateUser}
-                       transformValue={(phone) => ({phone: phone.replace(/\D/g, "")})}
+                       transformValue={(phone) => ({phone: phoneToPlain(phone)})}
                        onSuccess={onSuccess}/>
     </div>
 }

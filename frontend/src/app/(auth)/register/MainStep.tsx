@@ -10,7 +10,7 @@ import {IMaskInput} from "react-imask";
 import InputError from "@/shared/ui/inputs/InputError";
 import {useEffect, useState} from "react";
 import { motion } from "framer-motion";
-import MainHead from "@/app/register/MainHead";
+import MainHead from "@/app/(auth)/MainHead";
 import {UserType} from "@/entities/user";
 
 const schema = yup

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import {motion} from "framer-motion";
 
-const RegisterHead = ({children}: any) => {
+const AuthHead = ({children}: any) => {
     return <motion.div initial={{opacity: 0}}
                        animate={{opacity: 1}}
                        exit={{opacity: 0}}
@@ -15,4 +15,4 @@ const RegisterHead = ({children}: any) => {
     </motion.div>
 }
 
-export default RegisterHead;
+export default AuthHead;

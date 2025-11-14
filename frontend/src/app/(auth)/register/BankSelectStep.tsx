@@ -5,7 +5,7 @@ import {motion} from "framer-motion";
 import {Bank, BankKey, banks} from "@/entities/bank";
 import Heading from "@/shared/ui/typography/Heading";
 import AccentButton from "@/shared/ui/AccentButton";
-import RegisterHead from "@/app/register/RegisterHead";
+import AuthHead from "@/app/(auth)/AuthHead";
 
 type Props = {
     onSuccess: (banks: BankKey[]) => void;
@@ -23,10 +23,10 @@ const BankSelectStep = ({onSuccess}: Props) => {
     }
 
     return <>
-        <RegisterHead>
+        <AuthHead>
             <h1 className="text-3xl font-semibold leading-none mb-1.5">Выберите банк</h1>
             <p className="max-w-72 font-normal text-secondary leading-tight">Можно добавить до 4-х банков</p>
-        </RegisterHead>
+        </AuthHead>
         <motion.div
             initial={{opacity: 0, y: 10}}
             animate={{opacity: 1, y: 0}}

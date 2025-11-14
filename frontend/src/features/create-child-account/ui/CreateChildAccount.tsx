@@ -15,8 +15,6 @@ import * as yup from "yup";
 import AnimatedLoader from "@/shared/ui/loaders/AnimatedLoader";
 import BankSelect from "@/shared/ui/inputs/BankSelect";
 import ImageInput from "@/shared/ui/inputs/ImageInput";
-import {BankKey, banks} from "@/entities/bank";
-import Select from "@/shared/ui/inputs/Select";
 import {createChildAccount} from "@/entities/child-account/api/api";
 
 type Props = {

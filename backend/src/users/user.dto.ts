@@ -8,7 +8,7 @@ export class UserDTO {
     name: string;
 
     @ApiProperty({example: '+7 (999) 999-99-99', description: 'Номер телефона'})
-    @IsPhoneNumber("RU")
+    @IsPhoneNumber("RU", {message: "Неверный формат номера"})
     phone: string;
 
     @ApiProperty({description: 'Изображение'})
@@ -33,13 +33,13 @@ export class UserEditDTO {
     name?: string;
 
     @ApiProperty({nullable: true, example: '+7 (999) 999-99-99', description: 'Номер телефона'})
-    @IsPhoneNumber("RU")
+    @IsPhoneNumber("RU", {message: "Неверный формат номера"})
     @IsOptional()
     phone?: string;
 }
 
 export class UserLoginDTO {
     @ApiProperty({example: '+7 (999) 999-99-99', description: 'Номер телефона'})
-    @IsPhoneNumber("RU")
+    @IsPhoneNumber("RU", {message: "Неверный формат номера"})
     phone: string;
 }

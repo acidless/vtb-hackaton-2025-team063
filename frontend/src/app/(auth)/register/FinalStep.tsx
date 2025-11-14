@@ -1,7 +1,7 @@
 "use client";
 
 import {motion} from "framer-motion";
-import RegisterHead from "@/app/register/RegisterHead";
+import AuthHead from "@/app/(auth)/AuthHead";
 import {useFormattedPhone, UserInputType} from "@/entities/user";
 import Image from "next/image";
 import Heading from "@/shared/ui/typography/Heading";
@@ -17,9 +17,9 @@ const FinalStep = ({user, onSuccess}: Props) => {
     const formattedPhone = useFormattedPhone(user.phone!);
 
     return <>
-        <RegisterHead>
+        <AuthHead>
             <h1 className="text-3xl font-semibold leading-none mb-1.5">Отлично! Ваш профиль готов. Приступаем?</h1>
-        </RegisterHead>
+        </AuthHead>
         <motion.div
             className="flex items-center flex-col"
             initial={{opacity: 0, y: 10}}
