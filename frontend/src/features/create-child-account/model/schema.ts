@@ -23,8 +23,8 @@ export const schema = yup
             )
             .test(
                 "is-valid-size",
-                "Максимальный размер изображения - 50МБ",
-                (value: any) => value && value.size <= 50_000_000
+                "Максимальный размер изображения - 20МБ",
+                (value: any) => value && value.size <= 20_000_000
             )
     })
     .required();

@@ -11,7 +11,10 @@ import InputError from "@/shared/ui/inputs/InputError";
 import {useEffect, useState} from "react";
 import { motion } from "framer-motion";
 import MainHead from "@/app/(auth)/MainHead";
-import {UserType} from "@/entities/user";
+import {registerUser, UserType, validateUser} from "@/entities/user";
+import {useMutation} from "@tanstack/react-query";
+import phoneToPlain from "@/shared/lib/phoneToPlain";
+import AnimatedLoader from "@/shared/ui/loaders/AnimatedLoader";
 
 const schema = yup
     .object({
@@ -50,6 +53,7 @@ type Props = {
 
 const MainStep = ({onSuccess}: Props) => {
     const {
+        getValues,
         control,
         register,
         handleSubmit,
@@ -70,8 +74,18 @@ const MainStep = ({onSuccess}: Props) => {
         setValue("gender", gender);
     }
 
+    const {mutate: validate, isPending} = useMutation({
+        mutationFn: validateUser,
+        onSuccess: () => {
+            onSuccess(getValues());
+        },
+    });
+
     const onSubmit = (data: yup.InferType<typeof schema>) => {
-        onSuccess(data);
+        validate({
+            name: data.name,
+            phone: phoneToPlain(data.phone),
+        })
     }
 
     async function sendCode(){
@@ -145,6 +159,7 @@ const MainStep = ({onSuccess}: Props) => {
                     <AccentButton large background="bg-primary"
                                   className="justify-center py-2.5! font-normal!">Зарегистрироваться</AccentButton>
                 </div>
+                <AnimatedLoader isLoading={isPending}/>
             </form>
         </motion.div>
     </>

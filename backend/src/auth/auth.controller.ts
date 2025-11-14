@@ -1,4 +1,16 @@
-import {Body, Controller, Post, Put, Res, Get, UseGuards, Req, HttpCode, UploadedFile, UseInterceptors} from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Post,
+    Put,
+    Res,
+    Get,
+    UseGuards,
+    HttpCode,
+    UploadedFile,
+    UseInterceptors,
+    BadRequestException
+} from '@nestjs/common';
 import {UserDTO, UserLoginDTO} from "../users/user.dto";
 import {AuthService} from "./auth.service";
 import {type Response} from 'express';
@@ -14,9 +26,9 @@ export class AuthController {
     public constructor(private authService: AuthService, private usersService: UsersService) {
     }
 
-    @ApiOperation({ summary: 'Регистрация пользователя' })
-    @ApiResponse({ status: 201, description: 'Зарегистрированный пользователь' })
-    @ApiBody({ type: UserDTO })
+    @ApiOperation({summary: 'Регистрация пользователя'})
+    @ApiResponse({status: 201, description: 'Зарегистрированный пользователь'})
+    @ApiBody({type: UserDTO})
     @ApiConsumes('multipart/form-data')
     @Post()
     @HttpCode(201)
@@ -33,9 +45,25 @@ export class AuthController {
         return res.send({success: true, data: {user: data.user}});
     }
 
-    @ApiOperation({ summary: 'Вход пользователя в аккаунт' })
-    @ApiResponse({ status: 200, description: 'Данные пользователя' })
-    @ApiBody({ type: UserLoginDTO })
+    @ApiOperation({summary: 'Валидация данных перед регистрацией'})
+    @ApiResponse({status: 200})
+    @ApiBody({type: UserDTO})
+    @Post("/validation")
+    @HttpCode(200)
+    public async validate(@Body() dto: UserDTO) {
+        let user: any;
+        try {
+            user = await this.usersService.getUserByPhone(dto);
+        } catch (e) {}
+
+        if (user) {
+            throw new BadRequestException("Пользователь с таким номером уже зарегистрирован");
+        }
+    }
+
+    @ApiOperation({summary: 'Вход пользователя в аккаунт'})
+    @ApiResponse({status: 200, description: 'Данные пользователя'})
+    @ApiBody({type: UserLoginDTO})
     @Put()
     public async login(@Body() dto: UserLoginDTO, @Res() res: Response) {
         const data = await this.authService.login(dto);
@@ -49,8 +77,8 @@ export class AuthController {
         return res.send({success: true, data: {user: data.user}});
     }
 
-    @ApiOperation({ summary: 'Получение пользователя по его токену' })
-    @ApiResponse({ status: 200, description: 'Данные пользователя' })
+    @ApiOperation({summary: 'Получение пользователя по его токену'})
+    @ApiResponse({status: 200, description: 'Данные пользователя'})
     @ApiCookieAuth('access_token')
     @Get()
     @UseGuards(JwtAuthGuard)

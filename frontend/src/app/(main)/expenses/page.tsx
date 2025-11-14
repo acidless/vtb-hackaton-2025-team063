@@ -25,7 +25,7 @@ export default async function Expenses() {
                 <HydrationBoundary state={dehydrate(queryClient)}>
                     <Limits className="mx-4 md:mx-0 md:order-2"/>
                     <SharedExpenses className="ml-4 md:ml-0 md:order-1" firstAvatar={members[0].avatar}
-                                    secondAvatar={members[1].avatar}/>
+                                    secondAvatar={members[1] ? members[1].avatar : ""}/>
                 </HydrationBoundary>
             </div>
             <div className="md:order-1 flex flex-col items-stretch" id="left-column">
@@ -33,7 +33,7 @@ export default async function Expenses() {
                     <InteractiveTransactions avatar={members[0].avatar}/>
                 </HydrationBoundary>
             </div>
-            <ExpensesDistributionPortal  firstAvatar={members[0].avatar} secondAvatar={members[1].avatar}/>
+            <ExpensesDistributionPortal firstAvatar={members[0].avatar} secondAvatar={members[1] ? members[1].avatar : ""}/>
         </div>
     </div>
 }

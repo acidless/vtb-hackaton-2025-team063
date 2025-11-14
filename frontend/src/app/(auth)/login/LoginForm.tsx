@@ -8,7 +8,7 @@ import {motion} from "framer-motion";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {useMutation} from "@tanstack/react-query";
-import {loginUser} from "@/entities/user/api/api";
+import {loginUser} from "@/entities/user";
 import AnimatedLoader from "@/shared/ui/loaders/AnimatedLoader";
 import phoneToPlain from "@/shared/lib/phoneToPlain";
 

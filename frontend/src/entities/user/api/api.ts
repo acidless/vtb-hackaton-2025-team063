@@ -15,6 +15,13 @@ export async function loginUser(body: { phone: string }): Promise<UserType> {
     });
 }
 
+export async function validateUser(body: Partial<UserType>): Promise<UserType> {
+    return universalFetch("/auth/validation", {
+        method: "POST",
+        body
+    });
+}
+
 export async function authUser(): Promise<UserType> {
     return universalFetch("/auth", {
         method: "GET",

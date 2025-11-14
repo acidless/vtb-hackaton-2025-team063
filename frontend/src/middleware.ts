@@ -2,7 +2,6 @@ import {NextResponse} from "next/server";
 import type {NextRequest} from "next/server";
 
 export function middleware(req: NextRequest) {
-    console.log(228);
     const token = req.cookies.get("access_token")?.value;
 
     if (!token) {

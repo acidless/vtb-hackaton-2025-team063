@@ -11,6 +11,7 @@ import {useMutation} from "@tanstack/react-query";
 import {BankKey} from "@/entities/bank";
 import phoneToPlain from "@/shared/lib/phoneToPlain";
 import Link from "next/link";
+import {motion} from "framer-motion";
 
 const RegisterWrapper = () => {
     const [step, setStep] = useState(0);
@@ -24,7 +25,18 @@ const RegisterWrapper = () => {
 
     function onPhotoStepEnd(photo: File, photoSrc: string) {
         setUserData((prevUser) => ({...prevUser, photo, photoSrc}));
-        setStep(2);
+
+        const formData = new FormData();
+        formData.set("name", userData.name!);
+        formData.set("phone", phoneToPlain(userData.phone!));
+        formData.set("avatar", photo);
+
+        const familyCode = userData.code?.toString();
+        if (familyCode) {
+            formData.set("familyCode", familyCode);
+        }
+
+        register(formData);
     }
 
     function onBanksStepEnd(banks: BankKey[]) {
@@ -35,35 +47,29 @@ const RegisterWrapper = () => {
     const {mutate: register, isPending} = useMutation({
         mutationFn: registerUser,
         onSuccess: () => {
-            router.push("/dashboard");
+            setStep(2);
         },
     });
 
     function onRegisterFinished() {
-        const formData = new FormData();
-        formData.set("name", userData.name!);
-        formData.set("phone", phoneToPlain(userData.phone!));
-        formData.set("avatar", userData.photo!);
-
-        const familyCode = userData.code?.toString();
-        if(familyCode) {
-            formData.set("familyCode", familyCode);
-        }
-
-        register(formData);
+        router.push("/dashboard");
     }
 
     return <section className="min-h-screen w-full max-w-md login-page flex flex-col px-4 relative">
         {step === 0 && <MainStep onSuccess={onMainStepEnd}/>}
-        {step === 1 && <PhotoStep onSuccess={onPhotoStepEnd}/>}
+        {step === 1 && <PhotoStep isLoading={isPending} onSuccess={onPhotoStepEnd}/>}
         {step === 2 && <BankSelectStep onSuccess={onBanksStepEnd}/>}
         {step === 3 && <FinalStep user={userData} onSuccess={onRegisterFinished}/>}
-        <div className="flex justify-center items-center mt-2 text-light text-sm">
+
+        <motion.div className="flex justify-center items-center mt-2 text-light text-sm" initial={{opacity: 0, y: 10}}
+                    animate={{opacity: 1, y: 0}}
+                    exit={{opacity: 0, y: -10}}
+                    transition={{duration: 0.3}}>
             <p className="flex items-center justify-center gap-1">
-                Не зарегистрированы?
-                <Link className="text-active" href="/login">Регистрация</Link>
+                Есть аккаунт?
+                <Link className="text-active" href="/login">Войти</Link>
             </p>
-        </div>
+        </motion.div>
 
         <div
             className="absolute bottom-7 left-1/2 -translate-x-1/2 flex items-center justify-center gap-0.5 w-full">

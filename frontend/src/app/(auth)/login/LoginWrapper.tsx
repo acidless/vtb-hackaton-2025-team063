@@ -4,6 +4,7 @@ import MainHead from "@/app/(auth)/MainHead";
 import {useRouter} from "next/navigation";
 import LoginForm from "@/app/(auth)/login/LoginForm";
 import Link from "next/link";
+import {motion} from "framer-motion";
 
 const LoginWrapper = () => {
     const router = useRouter();
@@ -15,12 +16,15 @@ const LoginWrapper = () => {
     return <section className="min-h-screen w-full max-w-md login-page flex flex-col px-4 relative">
         <MainHead/>
         <LoginForm onSuccess={onSuccess}/>
-        <div className="flex justify-center items-center mt-2 text-light text-sm">
+        <motion.div className="flex justify-center items-center mt-2 text-light text-sm" initial={{opacity: 0, y: 10}}
+                    animate={{opacity: 1, y: 0}}
+                    exit={{opacity: 0, y: -10}}
+                    transition={{duration: 0.3}}>
             <p className="flex items-center justify-center gap-1">
-                Нет аккаунта?
-                <Link className="text-active" href="/register">Войти</Link>
+                Не зарегистрированы?
+                <Link className="text-active" href="/register">Регистрация</Link>
             </p>
-        </div>
+        </motion.div>
     </section>
 }
 

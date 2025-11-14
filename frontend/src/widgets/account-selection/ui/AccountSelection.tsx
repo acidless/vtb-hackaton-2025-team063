@@ -46,7 +46,7 @@ export const AccountSelection = ({error, value, id, onChange, excluded = [], ...
             <AnimatePresence>
                 {transformedAccounts.length
                     ? transformedAccounts.map((account) => {
-                        return <Account key={account.accountId} account={account}
+                        return <Account key={id + account.accountId + account.bankId} account={account}
                                         onClick={selectAccount}
                                         selected={selectedAccount?.accountId === account.accountId}/>
                     })

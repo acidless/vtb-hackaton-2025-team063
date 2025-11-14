@@ -7,12 +7,14 @@ import {Export} from "@/shared/ui/icons/Export";
 import {motion} from "framer-motion";
 import MainHead from "@/app/(auth)/MainHead";
 import usePhotoSelection from "@/shared/hooks/usePhotoSelection";
+import AnimatedLoader from "@/shared/ui/loaders/AnimatedLoader";
 
 type Props = {
     onSuccess: (photo: File, photoSrc: string) => void;
+    isLoading: boolean;
 }
 
-const PhotoStep = ({onSuccess}: Props) => {
+const PhotoStep = ({onSuccess, isLoading}: Props) => {
     const [photo, setPhoto] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -83,6 +85,8 @@ const PhotoStep = ({onSuccess}: Props) => {
                     />
                 </div>
 
+                <AnimatedLoader isLoading={isLoading}/>
+
                 {isCameraActive && (
                     <div className="flex flex-col items-center gap-2 mt-3">
                         <video ref={videoRef} autoPlay playsInline className="rounded-xl max-h-64"/>
@@ -97,6 +101,7 @@ const PhotoStep = ({onSuccess}: Props) => {
                         <canvas ref={canvasRef} className="hidden"/>
                     </div>
                 )}
+
             </motion.div>
         </>
     );

@@ -1,4 +1,4 @@
-import {Bank, BankIcon, BankKey, deleteConsent} from "@/entities/bank";
+import {BankIcon, BankKey, banks, deleteConsent} from "@/entities/bank";
 import {Check} from "@/shared/ui/icons/Check";
 import {motion} from "framer-motion";
 import {useQueryClient} from "@tanstack/react-query";
@@ -7,12 +7,11 @@ import SwipeForDelete from "@/shared/ui/SwipeForDelete";
 
 type Props = {
     bankId: BankKey;
-    bank: Bank;
     isConnected: boolean;
     onClick: (bankId: BankKey) => void;
 }
 
-export const ConnectableBank = ({bankId, bank, isConnected, onClick}: Props) => {
+export const ConnectableBank = ({bankId, isConnected, onClick}: Props) => {
     const queryClient = useQueryClient();
     const onDelete = useDelete(bankId, deleteConsent, onSuccess, "Удаление согласия...");
 
@@ -32,7 +31,7 @@ export const ConnectableBank = ({bankId, bank, isConnected, onClick}: Props) => 
                             transition={{duration: 0.3}}>
                     <div className="flex items-center gap-2">
                         <BankIcon bankId={bankId}/>
-                        <p className="text-base font-semibold">{bank.name}</p>
+                        <p className="text-base font-semibold">{banks[bankId].name}</p>
                     </div>
                     {isConnected && <div className="text-active"><Check/></div>}
                 </motion.div>

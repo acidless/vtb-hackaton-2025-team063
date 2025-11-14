@@ -33,7 +33,7 @@ const ExpensesDistributions = ({firstAvatar, secondAvatar, className}: Props) =>
         label: false
     }];
 
-    if (expenseCategories.length > 1) {
+    if (expenseCategories[1]) {
         firstPersonData.push({value: expenseCategories[1].expenses, color: "var(--icons-inactive)", label: false});
         secondPersonData.push({value: expenseCategories[1].expenses, color: "var(--primary-color)", label: true});
     }
@@ -48,11 +48,14 @@ const ExpensesDistributions = ({firstAvatar, secondAvatar, className}: Props) =>
                        src={getAbsoluteSeverUrl(firstAvatar)}
                        alt=""/>
             </DonutChart>
-            <DonutChart clickable={false} data={secondPersonData} size={80} height={200}>
-                <Image className="rounded-full w-12 h-12 object-cover" width={48} height={48}
-                       src={getAbsoluteSeverUrl(secondAvatar)}
-                       alt=""/>
-            </DonutChart>
+            {expenseCategories[1]
+                ? <DonutChart clickable={false} data={secondPersonData} size={80} height={200}>
+                    <Image className="rounded-full w-12 h-12 object-cover" width={48} height={48}
+                           src={getAbsoluteSeverUrl(secondAvatar)}
+                           alt=""/>
+                </DonutChart>
+                : <></>}
+
         </div>
     </section>;
 }

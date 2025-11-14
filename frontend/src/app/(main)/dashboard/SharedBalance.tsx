@@ -17,6 +17,7 @@ const SharedBalance = () => {
         refetchInterval: 5000
     });
 
+
     const sharedBalance = useMemo(() => {
         return familyFinance.reduce((acc, f) => acc + f.balance, 0);
     }, [familyFinance]);
@@ -27,8 +28,8 @@ const SharedBalance = () => {
 
     return <section className="mx-4 md:mr-0 p-2 rounded-xl bg-shared-balance mb-5 text-white">
         <div className="mb-12 flex items-center justify-between">
-            <CoupleAvatars firstAvatar={getAbsoluteSeverUrl(familyFinance[0].avatar)}
-                           secondAvatar={getAbsoluteSeverUrl(familyFinance[1].avatar)}/>
+            <CoupleAvatars firstAvatar={familyFinance[0] ? getAbsoluteSeverUrl(familyFinance[0].avatar) : ""}
+                           secondAvatar={familyFinance[1] ? getAbsoluteSeverUrl(familyFinance[1].avatar) : ""}/>
             <div className="bg-primary px-3 py-1.5 rounded-2xl shadow-xl z-1">
                 <p className="text-base font-semibold leading-tight">
                     + <MoneyAmount value={sharedIncome}/>
@@ -46,8 +47,8 @@ const SharedBalance = () => {
             </div>
             <div>
                 <p className="text-base font-semibold leading-tight flex items-center gap-0.5">
-                    <span>{familyFinance[0].account}</span>
-                    {familyFinance[1].account
+                    <span>{familyFinance[0]?.account}</span>
+                    {familyFinance[1]
                         ? <>
                             <span>•</span>
                             <span>{familyFinance[1].account}</span>
