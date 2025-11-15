@@ -2,6 +2,7 @@ import {version} from "./package.json";
 
 const withPWA = require("next-pwa")({
     dest: "public",
+    maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
     register: true,
     skipWaiting: true,
     disable: process.env.NODE_ENV === "development",
@@ -15,17 +16,7 @@ export default withPWA({
     env: {
         NEXT_PUBLIC_APP_VERSION: version,
     },
-    async headers() {
-        return [
-            {
-                source: "/api/:path*",
-                headers: [
-                    { key: "Access-Control-Allow-Origin", value: "http://localhost:3000" },
-                ]
-            }
-        ]
-    },
     images: {
-        unoptimized: process.env.NODE_ENV === 'development',
+        unoptimized: true,
     }
 });

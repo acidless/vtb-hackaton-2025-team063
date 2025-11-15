@@ -9,11 +9,10 @@ import {getFamilyExpenses} from "@/entities/family/api/api";
 import {ExpensesDistributionPortal} from "@/app/(main)/expenses/ExpensesDistributionPortal";
 
 export default async function Expenses() {
-    const members = await getFamily();
-
     const queryClient = new QueryClient();
 
     await Promise.all([
+        queryClient.prefetchQuery({queryKey: ["family"], queryFn: getFamily}),
         queryClient.prefetchQuery({queryKey: ["family-expenses"], queryFn: getFamilyExpenses}),
         queryClient.prefetchQuery({queryKey: ["transactions"], queryFn: getTransactions}),
         queryClient.prefetchQuery({queryKey: ["limits"], queryFn: getLimits}),
@@ -24,16 +23,15 @@ export default async function Expenses() {
             <div className="md:order-2 flex flex-col items-stretch" id="right-column">
                 <HydrationBoundary state={dehydrate(queryClient)}>
                     <Limits className="mx-4 md:mx-0 md:order-2"/>
-                    <SharedExpenses className="ml-4 md:ml-0 md:order-1" firstAvatar={members[0].avatar}
-                                    secondAvatar={members[1] ? members[1].avatar : ""}/>
+                    <SharedExpenses className="ml-4 md:ml-0 md:order-1"/>
                 </HydrationBoundary>
             </div>
             <div className="md:order-1 flex flex-col items-stretch" id="left-column">
                 <HydrationBoundary state={dehydrate(queryClient)}>
-                    <InteractiveTransactions avatar={members[0].avatar}/>
+                    <InteractiveTransactions/>
                 </HydrationBoundary>
             </div>
-            <ExpensesDistributionPortal firstAvatar={members[0].avatar} secondAvatar={members[1] ? members[1].avatar : ""}/>
+            <ExpensesDistributionPortal/>
         </div>
     </div>
 }

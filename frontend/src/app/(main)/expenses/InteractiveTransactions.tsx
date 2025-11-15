@@ -6,17 +6,18 @@ import PersonalExpenses from "@/app/(main)/expenses/PersonalExpenses";
 import TransactionHistory from "@/app/(main)/expenses/TransactionHistory";
 import {DndContext, pointerWithin} from "@dnd-kit/core";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import {getFamilyExpenses} from "@/entities/family/api/api";
+import {getFamily, getFamilyExpenses} from "@/entities/family/api/api";
 
-type Props = {
-    avatar: string;
-}
-
-const InteractiveExpenses = ({avatar}: Props) => {
+const InteractiveExpenses = () => {
     const {data: transactions = []} = useQuery({
         queryKey: ["transactions"],
         queryFn: getTransactions,
         refetchInterval: 5000
+    });
+
+    const {data: family = []} = useQuery({
+        queryKey: ["family"],
+        queryFn: getFamily,
     });
 
     const {data: categories = []} = useQuery({
@@ -78,7 +79,8 @@ const InteractiveExpenses = ({avatar}: Props) => {
 
         updateCategory({categoryId: Number(category.id), transactionId: transaction.transaction.id});
     }}>
-        <PersonalExpenses avatar={avatar} expenseCategories={categories[0].categories}/>
+        <PersonalExpenses avatar={family[0] ? family[0].avatar : ""}
+                          expenseCategories={categories[0] ? categories[0].categories : []}/>
         <TransactionHistory transactions={transactions}/>
     </DndContext>
 }

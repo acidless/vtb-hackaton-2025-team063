@@ -10,7 +10,7 @@ export default async function universalFetch<T>(url: string, options: FetchOptio
     const headers: Record<string, string> = {...(options.headers || {})};
 
     if (typeof window === "undefined") {
-        baseUrl = process.env.API_BASE_URL_INTERNAL || "http://localhost:3000";
+        baseUrl = process.env.API_BASE_URL_INTERNAL || "http://localhost:8000";
 
         const { cookies } = await import("next/headers");
         const allCookies = (await cookies()).getAll();
@@ -18,7 +18,7 @@ export default async function universalFetch<T>(url: string, options: FetchOptio
             headers["cookie"] = allCookies.map(c => `${c.name}=${c.value}`).join("; ");
         }
     } else {
-        baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
+        baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
     }
 
     if (!(options.body instanceof FormData)) {

@@ -7,8 +7,8 @@ type Props = {
 }
 
 const Avatar = ({avatar, className = "", alt = ""}: Props) => {
-    if(!avatar) {
-        return null;
+    if (!avatar) {
+        return <div className={`w-[2.375rem] h-[2.375rem] rounded-full relative bg-neutral-300 ${className}`}></div>
     }
 
     return <div className={`w-[2.375rem] h-[2.375rem] relative ${className}`}>

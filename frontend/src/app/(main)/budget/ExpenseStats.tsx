@@ -20,7 +20,7 @@ const ExpenseStats = ({className}: Props) => {
         <div className="mb-2.5">
             <Heading className="md:text-3xl lg:text-4xl" level={2}>Статистика расходов</Heading>
         </div>
-        <ExpensesBlock expenseCategories={expenseCategories[0].categories}/>
+        <ExpensesBlock expenseCategories={expenseCategories[0] ? expenseCategories[0].categories : []}/>
     </section>
 }
 

@@ -22,13 +22,13 @@ const ExpensesDistributions = ({firstAvatar, secondAvatar, className}: Props) =>
     });
 
     const firstPersonData = [{
-        value: expenseCategories[0].expenses,
+        value: expenseCategories[0] ? expenseCategories[0].expenses : 0,
         color: "var(--primary-color)",
         label: true
     }];
 
     const secondPersonData = [{
-        value: expenseCategories[0].expenses,
+        value: expenseCategories[0] ? expenseCategories[0].expenses : 0,
         color: "var(--icons-inactive)",
         label: false
     }];

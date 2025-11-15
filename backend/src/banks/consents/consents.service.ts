@@ -17,14 +17,11 @@ export class ConsentsService {
     public constructor(
         @InjectRepository(Consent)
         private readonly consentsRepository: Repository<Consent>,
-        private readonly configService: ConfigService,
         private readonly redisService: RedisService,
         private readonly bankService: BanksService) {
     }
 
     public async createConsent(bankId: string, userId: number, consentDTO: CreateConsentDto) {
-        const requestingBank = this.configService.get<string>("CLIENT_ID");
-
         const consentData = await this.bankService.requestBankAPI<{
             consent_id?: string,
             request_id?: string,
@@ -36,7 +33,7 @@ export class ConsentsService {
                 "client_id": consentDTO.client_id,
                 "permissions": ["ReadAccountsDetail", "ReadBalances", "ReadTransactionsDetail", "ManageAccounts"],
                 "reason": "Агрегация счетов для HackAPI",
-                "requesting_bank": requestingBank,
+                "requesting_bank": process.env.CLIENT_ID,
                 "requesting_bank_name": "Семейный Мультибанк"
             }
         });

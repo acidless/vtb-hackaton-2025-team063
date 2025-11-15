@@ -2,7 +2,6 @@ import {HttpService} from '@nestjs/axios';
 import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {lastValueFrom} from "rxjs";
 import {BanksConfig} from "./banks.config";
-import {ConfigService} from "@nestjs/config";
 import {AxiosRequestConfig} from "axios";
 import {CACHE_POLICY, RedisService} from "../redis/redis.service";
 
@@ -11,8 +10,7 @@ export class BanksService {
     private tokens: Record<string, { token: string; expiresAt: number }> = {};
 
     constructor(private readonly httpService: HttpService,
-                private readonly redisService: RedisService,
-                private readonly configService: ConfigService) {
+                private readonly redisService: RedisService) {
     }
 
     public async requestBankAPI<T>(bankKey: string, requestConfig: AxiosRequestConfig, cacheKey?: string | null, dontCache = CACHE_POLICY.CACHE) {
@@ -20,11 +18,9 @@ export class BanksService {
 
         const bank = BanksConfig[bankKey];
 
-        const clientId = this.configService.get<string>("CLIENT_ID");
-
         return this.errorHandledRequest(async () => {
             const url = `${bank.baseUrl}${requestConfig.url}`;
-            const key = cacheKey || `${url}:${clientId}:${requestConfig.headers?["X-Consent-Id"] : ""}`;
+            const key = cacheKey || `${url}:${process.env.CLIENT_ID}:${requestConfig.headers?["X-Consent-Id"] : ""}`;
 
             return this.redisService.withCache<T>(key, 300, async () => {
                 const response = await lastValueFrom(
@@ -34,7 +30,7 @@ export class BanksService {
                         headers: {
                             ...requestConfig.headers,
                             Authorization: `Bearer ${token}`,
-                            "X-Requesting-Bank": clientId,
+                            "X-Requesting-Bank": process.env.CLIENT_ID,
                             'Content-Type': 'application/json',
                         },
                     }),
@@ -54,8 +50,8 @@ export class BanksService {
             return cached.token;
         }
 
-        const clientId = this.configService.get<string>("CLIENT_ID");
-        const clientSecret = this.configService.get<string>("CLIENT_SECRET");
+        const clientId = process.env.CLIENT_ID;
+        const clientSecret = process.env.CLIENT_SECRET;
 
         return this.errorHandledRequest(async () => {
             const res = await lastValueFrom(

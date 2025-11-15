@@ -55,7 +55,12 @@ export const CreateBankConsent = ({isActive, setActive, bankId, clientId}: Props
                 text: "Банк успешно подключен!",
                 icon: () => <Check/>
             });
+
             queryClient.invalidateQueries({queryKey: ["consents"]});
+            queryClient.invalidateQueries({queryKey: ["transactions"]});
+            queryClient.invalidateQueries({queryKey: ["transactions"]});
+            queryClient.invalidateQueries({queryKey: ["family-expenses"]});
+            queryClient.invalidateQueries({queryKey: ["family-finance"]});
         },
     });
 

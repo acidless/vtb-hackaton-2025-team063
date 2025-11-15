@@ -13,6 +13,8 @@ import {CategoriesConfig} from "./categories/categories.config";
 import {PaymentConsentsService} from "./payment-consents/payment-consents.service";
 import {plainToInstance} from "class-transformer";
 import {validateOrReject} from "class-validator";
+import {OnEvent} from "@nestjs/event-emitter";
+import {CacheInvalidateEvent} from "../../../common/events/cache-invalidate.event";
 
 @Injectable()
 export class TransactionsService {
@@ -150,5 +152,12 @@ export class TransactionsService {
         await this.redisService.invalidateCache(this.baseKey, userId);
 
         return saved;
+    }
+
+    @OnEvent('cache.invalidate.consents', {async: true})
+    private async handleCacheInvalidation(event: CacheInvalidateEvent) {
+        const [userId] = event.entityIds;
+
+        await this.redisService.invalidateCache(this.baseKey, userId);
     }
 }
