@@ -34,7 +34,7 @@ const InteractiveExpenses = () => {
             await queryClient.cancelQueries({queryKey: ["transactions"]});
             await queryClient.cancelQueries({queryKey: ["family-expenses"]});
 
-            const previousTransactions = queryClient.getQueryData(["transactions"]);
+            const previousTransactions = queryClient.getQueryData<TransactionType[]>(["transactions"]);
             const previousCategories = queryClient.getQueryData(["family-expenses"]);
 
             queryClient.setQueryData(["transactions"], (old: TransactionType[] = []) =>
@@ -45,6 +45,36 @@ const InteractiveExpenses = () => {
                     } : tx
                 )
             );
+
+            queryClient.setQueryData(["family-expenses"], (old: any = []) => {
+                if (!old[0]) {
+                    return old;
+                }
+
+                const cloned = structuredClone(old);
+
+                const tx = previousTransactions!.find((t: any) => t.id === transactionId);
+                if (!tx) {
+                    return old;
+                }
+
+                const amount = tx.value;
+                const oldCategoryId = tx.category?.id;
+
+                if (oldCategoryId) {
+                    const prevCat = cloned[0].categories.find((c: any) => Number(c.id) === oldCategoryId);
+                    if (prevCat) {
+                        prevCat.spent -= amount;
+                    }
+                }
+
+                const newCat = cloned[0].categories.find((c: any) => Number(c.id) === categoryId);
+                if (newCat) {
+                    newCat.spent += amount;
+                }
+
+                return cloned;
+            });
 
             return {previousTransactions, previousCategories};
         },

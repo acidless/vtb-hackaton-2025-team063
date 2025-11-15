@@ -115,8 +115,8 @@ export class AccountsService {
             }
         });
 
-        const cacheKey = `${this.cacheKey}:${consent.consentId}`;
-        await this.redisService.invalidateCache(cacheKey, userId);
+        await this.redisService.invalidateCache(this.cacheKey, userId);
+        await this.redisService.invalidateCache(this.cacheKey, consent.consentId, userId);
 
         return response.data;
     }

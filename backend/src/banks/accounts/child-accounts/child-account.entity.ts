@@ -14,10 +14,6 @@ export class ChildAccount {
     bankId: string;
 
     @Column()
-    @Index()
-    clientId: string;
-
-    @Column()
     avatar: string;
 
     @Column({ type: 'decimal', precision: 10, scale: 2 })

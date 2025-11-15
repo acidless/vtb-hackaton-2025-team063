@@ -4,7 +4,6 @@ import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {Consent} from "./consent.entity";
 import {CreateConsentDto} from "./consent.dto";
-import {ConfigService} from "@nestjs/config";
 import {CACHE_POLICY, RedisService} from "../../redis/redis.service";
 import {ConsentResponseType} from "../banks.types";
 import {Interval} from "@nestjs/schedule";
@@ -122,7 +121,7 @@ export class ConsentsService {
                         const status = consentData.data.status;
 
                         if (status === "Authorized" && consent.status !== "active") {
-                            const oldId = consent.consentId;
+                            const oldId = consent.id;
 
                             await this.consentsRepository.delete(oldId);
 

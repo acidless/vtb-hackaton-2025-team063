@@ -6,7 +6,8 @@ export class Consent {
     @PrimaryGeneratedColumn()
     id: string;
 
-    @PrimaryColumn()
+    @Column()
+    @Index()
     consentId: string;
 
     @Column()

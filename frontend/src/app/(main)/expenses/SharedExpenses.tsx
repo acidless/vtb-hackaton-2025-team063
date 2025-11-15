@@ -29,8 +29,6 @@ const SharedExpenses = ({className}: Props) => {
     const firstAvatar = family[0] ? family[0].avatar : "";
     const secondAvatar = family[1] ? family[1].avatar : "";
 
-    console.log(firstAvatar, secondAvatar);
-
     const sharedExpenses = useMemo(() => {
         if(!expenseCategories[0]) {
             return [];
