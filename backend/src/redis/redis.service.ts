@@ -16,7 +16,7 @@ export class RedisService {
     ) {
     }
 
-    public async withCache<T>(key: string, ttl: number, callback: () => Promise<T>, useCache = () => true) {
+    public async withCache<T>(key: string, ttl: number, callback: () => Promise<T>, useCache = (response?: T) => true) {
         if (useCache()) {
             const data = await this.redis.get(key);
             if (data) {
@@ -25,7 +25,7 @@ export class RedisService {
         }
 
         const response = await callback();
-        if (useCache()) {
+        if (useCache(response)) {
             await this.redis.set(key, JSON.stringify(response), "EX", ttl);
         }
 
@@ -42,16 +42,21 @@ export class RedisService {
 
             const keysToDelete: string[] = [];
             for await (const keys of stream) {
-                if (keys.length) keysToDelete.push(...keys);
+                if (keys.length) {
+                    keysToDelete.push(...keys);
+                }
             }
 
             if (keysToDelete.length > 0) {
+                for(const key of keysToDelete) {
+                    this.emitter.emit(`cache.invalidate.${keyBase}`, new CacheInvalidateEvent(...key.split(":").slice(1)));
+                }
+
                 await this.redis.del(...keysToDelete);
             }
         } else {
+            this.emitter.emit(`cache.invalidate.${keyBase}`, new CacheInvalidateEvent(...entitiesId));
             await this.redis.del(pattern);
         }
-
-        this.emitter.emit(`cache.invalidate.${keyBase}`, new CacheInvalidateEvent(...entitiesId));
     }
 }

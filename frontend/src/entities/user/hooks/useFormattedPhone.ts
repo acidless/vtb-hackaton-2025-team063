@@ -1,3 +1,5 @@
+"use client";
+
 import IMask from "imask";
 import {useEffect, useState} from "react";
 

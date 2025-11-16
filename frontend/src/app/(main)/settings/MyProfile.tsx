@@ -7,23 +7,25 @@ import Checkbox from "@/shared/ui/inputs/Checkbox";
 import {motion} from "framer-motion";
 import {useQuery} from "@tanstack/react-query";
 import getAbsoluteSeverUrl from "@/shared/lib/getAbsoluteServerUrl";
-import {authUser} from "@/entities/user";
+import {authUser, UserType} from "@/entities/user";
 import ProfileEditableData from "@/app/(main)/settings/ProfileEditableData";
 
 
 type Props = {
     className?: string;
+    userInitial: UserType | null;
     settings: {
         pushEnabled: boolean;
     }
 }
 
-const MyProfile = ({className, settings}: Props) => {
+const MyProfile = ({className, userInitial, settings}: Props) => {
     const [isPushEnabled, setPushEnabled] = useState(settings.pushEnabled);
 
     const {data: user = null} = useQuery({
         queryKey: ["user"],
         queryFn: authUser,
+        initialData: userInitial,
         refetchOnReconnect: false,
         refetchOnMount: false,
         refetchOnWindowFocus: false,

@@ -5,7 +5,6 @@ import ExpenseStats from "@/app/(main)/budget/ExpenseStats";
 import {getChildAccounts} from "@/entities/child-account";
 import {getTransactions} from "@/entities/transaction";
 import {getPayments} from "@/entities/payment";
-import {dehydrate, HydrationBoundary, QueryClient} from "@tanstack/react-query";
 import {getGoals} from "@/entities/goal";
 import {getWallets} from "@/entities/wallet";
 import TransactionList from "@/app/(main)/budget/ExpenseList";
@@ -13,32 +12,26 @@ import {getFamilyExpenses} from "@/entities/family/api/api";
 import {ChildAccounts} from "@/app/(main)/budget/ChildAccounts";
 
 export default async function Budget() {
-    const queryClient = new QueryClient();
-
-    await Promise.all([
-        queryClient.prefetchQuery({queryKey: ["goals"], queryFn: getGoals}),
-        queryClient.prefetchQuery({queryKey: ["family-expenses"], queryFn: getFamilyExpenses}),
-        queryClient.prefetchQuery({queryKey: ["transactions"], queryFn: getTransactions}),
-        queryClient.prefetchQuery({queryKey: ["child-accounts"], queryFn: getChildAccounts}),
-        queryClient.prefetchQuery({queryKey: ["wallets"], queryFn: getWallets}),
-        queryClient.prefetchQuery({queryKey: ["payments"], queryFn: getPayments})
-    ]);
+    const [
+        goals,
+        wallets,
+        payments,
+        childAccounts,
+        familyExpenses,
+        transactions
+    ] = await Promise.all([getGoals(), getWallets(), getPayments(), getChildAccounts(), getFamilyExpenses(), getTransactions()]);
 
     return <div>
         <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4 lg:gap-8 mb-20">
             <div className="flex flex-col items-stretch">
-                <HydrationBoundary state={dehydrate(queryClient)}>
-                    <Goals className="mx-4 md:mr-0 md:order-3"/>
-                    <Wallets className="mx-4 md:mr-0 md:order-2"/>
-                    <UpcomingPayments className="mx-4 md:mr-0 md:order-1"/>
-                </HydrationBoundary>
+                <Goals className="mx-4 md:mr-0 md:order-3" goalsInitial={goals}/>
+                <Wallets className="mx-4 md:mr-0 md:order-2" walletsInitial={wallets}/>
+                <UpcomingPayments className="mx-4 md:mr-0 md:order-1" paymentsInitial={payments}/>
             </div>
             <div className="flex flex-col items-stretch">
-                <HydrationBoundary state={dehydrate(queryClient)}>
-                    <ChildAccounts className="mx-4 md:ml-0 md:order-3"/>
-                    <ExpenseStats className="ml-4 md:ml-0 md:mr-4 md:order-1"/>
-                    <TransactionList className="mx-4 md:ml-0 md:order-2"/>
-                </HydrationBoundary>
+                <ChildAccounts className="mx-4 md:ml-0 md:order-3" childAccountsInitial={childAccounts}/>
+                <ExpenseStats className="ml-4 md:ml-0 md:mr-4 md:order-1" expenseCategoriesInitial={familyExpenses}/>
+                <TransactionList className="mx-4 md:ml-0 md:order-2" transactionsInitial={transactions}/>
             </div>
         </div>
     </div>

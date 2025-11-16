@@ -6,6 +6,7 @@ import {AccountType} from "@/entities/account/model/types";
 import CollectionEmpty from "@/shared/ui/CollectionEmpty";
 import {BankKey} from "@/entities/bank";
 import InputError from "@/shared/ui/inputs/InputError";
+import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
 
 type Props = {
     error?: string | null;
@@ -19,7 +20,7 @@ export const AccountSelection = ({error, value, id, onChange, excluded = [], ...
     const {data: accounts = []} = useQuery({
         queryKey: ["accounts"],
         queryFn: getAccounts,
-        refetchInterval: 5000
+        refetchInterval: REFETCH_INTERVAL
     });
 
     const transformedAccounts = useMemo(() => {

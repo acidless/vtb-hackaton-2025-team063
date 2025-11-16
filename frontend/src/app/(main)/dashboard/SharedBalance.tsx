@@ -9,14 +9,21 @@ import {useQuery} from "@tanstack/react-query";
 import {getFamilyFinance} from "@/entities/family/api/api";
 import getAbsoluteSeverUrl from "@/shared/lib/getAbsoluteServerUrl";
 import {useMemo} from "react";
+import {PersonalAccountType} from "@/entities/account";
+import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
 
-const SharedBalance = () => {
+type Props = {
+    familyFinanceInitial: PersonalAccountType[];
+}
+
+const SharedBalance = ({familyFinanceInitial}: Props) => {
     const {data: familyFinance = []} = useQuery({
         queryKey: ["family-finance"],
+        initialData: familyFinanceInitial,
         queryFn: getFamilyFinance,
-        refetchInterval: 5000
+        refetchInterval: REFETCH_INTERVAL,
+        staleTime: REFETCH_INTERVAL
     });
-
 
     const sharedBalance = useMemo(() => {
         return familyFinance.reduce((acc, f) => acc + f.balance, 0);

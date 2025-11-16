@@ -2,6 +2,7 @@ import React, {JSX, useMemo, useState} from "react";
 import {BankKey, banks, Consent, getConsents} from "@/entities/bank";
 import {useQuery} from "@tanstack/react-query";
 import {CreateBankConsent} from "@/features/create-bank-consent";
+import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
 
 type Props = {
     bankMarkup: (bankId: BankKey, consent: Consent | undefined, onClick: (bankId: BankKey) => void) => JSX.Element;
@@ -15,7 +16,7 @@ export const BanksConnection = ({bankMarkup, className = "gap-1"}: Props) => {
     const {data: consents = []} = useQuery({
         queryKey: ["consents"],
         queryFn: getConsents,
-        refetchInterval: 5000,
+        refetchInterval: REFETCH_INTERVAL,
     });
 
     const bankToConsent = useMemo(() => {

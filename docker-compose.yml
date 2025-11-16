@@ -91,18 +91,16 @@ services:
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_API_BASE_URL: /api
-        API_BASE_URL_INTERNAL: http://localhost:3000
+        API_BASE_URL_INTERNAL: http://api:8000
         NEXT_PUBLIC_UPLOADS_BASE_URL: ""
-
     restart: unless-stopped
-
+    env_file:
+      - .env
     expose:
       - "3000"
-
     depends_on:
       api:
         condition: service_started
-
     networks:
       - app_net
 

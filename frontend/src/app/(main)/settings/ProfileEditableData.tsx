@@ -1,3 +1,5 @@
+"use client";
+
 import EditableField from "@/app/(main)/settings/EditableField";
 import {updateUser, useFormattedPhone, UserType} from "@/entities/user";
 import {forwardRef} from "react";

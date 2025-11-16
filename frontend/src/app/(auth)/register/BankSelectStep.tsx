@@ -8,6 +8,7 @@ import AccentButton from "@/shared/ui/AccentButton";
 import AuthHead from "@/app/(auth)/AuthHead";
 import {BanksConnection} from "@/features/banks-connection/ui/BanksConnection";
 import {useQuery} from "@tanstack/react-query";
+import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
 
 type Props = {
     onSuccess: (banks: BankKey[]) => void;
@@ -17,7 +18,7 @@ const BankSelectStep = ({onSuccess}: Props) => {
     const {data: consents = []} = useQuery({
         queryKey: ["consents"],
         queryFn: getConsents,
-        refetchInterval: 5000,
+        refetchInterval: REFETCH_INTERVAL,
     });
 
     return <>

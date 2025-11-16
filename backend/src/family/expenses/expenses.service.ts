@@ -21,6 +21,8 @@ export class ExpensesService {
         const memberId = await this.familyService.getFamilyMemberId(userId);
         const familyKey = this.familyCacheService.getFamilyKey(userId, memberId);
 
+        await this.redisService.invalidateCache(this.baseKey, familyKey);
+
         return this.redisService.withCache(`${this.baseKey}:${familyKey}`, 300, async () => {
             const expensesForPerson = async (userId: number) => {
                 const categories = await this.categoriesService.getCategories(userId);

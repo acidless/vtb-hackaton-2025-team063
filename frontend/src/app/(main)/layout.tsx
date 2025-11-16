@@ -1,27 +1,14 @@
-"use client";
-
 import {Navbar} from "@/widgets/navbar";
-import {ReactNode, useEffect} from "react";
-import {useQuery} from "@tanstack/react-query";
+import {ReactNode} from "react";
 import {authUser} from "@/entities/user";
-import {useRouter} from "next/navigation";
+import {redirect} from "next/navigation";
 
-export default function MainLayout({children}: Readonly<{ children: ReactNode; }>) {
-    const router = useRouter();
+export default async function MainLayout({children}: Readonly<{ children: ReactNode; }>) {
+    const user = await authUser();
 
-    const {data: user = null, isError} = useQuery({
-        queryKey: ["user"],
-        queryFn: authUser,
-        refetchOnReconnect: false,
-        refetchOnMount: false,
-        refetchOnWindowFocus: false,
-    });
-
-    useEffect(() => {
-        if (isError) {
-            router.replace("/login");
-        }
-    }, [isError, router]);
+    if (!user || !user.id) {
+        redirect("/login");
+    }
 
     return <>
         <main className="w-full mx-auto max-w-screen-2xl relative py-4">

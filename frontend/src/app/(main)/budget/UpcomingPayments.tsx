@@ -20,12 +20,14 @@ import {PaymentsList} from "@/widgets/payments-list";
 import {CreatePayment} from "@/features/create-payment";
 import {DepositPayment} from "@/features/deposit-payment";
 import {useQuery} from "@tanstack/react-query";
+import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
 
 type Props = {
     className?: string;
+    paymentsInitial: PaymentType[];
 }
 
-const UpcomingPayments = ({className}: Props) => {
+const UpcomingPayments = ({className, paymentsInitial}: Props) => {
     const [isDepositModalOpen, setDepositModalOpen] = useState(false);
     const [isCreateModalOpen, setCreateModalOpen] = useState(false);
     const [currentDate, setCurrentDate] = useState<Date>(new Date());
@@ -36,8 +38,10 @@ const UpcomingPayments = ({className}: Props) => {
 
     const {data: payments = []} = useQuery({
         queryKey: ["payments"],
+        initialData: paymentsInitial,
         queryFn: getPayments,
-        refetchInterval: 5000
+        refetchInterval: REFETCH_INTERVAL,
+        staleTime: REFETCH_INTERVAL
     });
 
     const uniquePaymentNames = useMemo(() => {

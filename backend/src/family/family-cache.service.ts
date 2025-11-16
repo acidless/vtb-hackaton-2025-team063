@@ -14,7 +14,7 @@ export class FamilyCacheService {
     }
 
     public async invalidateFamilyCache(baseKey: string, userId: number | string) {
-        if(userId === "*" || !(typeof userId === "number")) {
+        if(!(typeof userId === "number")) {
             return;
         }
 

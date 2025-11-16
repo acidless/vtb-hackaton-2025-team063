@@ -1,7 +1,7 @@
 "use client";
 
 import Heading from "@/shared/ui/typography/Heading";
-import {TransactionLight, getTransactions, toExcelData} from "@/entities/transaction";
+import {TransactionLight, getTransactions, toExcelData, TransactionType} from "@/entities/transaction";
 import useShowingSkeleton from "@/shared/hooks/useShowingSkeleton";
 import React from "react";
 import usePagination from "@/shared/hooks/usePagination";
@@ -9,19 +9,21 @@ import Pagination from "@/shared/ui/Pagination";
 import {exportToExcel} from "@/shared/lib/exportToExcel";
 import {Export} from "@/shared/ui/icons/Export";
 import {useQuery} from "@tanstack/react-query";
-import {Cancel} from "@/shared/ui/icons/Cancel";
-import CollectionEmpty from "@/shared/ui/CollectionEmpty";
 import CollectionEmptyWithIcon from "@/shared/ui/CollectionEmptyWithIcon";
+import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
 
 type Props = {
     className?: string;
+    transactionsInitial: TransactionType[];
 }
 
-const TransactionList = ({className}: Props) => {
+const TransactionList = ({className, transactionsInitial}: Props) => {
     const {data: transactions = []} = useQuery({
         queryKey: ["transactions"],
+        initialData: transactionsInitial,
         queryFn: getTransactions,
-        refetchInterval: 5000
+        refetchInterval: REFETCH_INTERVAL,
+        staleTime: REFETCH_INTERVAL
     });
 
     const [currentTransactions, {setPage, firstPage, lastPage}] = usePagination(transactions, 5);

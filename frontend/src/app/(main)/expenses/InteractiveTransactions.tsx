@@ -1,29 +1,44 @@
 "use client";
 
-import {TransactionCategories} from "@/entities/transaction-category";
+import {PersonalExpensesType, TransactionCategories} from "@/entities/transaction-category";
 import {getTransactions, TransactionType, updateTransactionCategory} from "@/entities/transaction";
-import PersonalExpenses from "@/app/(main)/expenses/PersonalExpenses";
 import TransactionHistory from "@/app/(main)/expenses/TransactionHistory";
 import {DndContext, pointerWithin} from "@dnd-kit/core";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {getFamily, getFamilyExpenses} from "@/entities/family/api/api";
+import {UserType} from "@/entities/user";
+import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
+import PersonalExpenses from "./PersonalExpenses";
 
-const InteractiveExpenses = () => {
+type Props = {
+    transactionsInitial: TransactionType[];
+    familyInitial: UserType[];
+    familyExpenses: PersonalExpensesType[];
+}
+
+const InteractiveExpenses = ({transactionsInitial, familyExpenses, familyInitial}: Props) => {
     const {data: transactions = []} = useQuery({
         queryKey: ["transactions"],
+        initialData: transactionsInitial,
         queryFn: getTransactions,
-        refetchInterval: 5000
+        refetchInterval: REFETCH_INTERVAL,
+        staleTime: REFETCH_INTERVAL,
     });
 
     const {data: family = []} = useQuery({
         queryKey: ["family"],
+        initialData: familyInitial,
         queryFn: getFamily,
+        refetchInterval: REFETCH_INTERVAL * 5,
+        staleTime: REFETCH_INTERVAL * 5,
     });
 
     const {data: categories = []} = useQuery({
         queryKey: ["family-expenses"],
+        initialData: familyExpenses,
         queryFn: getFamilyExpenses,
-        refetchInterval: 5000
+        refetchInterval: REFETCH_INTERVAL,
+        staleTime: REFETCH_INTERVAL,
     });
 
     const queryClient = useQueryClient();

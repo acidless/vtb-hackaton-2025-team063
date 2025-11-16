@@ -25,29 +25,37 @@ export default async function universalFetch<T>(url: string, options: FetchOptio
         headers["Content-Type"] = "application/json";
     }
 
-    const response = await fetch(`${baseUrl}${url}`, {
-        ...options,
-        headers,
-        credentials: typeof window === "undefined" ? undefined : "include",
-        body: options.body && !(options.body instanceof FormData)
-            ? JSON.stringify(options.body)
-            : options.body,
-    });
+    try{
+        const response = await fetch(`${baseUrl}${url}`, {
+            ...options,
+            headers,
+            credentials: typeof window === "undefined" ? undefined : "include",
+            body: options.body && !(options.body instanceof FormData)
+                ? JSON.stringify(options.body)
+                : options.body,
+        });
 
-    if (response.status === 204) {
-        return null as any;
+        if (response.status === 204) {
+            return null as any;
+        }
+
+        let json: any;
+        try {
+            json = await response.json();
+        } catch {
+            json = null;
+        }
+
+        if (!response.ok) {
+            throw new Error(json?.message || `HTTP error ${response.status}`);
+        }
+
+        return json?.data ?? json;
+    } catch (e) {
+        if(typeof window === "undefined") {
+            return [] as any;
+        } else {
+            throw e;
+        }
     }
-
-    let json: any;
-    try {
-        json = await response.json();
-    } catch {
-        json = null;
-    }
-
-    if (!response.ok) {
-        throw new Error(json?.message || `HTTP error ${response.status}`);
-    }
-
-    return json?.data ?? json;
 }

@@ -11,6 +11,8 @@ import {CacheInvalidateEvent} from "../common/events/cache-invalidate.event";
 
 @Injectable()
 export class UsersService {
+    private baseKey = "users";
+
     constructor(
         @InjectRepository(User)
         private readonly usersRepository: Repository<User>,
@@ -33,6 +35,7 @@ export class UsersService {
 
             if (user.partner) {
                 await manager.update(User, {id: user.partner}, {partner: {id: newUser.id}});
+                await this.redisService.invalidateCache(this.baseKey, user.partner);
             }
 
             return newUser;

@@ -10,18 +10,22 @@ import {useQuery} from "@tanstack/react-query";
 import CollectionEmpty from "@/shared/ui/CollectionEmpty";
 import {AnimatePresence} from "framer-motion";
 import {DepositModal} from "@/widgets/deposit-modal/ui/DepositModal";
+import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
 
 type Props = {
     className?: string;
+    walletsInitial: WalletType[];
 }
 
-const Wallets = ({className}: Props) => {
+const Wallets = ({className, walletsInitial}: Props) => {
     const [isModalOpen, setModalOpen] = useState(false);
 
     const {data: wallets = []} = useQuery({
         queryKey: ["wallets"],
+        initialData: walletsInitial,
         queryFn: getWallets,
-        refetchInterval: 5000
+        refetchInterval: REFETCH_INTERVAL,
+        staleTime: REFETCH_INTERVAL
     });
 
     const [selectedWallet, setSelectedWallet] = useState<WalletType | null>(null);

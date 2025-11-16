@@ -9,18 +9,24 @@ import {useQuery} from "@tanstack/react-query";
 import {getFamily} from "@/entities/family";
 import CodeModal from "@/app/(main)/settings/CodeModal";
 import CollectionEmpty from "@/shared/ui/CollectionEmpty";
+import {UserType} from "@/entities/user";
+import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
 
 type Props = {
     className?: string;
+    familyInitial: UserType[];
 }
 
-const ManageFamily = ({className}: Props) => {
+const ManageFamily = ({className, familyInitial}: Props) => {
     const [isModalOpen, setModalOpen] = useState(false);
 
     const {data: family = [], isPending} = useQuery({
         queryKey: ["family"],
+        initialData: familyInitial,
         queryFn: getFamily,
         refetchOnWindowFocus: false,
+        refetchInterval: REFETCH_INTERVAL * 5,
+        staleTime: REFETCH_INTERVAL * 5
     });
 
     const isSingle = family.length === 1;

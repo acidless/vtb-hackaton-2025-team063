@@ -151,7 +151,7 @@ export class AccountsService {
 
         await this.redisService.invalidateCache(this.cacheKey, userId);
         await this.redisService.invalidateCache(this.cacheKey, consent.consentId, userId);
-        await this.redisService.invalidateCache(this.cacheKey, consent.consentId, accountId, userId);
+        await this.redisService.invalidateCache(this.cacheKey, accountId, consent.consentId, userId);
 
         return response.data;
     }
@@ -190,6 +190,7 @@ export class AccountsService {
         const [userId] = event.entityIds;
 
         await this.redisService.invalidateCache(this.cacheKey, userId);
+        await this.redisService.invalidateCache(this.cacheKey, "*", userId);
     }
 
     @OnEvent('cache.invalidate.accounts', {async: true})

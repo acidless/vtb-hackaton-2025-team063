@@ -8,18 +8,23 @@ import getAbsoluteSeverUrl from "@/shared/lib/getAbsoluteServerUrl";
 import {useQuery} from "@tanstack/react-query";
 import {getFamilyExpenses} from "@/entities/family/api/api";
 import CollectionEmptyWithIcon from "@/shared/ui/CollectionEmptyWithIcon";
+import {PersonalExpensesType} from "@/entities/transaction-category";
+import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
 
 type Props = {
     firstAvatar: string;
     secondAvatar: string;
+    expenseCategoriesInitial: PersonalExpensesType[];
     className?: string;
 }
 
-const ExpensesDistributions = ({firstAvatar, secondAvatar, className}: Props) => {
+const ExpensesDistributions = ({firstAvatar, secondAvatar, expenseCategoriesInitial, className}: Props) => {
     const {data: expenseCategories = []} = useQuery({
         queryKey: ["family-expenses"],
+        initialData: expenseCategoriesInitial,
         queryFn: getFamilyExpenses,
-        refetchInterval: 5000
+        refetchInterval: REFETCH_INTERVAL,
+        staleTime: REFETCH_INTERVAL
     });
 
     const firstPersonData = [{

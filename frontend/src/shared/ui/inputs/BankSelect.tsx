@@ -3,6 +3,7 @@ import {BankKey, banks, getConsents} from "@/entities/bank";
 import {Control, Controller} from "react-hook-form";
 import Select from "@/shared/ui/inputs/Select";
 import {useMemo} from "react";
+import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
 
 type Props = {
     name: string;
@@ -14,7 +15,7 @@ const BankSelect = ({name, control, error}: Props) => {
     const {data: consents = []} = useQuery({
         queryKey: ["consents"],
         queryFn: getConsents,
-        refetchInterval: 5000,
+        refetchInterval: REFETCH_INTERVAL,
     });
 
     const bankToConsent = useMemo(() => {

@@ -94,6 +94,6 @@ export class LimitsService {
     private async handleCacheInvalidation(event: CacheInvalidateEvent) {
         const [entityId] = event.entityIds;
 
-        await this.redisService.invalidateCache(this.keyBase, entityId);
+        await this.familyCacheService.invalidateFamilyCache(this.keyBase, entityId as number);
     }
 }

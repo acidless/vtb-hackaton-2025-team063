@@ -11,20 +11,24 @@ import {
 } from "@/entities/child-account";
 import {ChildAccountsCarousel} from "@/widgets/chil-accounts-carousel";
 import {DepositModal} from "@/widgets/deposit-modal/ui/DepositModal";
+import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
 
 type Props = {
     className?: string;
+    childAccountsInitial: ChildAccountType[];
 }
 
-export const ChildAccounts = ({className}: Props) => {
+export const ChildAccounts = ({className, childAccountsInitial}: Props) => {
     const [isAddMoneyModalActive, setAddMoneyModalActive] = useState(false);
     const [isChangeLimitModalActive, setChangeLimitModalActive] = useState(false);
     const [selectedAccount, setSelectedAccount] = useState<ChildAccountType | null>(null);
 
     const {data: childAccounts = []} = useQuery({
         queryKey: ["child-accounts"],
+        initialData: childAccountsInitial,
         queryFn: getChildAccounts,
-        refetchInterval: 5000
+        refetchInterval: REFETCH_INTERVAL,
+        staleTime: REFETCH_INTERVAL
     });
 
     function onDepositClick(account: ChildAccountType) {

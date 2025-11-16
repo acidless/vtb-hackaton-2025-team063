@@ -29,7 +29,7 @@ export const PaymentsList = ({currentDate, payments, paymentMarkup, skeletonMark
         <div className="col-span-6 lg:col-span-5">
             {isLoading ? (
                 <div className="flex-1 flex flex-col gap-1">
-                    {Array.from({length: limit}).map((_, i) => skeletonMarkup(i))}
+                    {Array.from({length: payments.length}).map((_, i) => skeletonMarkup(i))}
                 </div>
             ) : hasPayments ? (
                 <motion.div

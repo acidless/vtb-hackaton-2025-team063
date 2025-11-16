@@ -15,6 +15,8 @@ export type TransactionCategoryType = {
     spent: number;
 }
 
+export type PersonalExpensesType = { expenses: number; categories: TransactionCategoryType[] };
+
 type TransactionCategory = {
     icon: string;
     color: string;

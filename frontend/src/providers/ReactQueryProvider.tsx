@@ -3,7 +3,8 @@
 import {MutationCache, QueryCache, QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import {ReactNode, useState} from 'react'
 import {usePopup} from "@/providers/GlobalPopupProvider";
-import {Check} from "@/shared/ui/icons/Check";
+
+export const REFETCH_INTERVAL = 5000;
 
 export default function ReactQueryProvider({children}: { children: ReactNode }) {
     const {showPopup} = usePopup();

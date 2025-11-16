@@ -10,18 +10,22 @@ import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {AnimatePresence} from "framer-motion";
 import CollectionEmpty from "@/shared/ui/CollectionEmpty";
 import {DepositModal} from "@/widgets/deposit-modal/ui/DepositModal";
+import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
 
 type Props = {
     className?: string;
+    goalsInitial: GoalType[];
 }
 
-const Goals = ({className}: Props) => {
+const Goals = ({className, goalsInitial}: Props) => {
     const [isModalOpen, setModalOpen] = useState(false);
 
     const {data: goals = []} = useQuery({
         queryKey: ["goals"],
+        initialData: goalsInitial,
         queryFn: getGoals,
-        refetchInterval: 5000,
+        refetchInterval: REFETCH_INTERVAL,
+        staleTime: REFETCH_INTERVAL,
     });
 
     const [selectedGoal, setSelectedGoal] = useState<GoalType | null>(null);

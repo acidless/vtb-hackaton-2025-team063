@@ -1,6 +1,6 @@
 "use client";
 
-import {getLimits, Limit} from "@/entities/limit";
+import {getLimits, Limit, LimitType} from "@/entities/limit";
 import Heading from "@/shared/ui/typography/Heading";
 import {Plus} from "@/shared/ui/icons/Plus";
 import AccentButton from "@/shared/ui/AccentButton";
@@ -9,18 +9,22 @@ import {CreateLimit} from "@/features/create-limit";
 import {useQuery} from "@tanstack/react-query";
 import CollectionEmpty from "@/shared/ui/CollectionEmpty";
 import {AnimatePresence} from "framer-motion";
+import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
 
 type Props = {
     className?: string;
+    limitsInitial: LimitType[];
 }
 
-const Limits = ({className}: Props) => {
+const Limits = ({className, limitsInitial}: Props) => {
     const [isModalOpen, setModalOpen] = useState(false);
 
     const {data: limits = [], isError} = useQuery({
         queryKey: ["limits"],
+        initialData: limitsInitial,
         queryFn: getLimits,
-        refetchInterval: 5000
+        refetchInterval: REFETCH_INTERVAL,
+        staleTime: REFETCH_INTERVAL
     });
 
     return <section className={`${className} mb-[1.875rem] md:p-3 md:rounded-2xl md:bg-sky-50`}>

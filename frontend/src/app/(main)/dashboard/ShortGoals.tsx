@@ -7,16 +7,20 @@ import {AnimatePresence} from "framer-motion";
 import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {useState} from "react";
 import {DepositModal} from "@/widgets/deposit-modal/ui/DepositModal";
+import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
 
 type Props = {
     className?: string;
+    goalsInitial: GoalType[];
 }
 
-const ShortGoals = ({className}: Props) => {
+const ShortGoals = ({className, goalsInitial}: Props) => {
     const {data: goals = []} = useQuery({
         queryKey: ["goals"],
+        initialData: goalsInitial,
         queryFn: getGoals,
-        refetchInterval: 5000
+        refetchInterval: REFETCH_INTERVAL,
+        staleTime: REFETCH_INTERVAL
     });
 
     const [selectedGoal, setSelectedGoal] = useState<GoalType | null>(null);

@@ -2,7 +2,7 @@ import universalFetch from "@/shared/lib/universalFetch";
 import {CodeData} from "@/entities/family";
 import {UserType} from "@/entities/user";
 import {PersonalAccountType} from "@/entities/account";
-import {TransactionCategoryType} from "@/entities/transaction-category";
+import {PersonalExpensesType, TransactionCategoryType} from "@/entities/transaction-category";
 
 export async function getCode(): Promise<CodeData> {
     return universalFetch("/family/code", {
@@ -22,7 +22,7 @@ export async function getFamilyFinance(): Promise<PersonalAccountType[]> {
     });
 }
 
-export async function getFamilyExpenses(): Promise<{ expenses: number; categories: TransactionCategoryType[] }[]> {
+export async function getFamilyExpenses(): Promise<PersonalExpensesType[]> {
     return universalFetch("/family/expenses", {
         method: "GET",
     });
