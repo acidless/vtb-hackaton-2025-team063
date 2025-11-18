@@ -90,9 +90,10 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        NEXT_PUBLIC_API_BASE_URL: /api
-        API_BASE_URL_INTERNAL: http://api:8000
-        NEXT_PUBLIC_UPLOADS_BASE_URL: ""
+        NEXT_PUBLIC_API_BASE_URL: "${NEXT_PUBLIC_API_BASE_URL}"
+        NEXT_PUBLIC_UPLOADS_BASE_URL: "${NEXT_PUBLIC_UPLOADS_BASE_URL}"
+        NEXT_PUBLIC_VAPID_PUBLIC_KEY: "${NEXT_PUBLIC_VAPID_PUBLIC_KEY}"
+        API_BASE_URL_INTERNAL: "${API_BASE_URL_INTERNAL}"
     restart: unless-stopped
     env_file:
       - .env

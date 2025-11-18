@@ -17,6 +17,7 @@ export default function ReactQueryProvider({children}: { children: ReactNode }) 
         },
         queryCache: new QueryCache({
             onError: (error) => {
+                console.error(error);
                 showPopup({
                     text: error.message,
                     background: "var(--error-color)"
@@ -25,6 +26,7 @@ export default function ReactQueryProvider({children}: { children: ReactNode }) 
         }),
         mutationCache: new MutationCache({
             onError: (error) => {
+                console.error(error);
                 showPopup({
                     text: error.message,
                     background: "var(--error-color)"

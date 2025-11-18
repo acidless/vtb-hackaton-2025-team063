@@ -50,7 +50,7 @@ export default async function universalFetch<T>(url: string, options: FetchOptio
             throw new Error(json?.message || `HTTP error ${response.status}`);
         }
 
-        return json?.data ?? json;
+        return json?.data === undefined ? json : json?.data;
     } catch (e) {
         if(typeof window === "undefined") {
             return [] as any;

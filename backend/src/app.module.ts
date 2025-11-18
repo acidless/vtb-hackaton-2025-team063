@@ -34,6 +34,8 @@ import {Wallet} from "./banks/accounts/wallets/wallet.entity";
 import {ScheduleModule} from "@nestjs/schedule";
 import { CryptoModule } from './crypto/crypto.module';
 import {FamilyAccountsModule} from "./family/family-accounts/family-accounts.module";
+import { NotificationsModule } from './notifications/notifications.module';
+import { Notification } from './notifications/notification.entity';
 
 
 @Module({
@@ -45,7 +47,7 @@ import {FamilyAccountsModule} from "./family/family-accounts/family-accounts.mod
             username: process.env.DB_USER || 'postgres',
             password: process.env.DB_PASSWORD || '',
             database: process.env.DB_NAME || 'family_multibank',
-            entities: [User, Consent, Limit, Payment, Goal, Transaction, ChildAccount, Wallet],
+            entities: [User, Consent, Limit, Payment, Goal, Transaction, ChildAccount, Wallet, Notification],
             synchronize: true,
         }),
         EventEmitterModule.forRoot(),
@@ -76,6 +78,7 @@ import {FamilyAccountsModule} from "./family/family-accounts/family-accounts.mod
         PaymentsModule,
         WalletsModule,
         CryptoModule,
+        NotificationsModule,
     ],
     controllers: [AppController],
     providers: [AppService],

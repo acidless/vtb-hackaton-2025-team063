@@ -9,6 +9,7 @@ import {useQuery} from "@tanstack/react-query";
 import getAbsoluteSeverUrl from "@/shared/lib/getAbsoluteServerUrl";
 import {authUser, UserType} from "@/entities/user";
 import ProfileEditableData from "@/app/(main)/settings/ProfileEditableData";
+import PushNotificationsToggle from "@/app/(main)/settings/PushNotificationsToggle";
 
 
 type Props = {
@@ -38,16 +39,7 @@ const MyProfile = ({className, userInitial, settings}: Props) => {
         </div>
         <ProfileEditableData user={user}/>
         <div>
-            <div className="bg-tertiary rounded-xl px-2.5">
-                <motion.div className="h-[2.625rem] flex items-center justify-between"
-                            initial={{opacity: 0, y: 10}}
-                            animate={{opacity: 1, y: 0}}
-                            exit={{opacity: 0, y: -10}}
-                            transition={{duration: 0.3}}>
-                    <p className="text-base font-medium">Push-уведомления</p>
-                    <Checkbox value={isPushEnabled} onChange={setPushEnabled}/>
-                </motion.div>
-            </div>
+            <PushNotificationsToggle isActive={settings.pushEnabled}/>
         </div>
     </section>
 }

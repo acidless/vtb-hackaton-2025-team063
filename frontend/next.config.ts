@@ -2,6 +2,7 @@ import {version} from "./package.json";
 
 const withPWA = require("next-pwa")({
     dest: "public",
+    swSrc: "service-worker.js",
     maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
     register: true,
     skipWaiting: true,
