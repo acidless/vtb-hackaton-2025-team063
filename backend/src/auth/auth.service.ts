@@ -19,7 +19,7 @@ export class AuthService {
     }
 
     public async login(userLoginDTO: UserLoginDTO) {
-        const user = await this.userService.getUserByPhone(userLoginDTO);
+        const user = await this.userService.findUser(userLoginDTO.id);
         const jwt = this.jwtService.sign({...user});
 
         return {user, accessToken: jwt};

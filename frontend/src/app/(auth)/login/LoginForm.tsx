@@ -1,22 +1,20 @@
 "use client";
 
 import {Controller, useForm} from "react-hook-form";
-import {IMaskInput} from "react-imask";
 import AccentButton from "@/shared/ui/AccentButton";
-import InputError from "@/shared/ui/inputs/InputError";
 import {motion} from "framer-motion";
 import {yupResolver} from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import {useMutation} from "@tanstack/react-query";
-import {loginUser} from "@/entities/user";
+import {useMutation, useQuery} from "@tanstack/react-query";
+import {getUsers, loginUser} from "@/entities/user";
 import AnimatedLoader from "@/shared/ui/loaders/AnimatedLoader";
-import phoneToPlain from "@/shared/lib/phoneToPlain";
+import Select from "@/shared/ui/inputs/Select";
 
 const schema = yup
     .object({
-        phone: yup
+        loginUserId: yup
             .string()
-            .required("Укажите номер телефона"),
+            .required("Выберите пользователя"),
     })
     .required();
 
@@ -31,6 +29,9 @@ const LoginForm = ({onSuccess}: Props) => {
         formState: {errors},
     } = useForm({
         resolver: yupResolver(schema),
+        defaultValues: {
+            loginUserId: null as any,
+        }
     });
 
     const {mutate, isPending} = useMutation({
@@ -40,8 +41,16 @@ const LoginForm = ({onSuccess}: Props) => {
         },
     });
 
+    const {data: users = []} = useQuery({
+        queryKey: ["users"],
+        queryFn: getUsers,
+        refetchInterval: false,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false
+    });
+
     const onSubmit = (data: yup.InferType<typeof schema>) => {
-        mutate({phone: phoneToPlain(data.phone)});
+        mutate({id: Number(data.loginUserId)});
     }
 
     return <motion.div className="p-4 rounded-xl bg-white"
@@ -52,27 +61,16 @@ const LoginForm = ({onSuccess}: Props) => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-2 flex flex-col">
                 <Controller
-                    name="phone"
+                    name="loginUserId"
                     control={control}
                     render={({field}) => (
-                        <>
-                            <div className="flex items-stretch gap-2">
-                                <IMaskInput
-                                    {...field}
-                                    mask="+{7} (000) 000-00-00"
-                                    unmask={false}
-                                    value={field.value || ""}
-                                    onAccept={(value) => field.onChange(value)}
-                                    placeholder="+7 (999) 999-99-99"
-                                    type="tel"
-                                    inputMode="numeric"
-                                    className={`min-w-0 flex-1 large text-sm text-primary py-2.5 px-2.5 bg-tertiary rounded-xl font-normal outline-primary ${
-                                        errors.phone ? "border-error" : ""
-                                    }`}
-                                />
-                            </div>
-                            <InputError error={errors.phone?.message}/>
-                        </>
+                        <Select error={errors.loginUserId?.message as string}
+                                onChange={(value) => field.onChange(value)}
+                                large placeholder="Выберите пользователя" value={field.value} id="loginUserId"
+                                options={users.map((user) => ({
+                                    value: user.id.toString(),
+                                    label: user.name
+                                }))}/>
                     )}
                 />
             </div>

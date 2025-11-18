@@ -11,6 +11,13 @@ import {ApiCookieAuth, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
+    @ApiOperation({ summary: 'Получение списка пользователей' })
+    @ApiResponse({ status: 200, description: 'Список пользователей' })
+    @Get()
+    public async getAll() {
+        return this.usersService.getAll();
+    }
+
     @ApiOperation({ summary: 'Изменение данных пользователя' })
     @ApiResponse({ status: 200, description: 'Измененный пользователь' })
     @ApiCookieAuth('access_token')

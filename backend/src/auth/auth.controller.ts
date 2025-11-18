@@ -53,7 +53,7 @@ export class AuthController {
     public async validate(@Body() dto: UserDTO) {
         let user: any;
         try {
-            user = await this.usersService.getUserByPhone(dto);
+            user = await this.usersService.getUserByPhone(dto.phone);
         } catch (e) {}
 
         if (user) {

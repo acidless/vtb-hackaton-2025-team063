@@ -7,6 +7,7 @@ import {NotificationDTO} from "./notification.dto";
 
 @Injectable()
 export class NotificationsService {
+
     constructor(
         @InjectRepository(Notification)
         private readonly notificationRepository: Repository<Notification>,
@@ -31,6 +32,7 @@ export class NotificationsService {
             user: {id: userId}
         });
         await this.notificationRepository.save(notification);
+
         return notification;
     }
 

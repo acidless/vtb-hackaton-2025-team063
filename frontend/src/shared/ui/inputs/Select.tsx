@@ -54,7 +54,7 @@ const Select = ({options, id, value, className, placeholder, onChange, large, er
     }
 
     return <>
-        <div ref={ref} id={id} className={`relative ${className}`}>
+        <div ref={ref} id={id} className={`relative cursor-pointer ${className}`}>
             <div
                 onClick={() => setOpen(!isOpen)}
                 className={`${showPlaceholder ? "text-placeholder" : "text-primary"} ${error ? "border-error" : ""} ${large ? "text-sm py-2.5" : "py-1.5 text-xs"} pl-1.5 pr-2.5 bg-tertiary rounded-xl flex items-center justify-between gap-4`}>

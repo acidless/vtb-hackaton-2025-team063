@@ -1,6 +1,13 @@
 import {UserEditType, UserType} from "@/entities/user";
 import universalFetch from "@/shared/lib/universalFetch";
 
+export async function getUsers() {
+    return universalFetch<{ id: number; name: string }[]>("/users", {
+        method: "GET",
+    });
+}
+
+
 export async function registerUser(user: FormData) {
     return universalFetch("/auth", {
         method: "POST",
@@ -8,7 +15,7 @@ export async function registerUser(user: FormData) {
     });
 }
 
-export async function loginUser(body: { phone: string }): Promise<UserType> {
+export async function loginUser(body: { id: number }): Promise<UserType> {
     return universalFetch("/auth", {
         method: "PUT",
         body

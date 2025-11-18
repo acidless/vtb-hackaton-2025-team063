@@ -25,6 +25,13 @@ export class UsersService {
     ) {
     }
 
+    public async getAll() {
+        return this.redisService.withCache(this.baseKey, 3600, async () => {
+            const users = await this.usersRepository.find();
+            return users.map(u => ({id: u.id, name: u.name}));
+        });
+    }
+
     public async createUser(user: UserCreateDTO): Promise<User> {
         const foundUser = await this.usersRepository.findOne({where: {phone: user.phone}});
         if (foundUser) {
@@ -41,6 +48,8 @@ export class UsersService {
                 await this.notificationsService.sendNotification("Подключение к семье", `${user.name} подключился(-acь) к семье!`, user.partner);
             }
 
+            await this.redisService.invalidateCache(this.baseKey);
+
             return newUser;
         });
     }
@@ -54,8 +63,8 @@ export class UsersService {
         return user;
     }
 
-    public async getUserByPhone(userLoginDTO: UserLoginDTO): Promise<User> {
-        const user = await this.usersRepository.findOne({where: {phone: userLoginDTO.phone}});
+    public async getUserByPhone(phone: string): Promise<User> {
+        const user = await this.usersRepository.findOne({where: {phone}});
         if (!user) {
             throw new NotFoundException("Пользователь не найден");
         }
@@ -69,6 +78,9 @@ export class UsersService {
         }
 
         await this.usersRepository.update({id: userId}, {...userEditDTO});
+
+        await this.redisService.invalidateCache(this.baseKey, userId);
+        await this.redisService.invalidateCache(this.baseKey);
 
         return this.usersRepository.findOne({where: {id: userId}});
     }
