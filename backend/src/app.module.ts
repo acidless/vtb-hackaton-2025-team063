@@ -36,6 +36,7 @@ import { CryptoModule } from './crypto/crypto.module';
 import {FamilyAccountsModule} from "./family/family-accounts/family-accounts.module";
 import { NotificationsModule } from './notifications/notifications.module';
 import { Notification } from './notifications/notification.entity';
+import {ChildTransactionsModule} from "./banks/accounts/child-accounts/child-transactions/child-transactions.module";
 
 
 @Module({
@@ -67,6 +68,7 @@ import { Notification } from './notifications/notification.entity';
         TransactionsModule,
         GoalsModule,
         ChildAccountsModule,
+        ChildTransactionsModule,
         AccountsModule,
         FamilyAccountsModule,
         ConsentsModule,

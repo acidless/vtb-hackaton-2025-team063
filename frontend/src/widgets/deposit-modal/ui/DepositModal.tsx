@@ -49,6 +49,8 @@ export const DepositModal = ({
             reset();
             setActive(false);
             queryClient.invalidateQueries({queryKey: ["child-accounts"]});
+            queryClient.invalidateQueries({queryKey: ["child-transactions"]});
+            queryClient.invalidateQueries({queryKey: ["child-transaction-categories"]});
             queryClient.invalidateQueries({queryKey: ["family-finance"]});
             queryClient.invalidateQueries({queryKey: ["family-expenses"]});
             queryClient.invalidateQueries({queryKey: ["transactions"]});

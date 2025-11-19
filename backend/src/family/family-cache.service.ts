@@ -21,6 +21,6 @@ export class FamilyCacheService {
         const memberId = await this.familyService.getFamilyMemberId(Number(userId));
         const familyKey = this.getFamilyKey(Number(userId), memberId);
 
-        await this.redisService.invalidateCache(baseKey, familyKey);
+        await this.redisService.invalidateCache(baseKey, ...familyKey.split(":"));
     }
 }

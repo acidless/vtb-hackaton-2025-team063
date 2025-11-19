@@ -3,29 +3,29 @@
 import Heading from "@/shared/ui/typography/Heading";
 import {Expenses as ExpensesBlock} from "@/widgets/expenses";
 import {useQuery} from "@tanstack/react-query";
-import {getFamilyExpenses} from "@/entities/family/api/api";
-import {PersonalExpensesType} from "@/entities/transaction-category";
+import {TransactionCategoryType} from "@/entities/transaction-category";
 import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
+import {getChildTransactionCategories} from "@/entities/transaction/api/api";
 
 type Props = {
     className?: string;
-    expenseCategoriesInitial: PersonalExpensesType[];
+    childTransactionCategoriesInitial: TransactionCategoryType[];
 }
 
-const ChildExpenseStats = ({className, expenseCategoriesInitial}: Props) => {
-    const {data: expenseCategories = []} = useQuery({
-        queryKey: ["family-expenses"],
-        initialData: expenseCategoriesInitial,
-        queryFn: getFamilyExpenses,
+const ChildExpenseStats = ({className, childTransactionCategoriesInitial}: Props) => {
+    const {data: childTransactionCategories = []} = useQuery({
+        queryKey: ["child-transaction-categories"],
+        initialData: childTransactionCategoriesInitial,
+        queryFn: getChildTransactionCategories,
         refetchInterval: REFETCH_INTERVAL,
         staleTime: REFETCH_INTERVAL
     });
 
     return <section className={`${className} mb-[1.875rem] md:p-3 md:rounded-2xl md:bg-fuchsia-50`}>
         <div className="mb-2.5">
-            <Heading className="md:text-3xl lg:text-4xl" level={2}>Траты по детским счетам</Heading>
+            <Heading className="md:text-3xl lg:text-4xl" level={3}>Траты по детским счетам</Heading>
         </div>
-        <ExpensesBlock expenseCategories={expenseCategories[0] ? expenseCategories[0].categories : []}/>
+        <ExpensesBlock expenseCategories={childTransactionCategories}/>
     </section>
 }
 

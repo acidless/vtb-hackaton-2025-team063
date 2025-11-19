@@ -14,6 +14,6 @@ import {PaymentConsentsModule} from "./payment-consents/payment-consents.module"
   imports: [TypeOrmModule.forFeature([Transaction]), BanksModule, ConsentsModule, AccountsModule, RedisModule, PaymentConsentsModule],
   providers: [TransactionsService, TransactionsTransformer],
   controllers: [TransactionsController],
-  exports: [TransactionsService],
+  exports: [TransactionsService, TransactionsTransformer],
 })
 export class TransactionsModule {}

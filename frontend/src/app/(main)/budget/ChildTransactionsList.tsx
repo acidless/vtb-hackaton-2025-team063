@@ -1,7 +1,13 @@
 "use client";
 
 import Heading from "@/shared/ui/typography/Heading";
-import {TransactionLight, getTransactions, toExcelData, TransactionType} from "@/entities/transaction";
+import {
+    TransactionLight,
+    getTransactions,
+    toExcelData,
+    TransactionType,
+    getChildTransactions
+} from "@/entities/transaction";
 import useShowingSkeleton from "@/shared/hooks/useShowingSkeleton";
 import React from "react";
 import usePagination from "@/shared/hooks/usePagination";
@@ -14,14 +20,14 @@ import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
 
 type Props = {
     className?: string;
-    transactionsInitial: TransactionType[];
+    childTransactionsInitial: TransactionType[];
 }
 
-const ChildTransactionList = ({className, transactionsInitial}: Props) => {
+const ChildTransactionList = ({className, childTransactionsInitial}: Props) => {
     const {data: transactions = []} = useQuery({
-        queryKey: ["transactions"],
-        initialData: transactionsInitial,
-        queryFn: getTransactions,
+        queryKey: ["child-transactions"],
+        initialData: childTransactionsInitial,
+        queryFn: getChildTransactions,
         refetchInterval: REFETCH_INTERVAL,
         staleTime: REFETCH_INTERVAL
     });
@@ -32,7 +38,7 @@ const ChildTransactionList = ({className, transactionsInitial}: Props) => {
     return <section className={`${className} mb-[1.875rem] md:p-3 md:rounded-2xl md:bg-neutral-100`}>
         <div className="mb-2.5 flex justify-between items-center flex-wrap gap-x-2">
             <div className="flex items-center gap-2">
-                <Heading className="mb-1" level={2}>История операций по детским счетам</Heading>
+                <Heading className="mb-1 md:text-2xl" level={3}>История операций по детским счетам</Heading>
                 <button onClick={() => exportToExcel(toExcelData(transactions))} className="text-inactive">
                     <Export/>
                 </button>

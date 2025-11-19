@@ -31,7 +31,7 @@ export class TransactionsService {
         private readonly redisService: RedisService) {
     }
 
-    public async getTransactions(userId: number) {
+    public async getTransactions(userId: number, ...accountIds: string[]) {
         return this.redisService.withCache(`${this.baseKey}:${userId}`, 30, async () => {
             const consents = await this.consentsService.getUserConsents(userId);
             const bankToConsents = Object.fromEntries(consents.map(consent => [consent.bankId, consent.consentId]));
@@ -46,6 +46,10 @@ export class TransactionsService {
 
             for (const [bank, accounts] of Object.entries(bankAccounts) as [string, any][]) {
                 for (const account of accounts) {
+                    if (accountIds.length && !accountIds.includes(account.accountId)) {
+                        continue;
+                    }
+
                     const accountKey = `${this.baseKey}:${userId}:${account.accountId}`;
 
                     promises.push(this.banksService.requestBankAPI<{ data: { transaction: TransactionType[] } }>(bank, {
@@ -55,12 +59,12 @@ export class TransactionsService {
                                 "X-Consent-Id": bankToConsents[bank],
                             }
                         }, accountKey)
-                        .then(async accountTransactions => {
-                            const filteredTransactions = accountTransactions.data.transaction.filter(t => new Date(t.valueDateTime) >= lastMonth);
-                            const transformed = filteredTransactions.map(t => this.transactionsTransformer.transform(t, bank));
-                            transactions.push(...transformed);
-                        })
-                        .catch(err => console.error(err))
+                            .then(async accountTransactions => {
+                                const filteredTransactions = accountTransactions.data.transaction.filter(t => new Date(t.valueDateTime) >= lastMonth);
+                                const transformed = filteredTransactions.map(t => this.transactionsTransformer.transform(t, bank));
+                                transactions.push(...transformed);
+                            })
+                            .catch(err => console.error(err))
                     )
                 }
             }
@@ -76,7 +80,7 @@ export class TransactionsService {
                 };
             }
 
-            return Object.values(idToTransactions).sort((a, b) => b.date.getTime() - a.date.getTime());
+            return Object.values(idToTransactions).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         });
     }
 

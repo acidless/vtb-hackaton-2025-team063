@@ -3,13 +3,13 @@ import Wallets from "@/app/(main)/budget/Wallets";
 import UpcomingPayments from "@/app/(main)/budget/UpcomingPayments";
 import ChildExpenseStats from "@/app/(main)/budget/ChildExpenseStats";
 import {getChildAccounts} from "@/entities/child-account";
-import {getTransactions} from "@/entities/transaction";
+import {getChildTransactions} from "@/entities/transaction";
 import {getPayments} from "@/entities/payment";
 import {getGoals} from "@/entities/goal";
 import {getWallets} from "@/entities/wallet";
-import {getFamilyExpenses} from "@/entities/family/api/api";
 import {ChildAccounts} from "@/app/(main)/budget/ChildAccounts";
 import ChildTransactionList from "@/app/(main)/budget/ChildTransactionsList";
+import {getChildTransactionCategories} from "@/entities/transaction/api/api";
 
 export default async function Budget() {
     const [
@@ -17,9 +17,9 @@ export default async function Budget() {
         wallets,
         payments,
         childAccounts,
-        familyExpenses,
-        transactions
-    ] = await Promise.all([getGoals(), getWallets(), getPayments(), getChildAccounts(), getFamilyExpenses(), getTransactions()]);
+        childTransactions,
+        childTransactionCategories,
+    ] = await Promise.all([getGoals(), getWallets(), getPayments(), getChildAccounts(), getChildTransactions(), getChildTransactionCategories()]);
 
     return <div>
         <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4 lg:gap-8 mb-20">
@@ -30,8 +30,8 @@ export default async function Budget() {
             </div>
             <div className="flex flex-col items-stretch">
                 <ChildAccounts className="mx-4 md:ml-0 md:order-3" childAccountsInitial={childAccounts}/>
-                <ChildExpenseStats className="ml-4 md:ml-0 md:mr-4 md:order-1" expenseCategoriesInitial={familyExpenses}/>
-                <ChildTransactionList className="mx-4 md:ml-0 md:order-2" transactionsInitial={transactions}/>
+                <ChildExpenseStats className="ml-4 md:ml-0 md:mr-4 md:order-1" childTransactionCategoriesInitial={childTransactionCategories}/>
+                <ChildTransactionList className="mx-4 md:ml-0 md:order-2" childTransactionsInitial={childTransactions}/>
             </div>
         </div>
     </div>
