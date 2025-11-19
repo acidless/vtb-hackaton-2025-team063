@@ -54,16 +54,16 @@ Family Multibank — цифровая экосистема для совмест
 
 ## Архитектура и стек
 
-| Слой | Технологии | Назначение |
-| --- | --- | --- |
+| Слой | Технологии                                                  | Назначение |
+| --- |-------------------------------------------------------------| --- |
 | Frontend | Next.js 16, React 19, Tailwind CSS 4, @tanstack/react-query | Интерактивный интерфейс дашборда, виджеты, работа с API |
-| Backend | Django 4.2, Django REST Framework, Celery, Redis | Агрегация банковских данных, бизнес-логика кошельков и целей, очереди задач |
-| База данных | PostgreSQL 15 | Хранение счетов, целей, транзакций и пользователей |
-| Инфраструктура | Docker, docker-compose | Изолированное окружение для разработки и демонстрации |
+| Backend | Node.js, Nest.js, Redis                                     | Агрегация банковских данных, бизнес-логика кошельков и целей, очереди задач |
+| База данных | PostgreSQL 15                                               | Хранение счетов, целей, транзакций и пользователей |
+| Инфраструктура | Docker, docker-compose                                      | Изолированное окружение для разработки и демонстрации |
 
 ## Структура репозитория
 
-- [`backend/`](backend/) — Django-проект с приложениями `accounts`, `banks`, `payments`, `products`.
+- [`backend/`](backend/) — Nest-проект с приложениями `accounts`, `banks`, `payments`, `products`.
 - [`frontend/`](frontend/) — Next.js-приложение с модульной структурой (app directory, widgets, entities).
 - [`docker-compose.yml`](docker-compose.yml:1) — общий оркестратор для фронтенда, бэкенда, Postgres и Redis.
 - [`backend/docker-compose.yml`](backend/docker-compose.yml:1) — отдельный compose-файл для разработки бэкенда.
@@ -88,11 +88,8 @@ Family Multibank — цифровая экосистема для совмест
 #### Backend
 ```bash
 cd backend
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py runserver
+npm install
+npm run start:dev
 ```
 
 #### Frontend

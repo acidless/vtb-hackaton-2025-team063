@@ -1,3 +1,5 @@
+"use client";
+
 import Avatar from "@/shared/ui/Avatar";
 import ModalWindow from "@/shared/ui/ModalWindow";
 import {Dispatch, SetStateAction, useState} from "react";
@@ -5,6 +7,9 @@ import AccentButton from "@/shared/ui/AccentButton";
 import {motion} from "framer-motion";
 import {UserType} from "@/entities/user";
 import getAbsoluteSeverUrl from "@/shared/lib/getAbsoluteServerUrl";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {leaveFamily} from "@/entities/family";
+import AnimatedLoader from "@/shared/ui/loaders/AnimatedLoader";
 
 
 type ModalProps = {
@@ -13,14 +18,24 @@ type ModalProps = {
 }
 
 const DisconnectPartner = ({isActive, setActive}: ModalProps) => {
+    const queryClient = useQueryClient();
+
+    const {mutate, isPending} = useMutation({
+        mutationFn: leaveFamily,
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ["family"]});
+        },
+    });
+
     return <ModalWindow isActive={isActive} setActive={setActive}>
         <div className="mb-2.5 text-center">
             <p>Вы уверены, что хотите удалить партнера?</p>
         </div>
-        <div className="flex items-center justify-center gap-1">
+        <div className="flex items-center justify-center gap-1 mb-2.5">
             <AccentButton background="bg-light" type="button" onClick={() => setActive(false)}>Отмена</AccentButton>
-            <AccentButton background="bg-error" type="submit">Удалить</AccentButton>
+            <AccentButton background="bg-error" type="submit" onClick={() => mutate()}>Удалить</AccentButton>
         </div>
+        <AnimatedLoader isLoading={isPending}/>
     </ModalWindow>
 }
 
@@ -41,7 +56,8 @@ export const Partner = ({partner}: Props) => {
                 <Avatar avatar={getAbsoluteSeverUrl(partner.avatar)}/>
                 <p className="text-base font-medium">{partner.name}</p>
             </div>
-            <div className="flex flex-row-reverse justify-between xxs:justify-center xxs:flex-col items-center xxs:items-end gap-2 xxs:gap-0.5">
+            <div
+                className="flex flex-row-reverse justify-between xxs:justify-center xxs:flex-col items-center xxs:items-end gap-2 xxs:gap-0.5">
                 <Status partner={partner}/>
                 <button onClick={() => setModalOpen(true)}
                         className="text-light font-light text-sm cursor-pointer">Отключить

@@ -1,15 +1,15 @@
 import Goals from "@/app/(main)/budget/Goals";
 import Wallets from "@/app/(main)/budget/Wallets";
 import UpcomingPayments from "@/app/(main)/budget/UpcomingPayments";
-import ExpenseStats from "@/app/(main)/budget/ExpenseStats";
+import ChildExpenseStats from "@/app/(main)/budget/ChildExpenseStats";
 import {getChildAccounts} from "@/entities/child-account";
 import {getTransactions} from "@/entities/transaction";
 import {getPayments} from "@/entities/payment";
 import {getGoals} from "@/entities/goal";
 import {getWallets} from "@/entities/wallet";
-import TransactionList from "@/app/(main)/budget/ExpenseList";
 import {getFamilyExpenses} from "@/entities/family/api/api";
 import {ChildAccounts} from "@/app/(main)/budget/ChildAccounts";
+import ChildTransactionList from "@/app/(main)/budget/ChildTransactionsList";
 
 export default async function Budget() {
     const [
@@ -30,8 +30,8 @@ export default async function Budget() {
             </div>
             <div className="flex flex-col items-stretch">
                 <ChildAccounts className="mx-4 md:ml-0 md:order-3" childAccountsInitial={childAccounts}/>
-                <ExpenseStats className="ml-4 md:ml-0 md:mr-4 md:order-1" expenseCategoriesInitial={familyExpenses}/>
-                <TransactionList className="mx-4 md:ml-0 md:order-2" transactionsInitial={transactions}/>
+                <ChildExpenseStats className="ml-4 md:ml-0 md:mr-4 md:order-1" expenseCategoriesInitial={familyExpenses}/>
+                <ChildTransactionList className="mx-4 md:ml-0 md:order-2" transactionsInitial={transactions}/>
             </div>
         </div>
     </div>

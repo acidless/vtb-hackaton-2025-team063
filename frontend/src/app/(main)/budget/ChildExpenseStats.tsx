@@ -12,7 +12,7 @@ type Props = {
     expenseCategoriesInitial: PersonalExpensesType[];
 }
 
-const ExpenseStats = ({className, expenseCategoriesInitial}: Props) => {
+const ChildExpenseStats = ({className, expenseCategoriesInitial}: Props) => {
     const {data: expenseCategories = []} = useQuery({
         queryKey: ["family-expenses"],
         initialData: expenseCategoriesInitial,
@@ -23,10 +23,10 @@ const ExpenseStats = ({className, expenseCategoriesInitial}: Props) => {
 
     return <section className={`${className} mb-[1.875rem] md:p-3 md:rounded-2xl md:bg-fuchsia-50`}>
         <div className="mb-2.5">
-            <Heading className="md:text-3xl lg:text-4xl" level={2}>Статистика расходов</Heading>
+            <Heading className="md:text-3xl lg:text-4xl" level={2}>Траты по детским счетам</Heading>
         </div>
         <ExpensesBlock expenseCategories={expenseCategories[0] ? expenseCategories[0].categories : []}/>
     </section>
 }
 
-export default ExpenseStats;
+export default ChildExpenseStats;

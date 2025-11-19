@@ -17,7 +17,7 @@ type Props = {
     transactionsInitial: TransactionType[];
 }
 
-const TransactionList = ({className, transactionsInitial}: Props) => {
+const ChildTransactionList = ({className, transactionsInitial}: Props) => {
     const {data: transactions = []} = useQuery({
         queryKey: ["transactions"],
         initialData: transactionsInitial,
@@ -32,7 +32,7 @@ const TransactionList = ({className, transactionsInitial}: Props) => {
     return <section className={`${className} mb-[1.875rem] md:p-3 md:rounded-2xl md:bg-neutral-100`}>
         <div className="mb-2.5 flex justify-between items-center flex-wrap gap-x-2">
             <div className="flex items-center gap-2">
-                <Heading className="mb-1" level={2}>История операций</Heading>
+                <Heading className="mb-1" level={2}>История операций по детским счетам</Heading>
                 <button onClick={() => exportToExcel(toExcelData(transactions))} className="text-inactive">
                     <Export/>
                 </button>
@@ -55,4 +55,4 @@ const TransactionList = ({className, transactionsInitial}: Props) => {
     </section>
 }
 
-export default TransactionList;
+export default ChildTransactionList;

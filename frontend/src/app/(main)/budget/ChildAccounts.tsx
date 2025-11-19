@@ -43,7 +43,7 @@ export const ChildAccounts = ({className, childAccountsInitial}: Props) => {
 
     return <section className={`mb-[1.875rem] ${className}`}>
         <div className="mb-2.5">
-            <Heading level={2}>Детский счет</Heading>
+            <Heading level={2}>Детские счета</Heading>
         </div>
         <ChildAccountsCarousel childAccounts={childAccounts}
                                component={(account) => <ChildAccountExtended account={account}

@@ -1,7 +1,7 @@
-import {Injectable} from '@nestjs/common';
+import {BadRequestException, Injectable} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
 import {User} from "../users/user.entity";
-import {Repository} from "typeorm";
+import {DataSource, EntityManager, Repository} from "typeorm";
 import {RedisService} from "../redis/redis.service";
 import {OnEvent} from "@nestjs/event-emitter";
 import {CacheInvalidateEvent} from "../common/events/cache-invalidate.event";
@@ -13,6 +13,7 @@ export class FamilyService {
     public constructor(
         @InjectRepository(User)
         private readonly usersRepository: Repository<User>,
+        private readonly dataSource: DataSource,
         private readonly redisService: RedisService) {
     }
 
@@ -41,6 +42,21 @@ export class FamilyService {
         return partner.id;
     }
 
+
+    public async leaveFamily(userId: number) {
+        return this.dataSource.transaction(async (manager: EntityManager) => {
+            const memberId = await this.getFamilyMemberId(userId);
+            if (!memberId) {
+                throw new BadRequestException("Вы не состоите в семье");
+            }
+
+            await manager.update(User, {id: memberId}, {partner: {id: undefined}});
+            await manager.update(User, {id: userId}, {partner: {id: undefined}});
+
+            await this.redisService.invalidateCache(this.baseKey, userId);
+            await this.redisService.invalidateCache(this.baseKey, memberId);
+        });
+    }
 
     @OnEvent('cache.invalidate.users', {async: true})
     async handleConsentsInvalidation(event: CacheInvalidateEvent) {

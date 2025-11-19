@@ -1,4 +1,4 @@
-import {Controller, Get, UseGuards} from '@nestjs/common';
+import {Controller, Delete, Get, HttpCode, UseGuards} from '@nestjs/common';
 import {ApiCookieAuth, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {FamilyService} from "./family.service";
 import {JwtAuthGuard} from "../auth/jwt-auth.guard";
@@ -23,6 +23,16 @@ export class FamilyController {
         }
 
         return [user];
+    }
+
+    @ApiOperation({ summary: 'Выход из семьи' })
+    @ApiResponse({ status: 204 })
+    @ApiCookieAuth('access_token')
+    @Delete()
+    @HttpCode(204)
+    @UseGuards(JwtAuthGuard)
+    public async delete(@User("id") userId: number) {
+        await this.familyService.leaveFamily(userId);
     }
 
     @ApiOperation({ summary: 'Получение расширенных данных пользователей семьи' })
