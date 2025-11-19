@@ -1,5 +1,5 @@
 import {motion} from "framer-motion";
-import Checkbox from "@/shared/ui/inputs/Checkbox";
+import Swatch from "@/shared/ui/inputs/Swatch";
 import {useState} from "react";
 import {useMutation} from "@tanstack/react-query";
 import {notificationsSubscribe, notificationsUnsubscribe} from "@/entities/notification";
@@ -42,7 +42,7 @@ const PushNotificationsToggle = ({isActive}: Props) => {
                     exit={{opacity: 0, y: -10}}
                     transition={{duration: 0.3}}>
             <p className="text-base font-medium">Push-уведомления</p>
-            <Checkbox value={isPushEnabled} onChange={toggleNotifications}/>
+            <Swatch value={isPushEnabled} onChange={toggleNotifications}/>
         </motion.div>
     </div>;
 }

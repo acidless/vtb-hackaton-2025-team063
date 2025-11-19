@@ -1,0 +1,1 @@
+export {ConditionsApprove} from "@/widgets/conditions-approve/ui/ConditionsApprove";

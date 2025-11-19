@@ -1,12 +1,16 @@
+import {Checkmark} from "@/shared/ui/icons/Checkmark";
+
 type Props = {
     value: boolean;
     onChange: (value: boolean) => void;
 }
 
-const Checkbox = ({value, onChange}: Props) => {
-    return <div onClick={() => onChange(!value)} className={`cursor-pointer w-12 h-5 bg-secondary rounded-full overflow-hidden relative`}>
-        <div className={`h-full bg-primary rounded-full transition-all duration-300 ${value ? "w-12" : "w-0"}`}></div>
-        <div className={`absolute top-[1px] bottom-[1px] bg-white rounded-full w-7 transition-all duration-300 ${value ? "left-[19px]" : "left-[1px]"}`}></div>
+const Checkbox = ({value, onChange, children}: Props) => {
+    return <div className="flex items-center gap-2 flex-wrap cursor-pointer" onClick={() => onChange(!value)}>
+        <div role="checkbox" className={`flex items-center justify-center text-white cursor-pointer w-4 h-4 border-1 transition-colors duration-300 ${value ? "bg-primary border-transparent" : "bg-tertiary border-neutral-400"} rounded-sm overflow-hidden relative`}>
+            {value ? <Checkmark className="w-2 h-2"/> : <></>}
+        </div>
+        {children}
     </div>
 }
 

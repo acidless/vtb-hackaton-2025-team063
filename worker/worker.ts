@@ -1,5 +1,6 @@
 import { Worker } from 'bullmq';
 import axios from 'axios';
+import 'dotenv/config';
 
 const worker = new Worker(
     'bank-requests',

@@ -3,6 +3,7 @@
 :root {
     --color-primary-light: #E6F0FF;
     --primary-color: #0066FF;
+    --primary-color--disabled: #00358c;
     --primary-color--dark: #0046B3;
     --text-primary: #1E1E1E;
     --text-secondary: #6B7280;
@@ -65,6 +66,10 @@ main {
 
 .bg-primary {
     background: var(--primary-color);
+}
+
+.bg-primary[disabled] {
+    background: var(--primary-color--disabled);
 }
 
 .bg-primary-hover:hover {

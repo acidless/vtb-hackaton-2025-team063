@@ -12,6 +12,8 @@ import {BankKey} from "@/entities/bank";
 import phoneToPlain from "@/shared/lib/phoneToPlain";
 import Link from "next/link";
 import {motion} from "framer-motion";
+import {ConditionsApprove} from "@/widgets/conditions-approve";
+import RegisterConditionApprove from "@/app/(auth)/register/RegisterConditionApprove";
 
 const RegisterWrapper = () => {
     const [step, setStep] = useState(0);
@@ -20,7 +22,11 @@ const RegisterWrapper = () => {
 
     function onMainStepEnd(user: Partial<UserInputType>) {
         setUserData((prevUser) => ({...prevUser, ...user}));
-        setStep(1);
+        setStep(user.code ? 1 : 2);
+    }
+
+    function onApprove() {
+        setStep(2);
     }
 
     function onPhotoStepEnd(photo: File, photoSrc: string) {
@@ -41,13 +47,13 @@ const RegisterWrapper = () => {
 
     function onBanksStepEnd(banks: BankKey[]) {
         setUserData((prevUser) => ({...prevUser, banks}));
-        setStep(3);
+        setStep(4);
     }
 
     const {mutate: register, isPending} = useMutation({
         mutationFn: registerUser,
         onSuccess: () => {
-            setStep(2);
+            setStep(3);
         },
     });
 
@@ -57,9 +63,10 @@ const RegisterWrapper = () => {
 
     return <section className="min-h-screen w-full max-w-md login-page flex flex-col px-4 relative">
         {step === 0 && <MainStep onSuccess={onMainStepEnd}/>}
-        {step === 1 && <PhotoStep isLoading={isPending} onSuccess={onPhotoStepEnd}/>}
-        {step === 2 && <BankSelectStep onSuccess={onBanksStepEnd}/>}
-        {step === 3 && <FinalStep user={userData} onSuccess={onRegisterFinished}/>}
+        {step === 1 && <RegisterConditionApprove onApprove={onApprove}/>}
+        {step === 2 && <PhotoStep isLoading={isPending} onSuccess={onPhotoStepEnd}/>}
+        {step === 3 && <BankSelectStep onSuccess={onBanksStepEnd}/>}
+        {step === 4 && <FinalStep user={userData} onSuccess={onRegisterFinished}/>}
 
         <motion.div className="flex justify-center items-center mt-2 text-light text-sm" initial={{opacity: 0, y: 10}}
                     animate={{opacity: 1, y: 0}}
@@ -73,7 +80,7 @@ const RegisterWrapper = () => {
 
         <div
             className="absolute bottom-7 left-1/2 -translate-x-1/2 flex items-center justify-center gap-0.5 w-full">
-            {Array.from({length: 4}).map((_, i) => (
+            {Array.from({length: 5}).map((_, i) => (
                 <div key={i}
                      className={`${step === i ? "w-14" : "w-1.5"} transition-all duration-500 h-1.5 bg-primary rounded-full`}></div>
             ))}
