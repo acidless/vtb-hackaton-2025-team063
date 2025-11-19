@@ -6,9 +6,10 @@ import {Payment} from "./payment.entity";
 import {RedisModule} from "../redis/redis.module";
 import { PaymentsController } from './payments.controller';
 import {TransactionsModule} from "../banks/accounts/transactions/transactions.module";
+import {FamilyAccountsModule} from "../family/family-accounts/family-accounts.module";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Payment]), FamilyModule, TransactionsModule, RedisModule],
+  imports: [TypeOrmModule.forFeature([Payment]), FamilyModule, TransactionsModule, FamilyAccountsModule, RedisModule],
   providers: [PaymentsService],
   controllers: [PaymentsController]
 })

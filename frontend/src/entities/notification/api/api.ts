@@ -9,7 +9,6 @@ export async function getNotificationsStatus() {
 
 export async function notificationsSubscribe() {
     const permission = await Notification.requestPermission();
-    console.log(permission);
     if (permission !== "granted") {
         throw new Error("Вы запретили уведомления");
     }
@@ -17,9 +16,7 @@ export async function notificationsSubscribe() {
     const reg = await navigator.serviceWorker.ready;
 
     const key = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!;
-    console.log("Raw key:", key);
     const uint8 = urlBase64ToUint8Array(key);
-    console.log("Uint8Array:", uint8);
 
     const subscription = await reg.pushManager.subscribe({
         userVisibleOnly: true,

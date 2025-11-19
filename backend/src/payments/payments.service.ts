@@ -8,6 +8,7 @@ import {PaymentDTO} from "./payment.dto";
 import {FamilyCacheService} from "../family/family-cache.service";
 import {TransactionsService} from "../banks/accounts/transactions/transactions.service";
 import {DepositDTO} from "../banks/accounts/transactions/transaction.dto";
+import {FamilyAccountsService} from "../family/family-accounts/family-accounts.service";
 
 @Injectable()
 export class PaymentsService {
@@ -19,6 +20,7 @@ export class PaymentsService {
         private readonly transactionsService: TransactionsService,
         private readonly familyService: FamilyService,
         private readonly familyCacheService: FamilyCacheService,
+        private readonly familyAccountsService: FamilyAccountsService,
         private readonly redisService: RedisService,
     ) {
     }
@@ -55,7 +57,8 @@ export class PaymentsService {
             throw new NotFoundException("Платеж не найден");
         }
 
-        const transaction = await this.transactionsService.createTransaction(userId, {
+        const holder = await this.familyAccountsService.getAccountHolder(depositDTO.fromBank, depositDTO.fromAccountId, userId, memberId);
+        await this.transactionsService.createTransaction(holder, {
             fromAccountId: depositDTO.fromAccountId,
             fromAccount: depositDTO.fromAccount,
             amount: depositDTO.amount,

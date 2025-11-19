@@ -5,3 +5,7 @@ import {BankKey} from "@/entities/bank";
 export async function getAccounts(): Promise<Record<BankKey, AccountType[]>> {
     return universalFetch("/accounts/extended");
 }
+
+export async function getFamilyAccounts(): Promise<Record<BankKey, AccountType[]>> {
+    return universalFetch("/family/accounts");
+}

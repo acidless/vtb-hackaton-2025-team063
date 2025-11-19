@@ -45,13 +45,14 @@ export class WalletsService {
                 where: {
                     id: In(accountIds),
                     user: {id: In([userId, memberId])}
-                }
+                },
+                relations: ["user"]
             }) as WalletWithBalance[];
 
             const promises: Promise<any>[] = [];
             for (const wallet of wallets) {
-                wallet.currentAmount = 0;
-                promises.push(this.accountsService.getBalance(wallet.id, wallet.bankId, userId)
+                wallet.currentAmount = wallet.amount;
+                promises.push(this.accountsService.getBalance(wallet.id, wallet.bankId, wallet.user.id)
                     .then(balance => wallet.currentAmount = balance)
                     .catch(err => console.error(err))
                 );
@@ -91,9 +92,10 @@ export class WalletsService {
         const memberId = await this.familyService.getFamilyMemberId(userId);
         const resWallet = wallet || await this.findWallet(walletId, userId, memberId);
 
-        const balance = await this.accountsService.getBalance(resWallet.account, resWallet.bankId, resWallet.user.id);
+        const balance = await this.accountsService.getBalance(resWallet.id, resWallet.bankId, resWallet.user.id);
+        const accountHolder = await this.familyAccountsService.getAccountHolder(depositDTO.fromBank, depositDTO.fromAccountId, userId, memberId);
 
-        const transaction = await this.transactionsService.createTransaction(resWallet.user.id, {
+        await this.transactionsService.createTransaction(accountHolder, {
             fromAccountId: depositDTO.fromAccountId,
             fromAccount: depositDTO.fromAccount,
             amount: depositDTO.amount,
@@ -108,7 +110,7 @@ export class WalletsService {
         const usedPercent = Math.round((remains) / resWallet.amount * 100);
         if (usedPercent >= 100) {
             await this.notificationsService.sendNotification("Лимит кошелька исчерпан", `На кошельке "${resWallet.name}" закончились средства`, userId, memberId);
-        } else if(usedPercent >= 90) {
+        } else if (usedPercent >= 90) {
             await this.notificationsService.sendNotification("Средства на кошельке подходят к концу", `На кошельке "${resWallet.name}" осталось ${remains}₽`, userId, memberId);
         }
 
@@ -123,7 +125,7 @@ export class WalletsService {
 
         const account = await this.accountsService.closeAccount(wallet.user.id, wallet.bankId, walletId, {action: "transfer"});
         if (account.status === "closed") {
-            await this.walletRepository.remove(wallet);
+            await this.walletRepository.delete(wallet.id);
 
             await this.familyCacheService.invalidateFamilyCache(this.baseKey, userId);
         }

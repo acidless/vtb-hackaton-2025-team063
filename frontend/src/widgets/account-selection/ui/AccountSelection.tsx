@@ -1,6 +1,6 @@
 import {useQuery} from "@tanstack/react-query";
 import {AnimatePresence} from "framer-motion";
-import {Account, getAccounts} from "@/entities/account";
+import {Account, getFamilyAccounts} from "@/entities/account";
 import {useEffect, useMemo, useState} from "react";
 import {AccountType} from "@/entities/account/model/types";
 import CollectionEmpty from "@/shared/ui/CollectionEmpty";
@@ -19,7 +19,7 @@ type Props = {
 export const AccountSelection = ({error, value, id, onChange, excluded = [], ...props}: Props) => {
     const {data: accounts = []} = useQuery({
         queryKey: ["accounts"],
-        queryFn: getAccounts,
+        queryFn: getFamilyAccounts,
         refetchInterval: REFETCH_INTERVAL
     });
 
@@ -47,9 +47,9 @@ export const AccountSelection = ({error, value, id, onChange, excluded = [], ...
             <AnimatePresence>
                 {transformedAccounts.length
                     ? transformedAccounts.map((account) => {
-                        return <Account key={id + account.accountId + account.bankId} account={account}
+                        return <Account key={account.accountId + account.bankId} account={account}
                                         onClick={selectAccount}
-                                        selected={selectedAccount?.accountId === account.accountId}/>
+                                        selected={selectedAccount?.accountId === account.accountId && account.bankId === selectedAccount.bankId}/>
                     })
                     : <CollectionEmpty>У вас нет подходящих счетов</CollectionEmpty>
                 }

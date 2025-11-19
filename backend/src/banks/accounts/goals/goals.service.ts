@@ -41,11 +41,12 @@ export class GoalsService {
                 where: {
                     id: In(accountIds),
                     user: {id: In([userId, memberId])}
-                }
+                },
+                relations: ["user"]
             });
 
             return await Promise.all(goals.map(async goal => {
-                const balance = await this.accountsService.getBalance(goal.id, goal.bankId, userId);
+                const balance = await this.accountsService.getBalance(goal.id, goal.bankId, goal.user.id);
                 return {...goal, collected: balance};
             }));
         });
@@ -82,8 +83,9 @@ export class GoalsService {
     public async depositGoal(userId: number, goalId: string, depositDTO: DepositDTO) {
         const memberId = await this.familyService.getFamilyMemberId(userId);
         const goal = await this.findGoal(goalId, userId, memberId);
+        const accountHolder = await this.familyAccountsService.getAccountHolder(depositDTO.fromAccountId, depositDTO.fromBank, userId, memberId);
 
-        const transaction = await this.transactionsService.createTransaction(userId, {
+        await this.transactionsService.createTransaction(accountHolder, {
             fromAccountId: depositDTO.fromAccountId,
             fromAccount: depositDTO.fromAccount,
             amount: depositDTO.amount,

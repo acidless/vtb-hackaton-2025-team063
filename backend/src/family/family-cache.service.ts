@@ -14,12 +14,12 @@ export class FamilyCacheService {
     }
 
     public async invalidateFamilyCache(baseKey: string, userId: number | string) {
-        if(!(typeof userId === "number")) {
+        if(Number.isNaN(Number(userId))) {
             return;
         }
 
-        const memberId = await this.familyService.getFamilyMemberId(userId);
-        const familyKey = this.getFamilyKey(userId, memberId);
+        const memberId = await this.familyService.getFamilyMemberId(Number(userId));
+        const familyKey = this.getFamilyKey(Number(userId), memberId);
 
         await this.redisService.invalidateCache(baseKey, familyKey);
     }

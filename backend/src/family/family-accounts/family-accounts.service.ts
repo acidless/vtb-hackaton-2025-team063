@@ -15,19 +15,18 @@ export class FamilyAccountsService {
         private readonly familyService: FamilyService,
         private readonly familyCacheService: FamilyCacheService,
         private readonly redisService: RedisService,
-    ) {
-    }
+    ) {}
 
     public async getAccounts(userId: number) {
         const memberId = await this.familyService.getFamilyMemberId(userId);
         const familyKey = this.familyCacheService.getFamilyKey(userId, memberId);
 
         return this.redisService.withCache(`${this.baseKey}:${familyKey}`, 3600, async () => {
-            const myAccounts = await this.accountsService.getAccounts(userId);
+            const myAccounts = await this.accountsService.getAccountsForPayments(userId);
 
             let memberAccounts = {};
             if(memberId) {
-                memberAccounts = await this.accountsService.getAccounts(memberId);
+                memberAccounts = await this.accountsService.getAccountsForPayments(memberId);
             }
 
             for (const key in memberAccounts) {
@@ -46,10 +45,21 @@ export class FamilyAccountsService {
         });
     }
 
-    @OnEvent('cache.invalidate.accounts', {async: true})
+    public async getAccountHolder(bankId: string, accountId: string, userId: number, memberId?: number) {
+        try {
+            const account = await this.accountsService.getAccountInfo(userId, bankId, accountId);
+            if(account) {
+                return userId;
+            }
+        } catch (e) {}
+
+        return memberId!;
+    }
+
+    @OnEvent('cache.invalidate.accounts-extended', {async: true})
     private async handleExtendedCacheInvalidation(event: CacheInvalidateEvent) {
         const [userId] = event.entityIds;
 
-        await this.familyCacheService.invalidateFamilyCache(this.baseKey, userId as number);
+        await this.familyCacheService.invalidateFamilyCache(this.baseKey, userId!);
     }
 }

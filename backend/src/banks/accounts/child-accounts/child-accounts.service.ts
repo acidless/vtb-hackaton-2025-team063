@@ -100,8 +100,9 @@ export class ChildAccountsService {
     public async depositChildAccount(userId: number, childAccountId: string, depositDTO: DepositDTO) {
         const partnerId = await this.familyService.getFamilyMemberId(userId);
         const childAccount = await this.findChildAccount(childAccountId, userId, partnerId);
+        const accountHolder = await this.familyAccountsService.getAccountHolder(depositDTO.fromBank, depositDTO.fromAccountId, userId, partnerId);
 
-        const transaction = await this.transactionsService.createTransaction(userId, {
+        const transaction = await this.transactionsService.createTransaction(accountHolder, {
             fromAccountId: depositDTO.fromAccountId,
             fromAccount: depositDTO.fromAccount,
             amount: depositDTO.amount,

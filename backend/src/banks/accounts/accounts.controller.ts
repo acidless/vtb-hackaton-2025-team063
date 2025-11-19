@@ -5,7 +5,6 @@ import {User} from "../../common/decorators/user.decorator";
 import {ApiCookieAuth, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {ValidateBankIdPipe} from "../../common/pipes/validate-bank-id.pipe";
 import {AccountCloseDTO, AccountDTO} from "./account.dto";
-import {use} from "passport";
 
 @ApiTags("Счета")
 @Controller('accounts')
