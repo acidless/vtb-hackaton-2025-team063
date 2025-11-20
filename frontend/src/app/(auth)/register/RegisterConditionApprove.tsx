@@ -2,7 +2,7 @@ import {ConditionsApprove} from "@/widgets/conditions-approve";
 import {motion} from "framer-motion";
 
 type Props = {
-    onApprove: () => {}
+    onApprove: () => void;
 }
 
 const RegisterConditionApprove = ({onApprove}: Props) => {

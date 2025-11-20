@@ -1,8 +1,10 @@
 import {Checkmark} from "@/shared/ui/icons/Checkmark";
+import {ReactNode} from "react";
 
 type Props = {
     value: boolean;
     onChange: (value: boolean) => void;
+    children: ReactNode;
 }
 
 const Checkbox = ({value, onChange, children}: Props) => {

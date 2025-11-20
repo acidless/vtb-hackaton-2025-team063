@@ -6,7 +6,7 @@ import {useState} from "react";
 import AccentButton from "@/shared/ui/AccentButton";
 
 type Props = {
-    onContinue: () => {}
+    onContinue: () => void;
 }
 
 export const ConditionsApprove = ({onContinue}: Props) => {

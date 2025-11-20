@@ -26,7 +26,7 @@ export class BanksService {
             const url = `${bank.baseUrl}${requestConfig.url}`;
             const key = cacheKey || `${url}:${process.env.CLIENT_ID}:${requestConfig.headers?["X-Consent-Id"] : ""}`;
 
-            return this.redisService.withLock(key, 10000, async () => {
+            return this.redisService.withLock(key, 30000, async () => {
                 return this.redisService.withCache<T>(key, 300, async () => {
                     const stack = new Error().stack;
                     const job = await this.banksQueueService.addJob(url, token, bankKey, requestConfig);
