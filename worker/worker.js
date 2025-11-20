@@ -18,6 +18,7 @@ require("dotenv/config");
 const worker = new bullmq_1.Worker('bank-requests', (job) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const { token, url, request } = job.data;
+    console.log("Sending request: ", url, token, process.env.CLIENT_ID);
     try {
         const res = yield (0, axios_1.default)(Object.assign(Object.assign({}, request), { url, headers: Object.assign(Object.assign({}, request.headers), { Authorization: `Bearer ${token}`, "X-Requesting-Bank": process.env.CLIENT_ID, 'Content-Type': 'application/json' }), timeout: 10000 }));
         return res.data;

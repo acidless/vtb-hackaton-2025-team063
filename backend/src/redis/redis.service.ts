@@ -2,6 +2,7 @@ import {Inject, Injectable} from '@nestjs/common';
 import Redis from "ioredis";
 import {EventEmitter2} from "@nestjs/event-emitter";
 import {CacheInvalidateEvent} from "../common/events/cache-invalidate.event";
+import Redlock from "redlock";
 
 export enum CACHE_POLICY {
     CACHE,
@@ -10,10 +11,33 @@ export enum CACHE_POLICY {
 
 @Injectable()
 export class RedisService {
+    public readonly redlock: Redlock;
+
     public constructor(
         @Inject('REDIS_CLIENT') public readonly redis: Redis,
         private readonly emitter: EventEmitter2
     ) {
+        this.redlock = new Redlock(
+            [this.redis],
+            {
+                driftFactor: 0.01,
+                retryCount: 20,
+                retryDelay: 150,
+                retryJitter: 100,
+            }
+        );
+    }
+
+    public async withLock<T>(key: string, ttl: number, callback: () => Promise<T>): Promise<T> {
+        const resource = `lock:${key}`;
+
+        const lock = await this.redlock.acquire([resource], ttl);
+
+        try {
+            return await callback();
+        } finally {
+            await lock.release();
+        }
     }
 
     public async withCache<T>(key: string, ttl: number, callback: () => Promise<T>, useCache = (response?: T) => true) {

@@ -37,6 +37,7 @@ import {FamilyAccountsModule} from "./family/family-accounts/family-accounts.mod
 import { NotificationsModule } from './notifications/notifications.module';
 import { Notification } from './notifications/notification.entity';
 import {ChildTransactionsModule} from "./banks/accounts/child-accounts/child-transactions/child-transactions.module";
+import {BanksQueueModule} from "./banks/banks-queue.module";
 
 
 @Module({
@@ -62,6 +63,7 @@ import {ChildTransactionsModule} from "./banks/accounts/child-accounts/child-tra
         ScheduleModule.forRoot(),
         RedisModule,
         UsersModule,
+        BanksQueueModule,
         CommonModule,
         AuthModule,
         PaymentConsentsModule,

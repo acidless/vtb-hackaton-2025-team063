@@ -94,6 +94,8 @@ export class ConsentsService {
 
     @Interval(10000)
     private async checkConsents() {
+        return;
+
         const consents = await this.consentsRepository.find({
             relations: ["user"],
         });

@@ -13,7 +13,9 @@ export class BanksService {
     constructor(private readonly httpService: HttpService,
                 private readonly redisService: RedisService,
                 private readonly banksQueueService: BanksQueueService)
-    {}
+    {
+        this.redisService.redis.flushall();
+    }
 
     public async requestBankAPI<T>(bankKey: string, requestConfig: AxiosRequestConfig, cacheKey?: string | null, dontCache = CACHE_POLICY.CACHE) {
         const token = await this.getAccessToken(bankKey);
@@ -24,12 +26,15 @@ export class BanksService {
             const url = `${bank.baseUrl}${requestConfig.url}`;
             const key = cacheKey || `${url}:${process.env.CLIENT_ID}:${requestConfig.headers?["X-Consent-Id"] : ""}`;
 
-            return this.redisService.withCache<T>(key, 300, async () => {
-                const job = await this.banksQueueService.addJob(url, token, bankKey, requestConfig);
-                const result = await job.waitUntilFinished(this.banksQueueService.events);
+            return this.redisService.withLock(key, 10000, async () => {
+                return this.redisService.withCache<T>(key, 300, async () => {
+                    const stack = new Error().stack;
+                    const job = await this.banksQueueService.addJob(url, token, bankKey, requestConfig);
+                    const result = await job.waitUntilFinished(this.banksQueueService.events);
 
-                return result as T;
-            }, () => requestConfig.method === "GET" && dontCache !== CACHE_POLICY.DONT_CACHE);
+                    return result as T;
+                }, () => requestConfig.method === "GET" && dontCache !== CACHE_POLICY.DONT_CACHE);
+            });
         });
     }
 
@@ -63,18 +68,38 @@ export class BanksService {
         try {
             return await callback();
         } catch (err) {
-            console.error("Error:", err.request.path, err.message);
+            const isAxios = err?.isAxiosError || err?.response || err?.request;
 
-            if (err.response?.data) {
+            console.error(
+                'Error:',
+                isAxios ? err?.request?.path ?? err?.config?.url : '(non-axios error)',
+                err?.message
+            );
+
+            if (isAxios && err.response?.data) {
                 throw new HttpException(
                     `Ошибка API банка: ${JSON.stringify(err.response.data)}`,
                     err.response.status || HttpStatus.INTERNAL_SERVER_ERROR,
                 );
             }
 
+            if (err.message === 'RATE_LIMIT') {
+                throw new HttpException(
+                    'Банк вернул rate-limit, попробуйте позже.',
+                    HttpStatus.TOO_MANY_REQUESTS
+                );
+            }
+
+            if (err.name === 'JobError') {
+                throw new HttpException(
+                    `Ошибка обработки очереди: ${err.message}`,
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                );
+            }
+
             throw new HttpException(
-                `Ошибка при получении токена: ${err.message}`,
-                HttpStatus.INTERNAL_SERVER_ERROR,
+                `Ошибка при получении данных: ${err.message}`,
+                HttpStatus.INTERNAL_SERVER_ERROR
             );
         }
     }
