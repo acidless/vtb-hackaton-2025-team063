@@ -2,3 +2,4 @@ export type {CashbackType, CardWithCashbackType, CategoryCashbackType} from "@/e
 export {BestCashback} from "@/entities/cashback/ui/BestCashback";
 export {CashbackCard} from "@/entities/cashback/ui/CashbackCard";
 export {CategoryCashback} from "@/entities/cashback/ui/CategoryCashback";
+export {CategoryCashbackCard} from "@/entities/cashback/ui/CategoryCashbackCard";

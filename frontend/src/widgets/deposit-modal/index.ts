@@ -1,0 +1,1 @@
+export {CashbackModal} from "@/widgets/cashback-modal/ui/CashbackModal";

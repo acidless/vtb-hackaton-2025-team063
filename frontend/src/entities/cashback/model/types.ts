@@ -6,6 +6,7 @@ export type CashbackType = {
     bank: BankKey;
     date: Date;
     percents: number;
+    cashback: number;
     card: string;
 }
 

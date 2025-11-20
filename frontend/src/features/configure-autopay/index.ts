@@ -1,0 +1,1 @@
+export {ConfigureAutopay} from "@/features/configure-autopay/ui/ConfigureAutopay";

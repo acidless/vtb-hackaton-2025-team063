@@ -1,0 +1,1 @@
+export {CategoryCashbackModal} from "@/widgets/category-cashback/ui/CategoryCashbackModal";

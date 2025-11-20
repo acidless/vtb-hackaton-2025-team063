@@ -9,10 +9,11 @@ import {banks} from "@/entities/bank";
 type Props = {
     cashback: CashbackType;
     userAvatar: string;
+    onClick: (category: number) => void;
 }
 
-export const BestCashback = ({userAvatar, cashback}: Props) => {
-    return <motion.article className="bg-tertiary rounded-xl py-4 px-1.5">
+export const BestCashback = ({userAvatar, cashback, onClick}: Props) => {
+    return <motion.article className="bg-tertiary rounded-xl py-4 px-1.5 cursor-pointer" onClick={() => onClick(cashback.category)}>
         <motion.div className="flex items-center justify-between" initial={{opacity: 0, y: 10}}
                     animate={{opacity: 1, y: 0}}
                     transition={{duration: 0.3}}>

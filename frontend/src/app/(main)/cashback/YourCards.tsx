@@ -14,9 +14,10 @@ import {useMediaQuery} from "@mantine/hooks";
 type Props = {
     familyInitial: UserType[];
     cardsCashbackInitial: CardWithCashbackType[];
+    className?: string;
 }
 
-const BestCashbackList = ({familyInitial, cardsCashbackInitial}: Props) => {
+const BestCashbackList = ({familyInitial, cardsCashbackInitial, className = ""}: Props) => {
     const [activeSlide, setActiveSlide] = useState(0);
 
     const {data: family = []} = useQuery({
@@ -42,7 +43,7 @@ const BestCashbackList = ({familyInitial, cardsCashbackInitial}: Props) => {
         return cardsCashbackInitial.slice(start, end + 1);
     }, [isLarge, activeSlide, cardsCashbackInitial]);
 
-    return <section className="mx-4 mb-[1.875rem]">
+    return <section className={`${className} mb-[1.875rem]`}>
         <Heading className="mb-2.5" level={2}>Ваши карты</Heading>
         <div className="flex flex-col gap-1">
             <AnimatePresence>

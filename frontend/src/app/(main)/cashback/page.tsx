@@ -2,6 +2,7 @@ import SharedCashback from "@/app/(main)/cashback/SharedCashback";
 import {getFamily} from "@/entities/family";
 import BestCashbackList from "@/app/(main)/cashback/BestCashbackList";
 import YourCards from "@/app/(main)/cashback/YourCards";
+import CashbackPromo from "@/app/(main)/cashback/CashbackPromo";
 
 export default async function Cashback() {
     const [family] = await Promise.all([getFamily()]);
@@ -10,10 +11,11 @@ export default async function Cashback() {
         <SharedCashback familyInitial={family}/>
         <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4 lg:gap-8 mb-20">
             <div>
-                <BestCashbackList familyInitial={family} cashbackInitial={[{
+                <BestCashbackList className="mx-4 md:mr-0" familyInitial={family} cashbackInitial={[{
                     user: 12,
                     card: "12312312312312",
                     category: 1,
+                    cashback: 100,
                     bank: "abank",
                     date: new Date(),
                     percents: 10
@@ -22,14 +24,25 @@ export default async function Cashback() {
                         user: 24,
                         card: "12312312312312",
                         category: 2,
+                        cashback: 100,
                         bank: "abank",
                         date: new Date(),
                         percents: 10
                     },
                     {
+                        user: 24,
+                        card: "123123123543543",
+                        category: 2,
+                        cashback: 320,
+                        bank: "abank",
+                        date: new Date(),
+                        percents: 12
+                    },
+                    {
                         user: 12,
                         card: "12312312312312",
                         category: 3,
+                        cashback: 100,
                         bank: "abank",
                         date: new Date(),
                         percents: 10
@@ -38,6 +51,7 @@ export default async function Cashback() {
                         user: 12,
                         card: "12312312312312",
                         category: 4,
+                        cashback: 100,
                         bank: "abank",
                         date: new Date(),
                         percents: 10
@@ -46,6 +60,7 @@ export default async function Cashback() {
                         user: 12,
                         card: "12312312312312",
                         category: 5,
+                        cashback: 100,
                         bank: "abank",
                         date: new Date(),
                         percents: 10
@@ -53,14 +68,16 @@ export default async function Cashback() {
                         user: 12,
                         card: "12312312312312",
                         category: 6,
+                        cashback: 100,
                         bank: "abank",
                         date: new Date(),
                         percents: 10
                     }
                 ]}/>
+                <CashbackPromo className="mx-4 md:mr-0"/>
             </div>
             <div>
-                <YourCards familyInitial={family} cardsCashbackInitial={[
+                <YourCards className="mx-4 md:ml-0" familyInitial={family} cardsCashbackInitial={[
                     {
                         card: "1233123123",
                         user: 12,

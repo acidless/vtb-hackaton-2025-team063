@@ -11,12 +11,16 @@ import MoneyAmount from "@/shared/ui/MoneyAmount";
 import AccentButton from "@/shared/ui/AccentButton";
 import Avatar from "@/shared/ui/Avatar";
 import BalanceCounter from "@/shared/ui/MoneyCounting";
+import {CashbackModal} from "@/widgets/cashback-modal/ui/CashbackModal";
+import {useState} from "react";
 
 type Props = {
     familyInitial: UserType[];
 }
 
 const SharedCashback = ({familyInitial}: Props) => {
+    const [isModalActive, setModalActive] = useState(false);
+
     const {data: family = []} = useQuery({
         queryKey: ["family"],
         initialData: familyInitial,
@@ -56,10 +60,11 @@ const SharedCashback = ({familyInitial}: Props) => {
                     }
                 </div>
                 <div className="shrink-0">
-                    <AccentButton>Управлять кэшбэком</AccentButton>
+                    <AccentButton onClick={() => setModalActive(true)}>Управлять кэшбэком</AccentButton>
                 </div>
             </div>
         </div>
+        <CashbackModal isActive={isModalActive} setActive={setModalActive}/>
     </section>
 }
 

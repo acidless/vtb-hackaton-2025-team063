@@ -26,7 +26,7 @@ export const AccountSelection = ({error, value, id, onChange, excluded = [], ...
     const transformedAccounts = useMemo(() => {
         return (Object.keys(accounts) as BankKey[]).map((bankKey: BankKey) => {
             return (accounts as Record<BankKey, AccountType[]>)[bankKey]
-                .filter(a => a.accountSubType === "Checking" && !excluded.includes(a.accountId))
+                .filter(a => a.balance && a.accountSubType === "Checking" && !excluded.includes(a.accountId))
                 .map(a => ({...a, bankId: bankKey}))
         }).flat(1);
     }, [accounts, excluded]);

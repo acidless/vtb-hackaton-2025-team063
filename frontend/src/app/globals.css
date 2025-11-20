@@ -310,6 +310,37 @@ input.large::placeholder {
     background-color: var(--color-blue-500) !important;
 }
 
+.cashback-promo {
+    background: #0046B3;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.cashback-promo::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("/images/vacation.webp") right center no-repeat;
+    background-size: contain;
+    z-index: -1;
+}
+
+.cashback-promo::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background: #0046B3;
+    background: linear-gradient(90deg,rgba(0, 70, 179, 1) 0%, rgba(0, 70, 179, 1) 50%, transparent 100%);
+}
+
 .login-page {
     padding-top: 15vh;
     padding-bottom: 4rem;
