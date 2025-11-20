@@ -35,7 +35,7 @@ export const Limit = ({limit}: Props) => {
                             animate={{opacity: 1, y: 0}}
                             exit={{opacity: 0, y: -10}}
                             transition={{duration: 0.3}}>
-                    <TransactionCategoryAvatar categoryId={limit.category}/>
+                    <TransactionCategoryAvatar withBg categoryId={limit.category}/>
                     <div className="flex flex-col min-w-0">
                         <p className="text-primary font-medium text-ellipsis overflow-hidden whitespace-nowrap">{limit.name}</p>
                         <p className="text-light font-light text-xs">

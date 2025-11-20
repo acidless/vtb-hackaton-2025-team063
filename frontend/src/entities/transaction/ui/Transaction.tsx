@@ -42,7 +42,7 @@ export const Transaction = ({transaction}: Props) => {
                  {...(enableDrag ? attributes : [])}
                  style={style} className={`flex items-center justify-between p-1.5 rounded-xl ${enableDrag ? "active:cursor-grabbing" : ""}`}>
                 <div className="flex items-center gap-2 min-w-0">
-                    <TransactionCategoryAvatar categoryId={transaction.category.id}/>
+                    <TransactionCategoryAvatar withBg categoryId={transaction.category.id}/>
                     <div className="flex flex-col min-w-0">
                         <p className="text-base font-medium min-w-0 text-ellipsis overflow-hidden whitespace-nowrap">
                             {transaction.name}

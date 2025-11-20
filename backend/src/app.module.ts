@@ -38,6 +38,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { Notification } from './notifications/notification.entity';
 import {ChildTransactionsModule} from "./banks/accounts/child-accounts/child-transactions/child-transactions.module";
 import {BanksQueueModule} from "./banks/banks-queue.module";
+import {CardsModule} from "./banks/cards/cards.module";
 
 
 @Module({
@@ -64,6 +65,7 @@ import {BanksQueueModule} from "./banks/banks-queue.module";
         RedisModule,
         UsersModule,
         BanksQueueModule,
+        CardsModule,
         CommonModule,
         AuthModule,
         PaymentConsentsModule,

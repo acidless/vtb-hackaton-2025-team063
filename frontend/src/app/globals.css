@@ -31,8 +31,9 @@
 }
 
 @theme {
-    --breakpoint-xxs: 26rem;
-    --breakpoint-xs: 30rem;
+    --breakpoint-xxs: 415px;
+    --breakpoint-xs: 480px;
+    --breakpoint-1200: 1200px;
 }
 
 body, .font-sf {

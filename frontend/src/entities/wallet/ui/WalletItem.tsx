@@ -41,7 +41,7 @@ export const WalletItem = ({item, onClick}: Props) => {
                         exit={{opacity: 0, y: -10}}
                         transition={{duration: 0.3}}
                     >
-                        <TransactionCategoryAvatar categoryId={item.categoryId}/>
+                        <TransactionCategoryAvatar withBg categoryId={item.categoryId}/>
                         <div className="flex flex-col min-w-0">
                             <p className="text-primary font-medium text-ellipsis overflow-hidden whitespace-nowrap">
                                 {item.name}
