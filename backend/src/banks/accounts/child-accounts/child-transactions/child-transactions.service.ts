@@ -86,6 +86,10 @@ export class ChildTransactionsService {
             });
             const childAccountIds = childAccounts.map(c => c.id);
 
+            if(!childAccountIds.length) {
+                return [];
+            }
+
             const [transactions1, transactions2] = await Promise.all(
                 [
                     this.transactionsService.getTransactions(userId, ...childAccountIds),
