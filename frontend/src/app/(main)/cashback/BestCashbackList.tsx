@@ -67,8 +67,8 @@ const BestCashbackList = ({familyInitial, cashbackInitial, className = ""}: Prop
     const categoryCashbacks = useMemo(() => {
         return cashback.map(card => ({
             ...card,
-            cashback: card.cashback.filter(c => c.category === currentCategory).sort((a, b) => b.percents - a.percents)[0]
-        }));
+            cashback: card.cashback.filter(c => c.category === currentCategory)[0]
+        })).sort((a, b) => b.cashback.percents - a.cashback.percents);
     }, [cashback, currentCategory]);
 
     return <section className={`${className} mb-[1.875rem]`}>

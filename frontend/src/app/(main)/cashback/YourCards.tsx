@@ -50,10 +50,15 @@ const BestCashbackList = ({familyInitial, cashbackInitial, className = ""}: Prop
     const visibleCards = useMemo(() => {
         const slideSizePercent = isLarge ? 33 : 50;
         const visibleCount = Math.floor(100 / slideSizePercent);
-        const start = activeSlide;
-        const end = activeSlide + visibleCount - 1;
 
-        return cashback.slice(start, end + 1);
+        let start = activeSlide * visibleCount;
+        if(start + visibleCount > cashback.length) {
+            start = cashback.length - visibleCount;
+        }
+
+        const end = start + visibleCount;
+
+        return cashback.slice(start, end);
     }, [isLarge, activeSlide, cashback]);
 
     return <section className={`${className} mb-[1.875rem]`}>
@@ -61,7 +66,7 @@ const BestCashbackList = ({familyInitial, cashbackInitial, className = ""}: Prop
         <div className="flex flex-col gap-1">
             <AnimatePresence>
                 <Carousel className="mb-5 select-none" withIndicators slideGap="0.625rem" withControls={false}
-                          emblaOptions={{ align: 'start', slidesToScroll: isLarge ? 3 : 2 }}
+                          emblaOptions={{ align: 'start', slidesToScroll: isLarge ? 3 : 2, loop: false }}
                           slideSize={{base: '50%', lg: "33%"}} onSlideChange={setActiveSlide} classNames={{
                               indicators: "-bottom-3!",
                               indicator: "transition-all",
