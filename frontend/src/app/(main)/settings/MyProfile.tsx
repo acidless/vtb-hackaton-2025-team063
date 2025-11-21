@@ -10,6 +10,7 @@ import getAbsoluteSeverUrl from "@/shared/lib/getAbsoluteServerUrl";
 import {authUser, UserType} from "@/entities/user";
 import ProfileEditableData from "@/app/(main)/settings/ProfileEditableData";
 import PushNotificationsToggle from "@/app/(main)/settings/PushNotificationsToggle";
+import {REFETCH_INTERVAL} from "@/providers/ReactQueryProvider";
 
 
 type Props = {
@@ -21,15 +22,12 @@ type Props = {
 }
 
 const MyProfile = ({className, userInitial, settings}: Props) => {
-    const [isPushEnabled, setPushEnabled] = useState(settings.pushEnabled);
-
     const {data: user = null} = useQuery({
         queryKey: ["user"],
         queryFn: authUser,
         initialData: userInitial,
-        refetchOnReconnect: false,
-        refetchOnMount: false,
-        refetchOnWindowFocus: false,
+        refetchInterval: REFETCH_INTERVAL * 5,
+        staleTime: REFETCH_INTERVAL * 5
     });
 
     return <section className={`${className} mb-[1.875rem]`}>
