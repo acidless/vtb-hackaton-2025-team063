@@ -41,7 +41,7 @@ const HistogramColumn = ({index, maxValue, col, onDrag}: ColProps) => {
 
     return <div ref={setNodeRef} className="h-full flex items-end">
         <motion.div
-            className="w-8 rounded-lg transition-colors duration-500"
+            className="w-6 xxs:w-8 md:w-6 lg:w-8 rounded-lg transition-colors duration-500"
             style={{...style}}
             initial={{height: 0}}
             animate={{height: `${Math.max(5, height)}%`}}
@@ -77,7 +77,7 @@ const Histogram = ({data}: Props) => {
         setPopupActive(true);
     }
 
-    return <div className="flex justify-center items-end gap-3.5 h-52 relative">
+    return <div className="flex justify-center items-end gap-2 xxs:gap-3.5 h-52 relative">
         {data.map((col, i) => {
             return <HistogramColumn key={i} index={i} maxValue={maxValue} col={col} onDrag={onDrag}/>
         })}
