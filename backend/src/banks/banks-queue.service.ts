@@ -1,7 +1,7 @@
-import {Injectable} from '@nestjs/common';
+import {Injectable, Scope} from '@nestjs/common';
 import {Queue, QueueEvents} from "bullmq";
 
-@Injectable()
+@Injectable({ scope: Scope.DEFAULT })
 export class BanksQueueService {
     public queue: Queue;
     public events: QueueEvents;
@@ -13,9 +13,9 @@ export class BanksQueueService {
         };
 
         this.queue = new Queue('bank-requests', { connection });
-        this.queue.drain();
 
         this.events = new QueueEvents('bank-requests', { connection });
+        this.events.removeAllListeners();
         this.events.on('error', err => console.error('QueueEvents error:', err));
     }
 

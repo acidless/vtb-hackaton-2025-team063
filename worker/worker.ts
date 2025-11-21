@@ -36,7 +36,7 @@ const worker = new Worker(
         },
         concurrency: 1,
         limiter: {
-            max: 50,
+            max: 30,
             duration: 1000
         }
     }
@@ -44,6 +44,19 @@ const worker = new Worker(
 
 console.log('BullMQ worker started');
 
+worker.on('active', (job) => {
+    console.log(`[ACTIVE] id=${job.id} name=${job.name}`);
+});
+worker.on('completed', (job, result) => {
+    console.log(`[COMPLETED] id=${job.id}`);
+});
 worker.on('failed', (job, err) => {
-    console.error('Job failed', err.message);
+    console.log(`[FAILED] id=${job?.id}`, err.message);
+});
+worker.on('progress', (job, progress) => {
+    console.log(`[PROGRESS] id=${job.id}`, progress);
+});
+
+worker.on('error', (err) => {
+    console.error(`[WORKER ERROR]`, err);
 });

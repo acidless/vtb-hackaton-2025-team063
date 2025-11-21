@@ -19,8 +19,10 @@ export class ChildTransactionsController {
     @ApiCookieAuth('access_token')
     @Get()
     @UseGuards(JwtAuthGuard)
-    public getAll(@User("id") userId: number) {
-        return this.childTransactionsService.getTransactions(userId);
+    public async getAll(@User("id") userId: number) {
+        const response = await this.childTransactionsService.getTransactions(userId);
+        console.log("RESPONSE: ", response, new Date());
+        return response;
     }
 
     @ApiOperation({summary: 'Получение расходов детских счетов по категориям'})

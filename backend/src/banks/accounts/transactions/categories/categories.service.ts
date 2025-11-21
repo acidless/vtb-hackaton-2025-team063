@@ -29,9 +29,6 @@ export class CategoriesService {
             spent: 0
         }])));
 
-        const fromDate = new Date();
-        fromDate.setMonth(fromDate.getMonth() - 1);
-
         transactions.forEach((transaction) => {
             if (transaction.outcome) {
                 categories[transaction.category.id].spent += transaction.value;

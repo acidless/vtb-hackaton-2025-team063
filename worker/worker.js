@@ -18,7 +18,6 @@ require("dotenv/config");
 const worker = new bullmq_1.Worker('bank-requests', (job) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const { token, url, request } = job.data;
-    console.log("Sending request: ", url, token, process.env.CLIENT_ID);
     try {
         const res = yield (0, axios_1.default)(Object.assign(Object.assign({}, request), { url, headers: Object.assign(Object.assign({}, request.headers), { Authorization: `Bearer ${token}`, "X-Requesting-Bank": process.env.CLIENT_ID, 'Content-Type': 'application/json' }), timeout: 10000 }));
         return res.data;
@@ -41,6 +40,18 @@ const worker = new bullmq_1.Worker('bank-requests', (job) => __awaiter(void 0, v
     }
 });
 console.log('BullMQ worker started');
+worker.on('active', (job) => {
+    console.log(`[ACTIVE] id=${job.id} name=${job.name}`);
+});
+worker.on('completed', (job, result) => {
+    console.log(`[COMPLETED] id=${job.id}`);
+});
 worker.on('failed', (job, err) => {
-    console.error('Job failed', err.message);
+    console.log(`[FAILED] id=${job === null || job === void 0 ? void 0 : job.id}`, err.message);
+});
+worker.on('progress', (job, progress) => {
+    console.log(`[PROGRESS] id=${job.id}`, progress);
+});
+worker.on('error', (err) => {
+    console.error(`[WORKER ERROR]`, err);
 });
